@@ -103,6 +103,10 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 		public Data(Dungeon feature, int blockX, int blockY, int blockZ, Vec3i size, int[] floorCalls, Biome biome) {
 			super(feature, blockX >> 4, blockZ >> 4, biome);
+			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) { //1.12
+				blockX -= 8;
+				blockZ -= 8;
+			}
 			this.offsetX = blockX & 15;
 			this.blockY = blockY;
 			this.offsetZ = blockZ & 15;
@@ -165,23 +169,43 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			}
 
 			dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
-			LCG failedDungeon = LCG.JAVA.combine(-5);
-
-			for(long decoratorSeed: decoratorSeeds) {
-				for(int i = 0; i < 8; i++) {
-					ChunkRandomReverser.reversePopulationSeed((decoratorSeed ^ LCG.JAVA.multiplier)
-									- this.feature.getConfig().getSalt(this.biome),
-							this.chunkX << 4, this.chunkZ << 4, SeedCracker.MC_VERSION).forEach(structureSeed -> {
-						Log.printSeed("Found structure seed ${SEED}.", structureSeed);
-						dataStorage.getTimeMachine().structureSeeds.add(structureSeed);
-					});
-
-					decoratorSeed = failedDungeon.nextSeed(decoratorSeed);
+			
+			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) {
+				for (long seed : decoratorSeeds) {
+				
+					long decoratorSeed = seed;
+					for (int i = 0; i < 200; i++) {
+						ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2).forEach(s -> {
+						
+							//Log.printSeed("Found structure seed ${SEED}.", s);
+							System.out.println("structureseed: " + s);
+							if(dataStorage.addDungeon12StructureSeed(s)) {
+								Log.warn("return");
+	
+								return;
+							}
+							
+						});
+						decoratorSeed = LCG.JAVA.combine(-1).nextSeed(decoratorSeed);
+					}
 				}
-			}
+			}else {
+				LCG failedDungeon = LCG.JAVA.combine(-5);
 
-			dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
+				for(long decoratorSeed: decoratorSeeds) {
+					for(int i = 0; i < 8; i++) {
+						ChunkRandomReverser.reversePopulationSeed((decoratorSeed ^ LCG.JAVA.multiplier)
+										- this.feature.getConfig().getSalt(this.biome),
+								this.chunkX << 4, this.chunkZ << 4, SeedCracker.MC_VERSION).forEach(structureSeed -> {
+							Log.printSeed("Found structure seed ${SEED}.", structureSeed);
+							dataStorage.getTimeMachine().structureSeeds.add(structureSeed);
+							});
+
+						decoratorSeed = failedDungeon.nextSeed(decoratorSeed);
+					}
+				}
+				dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
+			}
 		}
 	}
-
 }

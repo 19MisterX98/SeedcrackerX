@@ -14,8 +14,11 @@ import kaptainwutax.seedcracker.cracker.HashedSeedData;
 import kaptainwutax.seedcracker.cracker.PillarData;
 import kaptainwutax.seedcracker.cracker.decorator.Dungeon;
 import kaptainwutax.seedcracker.cracker.decorator.EmeraldOre;
+import kaptainwutax.seedcracker.util.Log;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -45,6 +48,7 @@ public class DataStorage {
 	protected ScheduledSet<Entry<Feature.Data<?>>> baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 	protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
 	protected HashedSeedData hashedSeedData = null;
+	public List<Long> dungeon12StructureSeeds = new ArrayList<Long>();
 
 	public void tick() {
 		if(!this.timeMachine.isRunning) {
@@ -101,6 +105,18 @@ public class DataStorage {
 		this.biomeSeedData.scheduleAdd(e);
 		this.schedule(event::onDataAdded);
 		return true;
+	}
+	public boolean addDungeon12StructureSeed(long structureSeed) {
+		if(this.dungeon12StructureSeeds.contains(structureSeed)) {
+			//found matching structureseed
+			Log.printSeed("found two matching structureseeds ${SEED}.", structureSeed);
+			getTimeMachine().structureSeeds.add(structureSeed);
+			getTimeMachine().poke(TimeMachine.Phase.STRUCTURES);
+			getTimeMachine().poke(TimeMachine.Phase.BIOMES);
+			return true;
+		}
+		this.dungeon12StructureSeeds.add(structureSeed);
+		return false;
 	}
 
 	public synchronized boolean addHashedSeedData(HashedSeedData data, DataAddedEvent event) {

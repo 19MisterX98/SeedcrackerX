@@ -9,7 +9,6 @@ import kaptainwutax.seedcracker.render.Color;
 import kaptainwutax.seedcracker.render.Cube;
 import kaptainwutax.seedcracker.render.Cuboid;
 import kaptainwutax.seedcracker.util.BiomeFixer;
-import kaptainwutax.seedcracker.util.Log;
 import kaptainwutax.seedcracker.util.PosIterator;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -23,7 +22,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 

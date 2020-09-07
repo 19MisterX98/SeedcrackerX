@@ -172,6 +172,7 @@ public class DataStorage {
 	public void clear() {
 		this.scheduledData = new ConcurrentSet<>();
 		this.pillarData = null;
+		this.dungeon12StructureSeeds = new ArrayList<>();
 		this.baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 		this.biomeSeedData = new ScheduledSet<>(null);
 		this.hashedSeedData = null;

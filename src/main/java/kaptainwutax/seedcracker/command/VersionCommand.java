@@ -19,7 +19,7 @@ public class VersionCommand extends ClientCommand {
 	@Override
 	public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
 		for(MCVersion version: MCVersion.values()) {
-			if(version.isOlderThan(MCVersion.v1_13))continue;
+			if(version.isOlderThan(MCVersion.v1_8))continue;
 			builder.then(literal(version.name).executes(context -> this.setVersion(version)));
 		}
 	}

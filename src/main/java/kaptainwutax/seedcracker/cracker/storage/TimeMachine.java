@@ -151,9 +151,9 @@ public class TimeMachine {
 	}
 
 	protected boolean pokeBiomes() {
-		if(this.structureSeeds == null || this.worldSeeds != null)return false;
+		if(this.structureSeeds == null || this.structureSeeds.isEmpty()|| this.worldSeeds != null)return false;
 		if(this.dataStorage.hashedSeedData == null &&
-				(this.dataStorage.biomeSeedData.size() < 5 || this.structureSeeds.size() > 20))return false;
+				(this.dataStorage.biomeSeedData.size() < 8 || this.structureSeeds.size() > 20))return false;
 
 		this.worldSeeds = new ArrayList<>();
 		Log.debug("====================================");

@@ -129,14 +129,9 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 		public void onDataAdded(DataStorage dataStorage) {
 			dataStorage.getTimeMachine().poke(TimeMachine.Phase.STRUCTURES);
 			if(this.floorCalls == null || !this.usesFloor())return;
-			if(dataStorage.getTimeMachine().structureSeeds != null)return;
+			if(dataStorage.getTimeMachine().worldSeeds != null) return;
 
 			Log.warn("Short-cutting to dungeons...");
-			String boden = "";
-			for(int block : floorCalls) {
-				boden = boden.concat(Integer.toString(block));
-			}
-			Log.printDungeonInfo(", " + blockX + ", " + blockY + ", " + blockZ+", \"" + boden + "\"");
 
 			JavaRandomDevice device = new JavaRandomDevice();
 
@@ -171,23 +166,20 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
 			
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) {
-				for (long seed : decoratorSeeds) {
+				for (long decoratorSeed : decoratorSeeds) {
 				
-					long decoratorSeed = seed;
 					for (int i = 0; i < 200; i++) {
 						ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2).forEach(s -> {
 						
 							//Log.printSeed("Found structure seed ${SEED}.", s);
 							System.out.println("structureseed: " + s);
-							if(dataStorage.addDungeon12StructureSeed(s)) {
-								Log.warn("return");
-	
-								return;
-							}
-							
+							dataStorage.addDungeon12StructureSeed(s);	
 						});
 						decoratorSeed = LCG.JAVA.combine(-1).nextSeed(decoratorSeed);
 					}
+				}
+				if(dataStorage.getTimeMachine().worldSeeds == null) {
+					Log.warn("finished structure seed search");
 				}
 			}else {
 				LCG failedDungeon = LCG.JAVA.combine(-5);

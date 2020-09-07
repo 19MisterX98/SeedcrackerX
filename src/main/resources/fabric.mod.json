@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "seedcracker",
+  "version": "${version}",
+
+  "name": "Seed Cracker",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "KaptainWutax"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/seecracker/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "kaptainwutax.seedcracker.SeedCracker"
+    ]
+  },
+  "mixins": [
+    "seedcracker.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

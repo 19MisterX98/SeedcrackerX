@@ -75,7 +75,7 @@ public class PieceFinder extends Finder {
 
                 if (this.chunkPos.x % 2 == 0 && this.chunkPos.z % 2 == 0) {
                     this.structure.forEach((pos, state) -> {
-                        this.world.setBlockState(this.chunkPos.getCenterBlockPos().add(pos).add(0, y, 0), state, 0);
+                        this.world.setBlockState(this.chunkPos.getStartPos().add(pos).add(0, y, 0), state, 0);
                     });
                 }
             });
@@ -85,7 +85,7 @@ public class PieceFinder extends Finder {
             boolean found = true;
 
             for(Map.Entry<BlockPos, BlockState> entry: this.structure.entrySet()) {
-                BlockPos pos = this.chunkPos.getCenterBlockPos().add(center.add(entry.getKey()));
+                BlockPos pos = this.chunkPos.getStartPos().add(center.add(entry.getKey()));
                 BlockState state = this.world.getBlockState(pos);
 
                 //Blockstate may change when it gets placed in the world, that's why it's using the block here.
@@ -96,7 +96,7 @@ public class PieceFinder extends Finder {
             }
 
             if(found) {
-                result.add(this.chunkPos.getCenterBlockPos().add(center));
+                result.add(this.chunkPos.getStartPos().add(center));
             }
         }
 

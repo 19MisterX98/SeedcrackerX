@@ -28,13 +28,13 @@ public abstract class BlockFinder extends Finder {
     @Override
     public List<BlockPos> findInChunk() {
         List<BlockPos> result = new ArrayList<>();
-        Chunk chunk = this.world.getChunk(this.chunkPos.getCenterBlockPos());
+        Chunk chunk = this.world.getChunk(this.chunkPos.getStartPos());
 
         for(BlockPos blockPos: this.searchPositions) {
             BlockState currentState = chunk.getBlockState(blockPos);
 
             if(this.targetBlockStates.contains(currentState)) {
-                result.add(this.chunkPos.getCenterBlockPos().add(blockPos));
+                result.add(this.chunkPos.getStartPos().add(blockPos));
             }
         }
 

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class FinderConfig {
 
-    protected FinderProfile finderProfile = new YoloProfile();
+    protected FinderProfile finderProfile = new ModmenuProfile();
     protected Map<Finder.Type, ConcurrentLinkedQueue<Finder>> activeFinders = new ConcurrentHashMap<>();
 
     public FinderConfig() {

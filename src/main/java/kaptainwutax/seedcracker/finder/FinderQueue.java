@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import kaptainwutax.seedcracker.SeedCracker;
 import kaptainwutax.seedcracker.profile.FinderConfig;
+import kaptainwutax.seedcracker.profile.config.ConfigScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -17,7 +18,7 @@ public class FinderQueue {
     private final static FinderQueue INSTANCE = new FinderQueue();
     public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 
-    public RenderType renderType = RenderType.XRAY;
+    public RenderType renderType = ConfigScreen.getConfig().getRENDER();
     public FinderConfig finderProfile = new FinderConfig();
 
     private FinderQueue() {
@@ -72,7 +73,7 @@ public class FinderQueue {
     }
 
     public void clear() {
-        this.renderType = RenderType.XRAY;
+        this.renderType = ConfigScreen.getConfig().getRENDER();
         this.finderProfile = new FinderConfig();
     }
 

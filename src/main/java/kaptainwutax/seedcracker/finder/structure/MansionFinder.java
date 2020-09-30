@@ -67,7 +67,7 @@ public class MansionFinder extends Finder {
 
                 if(SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
                     this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(102, 66, 33)));
-                    this.renderers.add(new Cube(this.chunkPos.getCenterBlockPos().add(0, pos.getY(), 0), new Color(102, 66, 33)));
+                    this.renderers.add(new Cube(this.chunkPos.getStartPos().add(0, pos.getY(), 0), new Color(102, 66, 33)));
                 }
             });
         });

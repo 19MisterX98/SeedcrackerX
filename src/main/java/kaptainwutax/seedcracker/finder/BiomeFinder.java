@@ -11,7 +11,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.biome.BuiltinBiomes;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class BiomeFinder extends Finder {
 
         for(int x = 0; x < 16; x += 4) {
             for(int z = 0; z < 16; z += 4) {
-                BlockPos blockPos = this.chunkPos.getCenterBlockPos().add(x, 0, z);
+                BlockPos blockPos = this.chunkPos.getStartPos().add(x, 0, z);
                 Biome biome = this.world.getBiomeForNoiseGen(blockPos.getX() >> 2, 0, blockPos.getZ() >> 2);
 
                 //TODO: Fix this multi-threading issue.
-                if(biome == Biomes.THE_VOID) {
+                if(biome == BuiltinBiomes.THE_VOID) {
                     continue;
                 }
 

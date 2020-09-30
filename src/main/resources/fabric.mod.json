@@ -20,7 +20,10 @@
   "entrypoints": {
     "main": [
       "kaptainwutax.seedcracker.SeedCracker"
+    ], "modmenu": [
+      "kaptainwutax.seedcracker.profile.config.ScModMenuEntry"
     ]
+
   },
   "mixins": [
     "seedcracker.mixins.json"

@@ -24,6 +24,15 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:0.20.2+build.402-1.16"
+	modApi("me.shedaniel.cloth:config-2:4.8.1") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	//modApi("me.sargunvohra.mcmods:autoconfig1u:3.2.2") {
+	//	exclude(group: "net.fabricmc.fabric-api")
+	//}
+	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
+
 
 	implementation('com.github.KaptainWutax:MathUtils:6c2d50eacad0241ff76119e6e703b70bac4b4bce') {transitive = false}
 	implementation('com.github.KaptainWutax:SeedUtils:0de70bc772fef95d8acfa6991e7278ee53a8b46c') {transitive = false}
@@ -38,7 +47,8 @@ dependencies {
 	include('com.github.KaptainWutax:BiomeUtils:8e3622bd023e4a0f665021dacbeb2c1a00c3d3c8') {transitive = false}
 	include('com.github.KaptainWutax:ChunkRandomReversal:209eefb8ed2bd097e3c55d3934ba508b664443da') {transitive = false}
 	include('com.github.KaptainWutax:LattiCG:38f0b3d33e15ad2e6ce9ddb1f588e2b9a8c96174') {transitive = false}
-
+	include "me.shedaniel.cloth:config-2:4.8.1"
+	//include "me.sargunvohra.mcmods:autoconfig1u:3.2.2"
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 

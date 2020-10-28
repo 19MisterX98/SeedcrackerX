@@ -1,5 +1,6 @@
 package kaptainwutax.seedcracker.finder.decorator;
 
+import kaptainwutax.featureutils.Feature;
 import kaptainwutax.featureutils.decorator.EndGateway;
 import kaptainwutax.seedcracker.Features;
 import kaptainwutax.seedcracker.SeedCracker;
@@ -8,10 +9,12 @@ import kaptainwutax.seedcracker.finder.BlockFinder;
 import kaptainwutax.seedcracker.finder.Finder;
 import kaptainwutax.seedcracker.render.Color;
 import kaptainwutax.seedcracker.render.Cuboid;
+import kaptainwutax.seedcracker.util.BiomeFixer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
@@ -40,7 +43,7 @@ public class EndGatewayFinder extends BlockFinder {
         result.forEach(pos -> {
             int height = this.findHeight(pos);
 
-            if(height >= 3 && height <= 9) {
+            if(height >= 3 && height <= 9 && Features.END_GATEWAY.isValidBiome(BiomeFixer.swap(biome))) {
                 newResult.add(pos);
 
                 EndGateway.Data data = Features.END_GATEWAY.at(pos.getX(), pos.getZ(), height);

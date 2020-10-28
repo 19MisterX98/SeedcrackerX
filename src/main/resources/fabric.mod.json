@@ -4,23 +4,27 @@
   "version": "${version}",
 
   "name": "Seed Cracker",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Used for finding the seed of multiplayer or singleplayer worlds.",
   "authors": [
-    "KaptainWutax"
+    "KaptainWutax",
+    "19MisterX98"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "issues": "https://github.com/19MisterX98/seedcracker12/issues",
+    "sources": "https://github.com/19MisterX98/seedcracker12/"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/seecracker/icon.png",
+  "icon": "assets/seedcracker/icon.png",
 
   "environment": "client",
   "entrypoints": {
     "main": [
       "kaptainwutax.seedcracker.SeedCracker"
+    ], "modmenu": [
+      "kaptainwutax.seedcracker.profile.config.ScModMenuEntry"
     ]
+
   },
   "mixins": [
     "seedcracker.mixins.json"

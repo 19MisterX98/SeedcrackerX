@@ -8,7 +8,7 @@ import kaptainwutax.seedcracker.profile.config.ConfigScreen;
 public class ModmenuProfile extends CustomProfile {
 
 	public ModmenuProfile() {
-		super("WearBlackAllDay", true);
+		super("19MisterX98", true);
 		this.locked = false;
 		this.setTypeState(Finder.Type.BURIED_TREASURE,ConfigScreen.getConfig().isBURIED_TREASURE());
 		this.setTypeState(Finder.Type.DESERT_TEMPLE,ConfigScreen.getConfig().isDESERT_TEMPLE());

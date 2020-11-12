@@ -153,6 +153,9 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				} else if(call == MOSSY_COBBLESTONE_CALL) {
 					//Skip mossy, brute-force later.
 					device.addCall(FilteredSkip.filter(LCG.JAVA, r -> r.nextInt(4) != 0, 1));
+				} else if(call == 2){
+					//unkown
+					device.addCall(NextInt.consume(4,1));
 				}
 			}
 
@@ -169,12 +172,14 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				for (long decoratorSeed : decoratorSeeds) {
 				
 					for (int i = 0; i < 200; i++) {
-						ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2).forEach(s -> {
+						for(long structureSeed:ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2)) {
 						
 							//Log.printSeed("Found structure seed ${SEED}.", s);
-							System.out.println("structureseed: " + s);
-							dataStorage.addDungeon12StructureSeed(s);	
-						});
+							//System.out.println("structureseed: " + s);
+							if(dataStorage.addDungeon12StructureSeed(structureSeed)) {
+								break;
+							}
+						}
 						decoratorSeed = LCG.JAVA.combine(-1).nextSeed(decoratorSeed);
 					}
 				}

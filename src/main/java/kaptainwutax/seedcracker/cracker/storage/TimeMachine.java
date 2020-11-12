@@ -7,6 +7,7 @@ import kaptainwutax.seedcracker.cracker.BiomeData;
 import kaptainwutax.seedcracker.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.seedutils.mc.ChunkRand;
+import kaptainwutax.seedutils.mc.seed.StructureSeed;
 import kaptainwutax.seedutils.mc.seed.WorldSeed;
 
 import java.util.ArrayList;
@@ -181,7 +182,6 @@ public class TimeMachine {
 		}
 
 		Log.warn("Looking for world seeds...");
-
 		for(long structureSeed : this.structureSeeds) {
 			for(long upperBits = 0; upperBits < 1 << 16 && !this.shouldTerminate; upperBits++) {
 				long worldSeed = (upperBits << 48) | structureSeed;
@@ -199,7 +199,14 @@ public class TimeMachine {
 
 				if(matches) {
 					this.worldSeeds.add(worldSeed);
-					Log.printSeed("Found world seed ${SEED}.", worldSeed);
+					if(this.worldSeeds.size() < 10) {
+						Log.printSeed("Found world seed ${SEED}.", worldSeed);
+						if(this.worldSeeds.size() ==9) {
+							Log.warn("[Spam protection] printing all other seeds in console");
+						}
+					}else {
+						System.out.println("Found world seed " + worldSeed);
+					}
 				}
 
 				if(this.shouldTerminate) {
@@ -208,13 +215,27 @@ public class TimeMachine {
 			}
 		}
 
+		dispSearchEnd();
+
+		Log.warn("Looking for NextLong world seeds(might all be wrong)");
+		for(long structureSeed : this.structureSeeds) {
+			worldSeeds = StructureSeed.toRandomWorldSeeds(structureSeed);
+			for (Long worldSeed:worldSeeds){
+				Log.printSeed("Found world seed ${SEED}.", worldSeed);
+			}
+		}
+
+		dispSearchEnd();
+
+		return true;
+	}
+
+	private void dispSearchEnd() {
 		if(!this.worldSeeds.isEmpty()) {
 			Log.warn("Finished searching for world seeds.");
 		} else {
 			Log.error("Finished search with no results.");
 		}
-
-		return true;
 	}
 
 	public long timeMachine(long partialWorldSeed, int pillarSeed) {

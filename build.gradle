@@ -13,11 +13,16 @@ group = project.maven_group
 minecraft {
 }
 
+
 repositories {
 	maven {
 		url "https://jitpack.io"
 	}
+	maven {
+		url 'https://dl.bintray.com/earthcomputer/mods'
+	}
 }
+
 
 dependencies {
 	//to change the versions see the gradle.properties file
@@ -25,12 +30,12 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
 	modApi("me.shedaniel.cloth:config-2:4.8.1") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	//modApi("me.sargunvohra.mcmods:autoconfig1u:3.2.2") {
-	//	exclude(group: "net.fabricmc.fabric-api")
-	//}
+	modImplementation 'net.earthcomputer:multiconnect:1.3.34'
+	
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
 
 
@@ -48,7 +53,6 @@ dependencies {
 	include('com.github.KaptainWutax:ChunkRandomReversal:209eefb8ed2bd097e3c55d3934ba508b664443da') {transitive = false}
 	include('com.github.KaptainWutax:LattiCG:38f0b3d33e15ad2e6ce9ddb1f588e2b9a8c96174') {transitive = false}
 	include "me.shedaniel.cloth:config-2:4.8.1"
-	//include "me.sargunvohra.mcmods:autoconfig1u:3.2.2"
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 

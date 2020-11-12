@@ -12,11 +12,6 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public class ScModMenuEntry implements ModMenuApi{
     ConfigScreen configscreen = new ConfigScreen();
-    
-    @Override
-    public String getModId() {
-        return "seedcracker";
-    }
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {

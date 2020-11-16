@@ -216,16 +216,16 @@ public class TimeMachine {
 		}
 
 		dispSearchEnd();
-
-		Log.warn("Looking for NextLong world seeds(might all be wrong)");
-		for(long structureSeed : this.structureSeeds) {
-			worldSeeds = StructureSeed.toRandomWorldSeeds(structureSeed);
-			for (Long worldSeed:worldSeeds){
+		if(worldSeeds.size() != 1) {
+			Log.warn("Looking for NextLong world seeds(might all be wrong)");
+			for (long structureSeed : this.structureSeeds) {
+				worldSeeds.addAll(StructureSeed.toRandomWorldSeeds(structureSeed));
+			}
+			for (Long worldSeed : worldSeeds) {
 				Log.printSeed("Found world seed ${SEED}.", worldSeed);
 			}
+			dispSearchEnd();
 		}
-
-		dispSearchEnd();
 
 		return true;
 	}

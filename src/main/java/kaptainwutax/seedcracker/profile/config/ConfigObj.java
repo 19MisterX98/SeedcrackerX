@@ -1,8 +1,10 @@
 package kaptainwutax.seedcracker.profile.config;
 
 
+import kaptainwutax.seedcracker.command.ClientCommand;
 import kaptainwutax.seedcracker.finder.FinderQueue.RenderType;
 import kaptainwutax.seedutils.mc.MCVersion;
+import net.minecraft.util.Formatting;
 
 public class ConfigObj{
     protected boolean BURIED_TREASURE = true;
@@ -20,6 +22,28 @@ public class ConfigObj{
     protected boolean BIOME = true;
     protected MCVersion VERSION = MCVersion.v1_16_2;
     protected RenderType RENDER = RenderType.XRAY;
+
+    protected boolean Active = true;
+
+    public boolean isActive() {
+        return Active;
+    }
+
+    public boolean isDEBUG() {
+        return DEBUG;
+    }
+
+    public void setDEBUG(boolean DEBUG) {
+        this.DEBUG = DEBUG;
+        if(this.DEBUG) {
+            ClientCommand.sendFeedback("Debug is active.", Formatting.GREEN, true);
+        } else {
+            ClientCommand.sendFeedback("Debug is not active.", Formatting.RED, true);
+        }
+
+    }
+
+    private boolean DEBUG = false;
 
     public boolean isBURIED_TREASURE() {
         return this.BURIED_TREASURE;

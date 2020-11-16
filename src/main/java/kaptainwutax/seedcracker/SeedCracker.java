@@ -20,6 +20,7 @@ public class SeedCracker implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ConfigScreen.loadConfig();
+		this.active = ConfigScreen.getConfig().isActive();
 		Features.init(MC_VERSION);
 		RenderQueue.get().add("hand", FinderQueue.get()::renderFinders);
 	}
@@ -47,6 +48,7 @@ public class SeedCracker implements ModInitializer {
     }
 
 	public void reset() {
+		setActive(ConfigScreen.getConfig().isActive());
 		SeedCracker.get().getDataStorage().clear();
 		FinderQueue.get().clear();
 	}

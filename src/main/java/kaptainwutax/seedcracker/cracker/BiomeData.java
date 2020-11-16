@@ -2,6 +2,8 @@ package kaptainwutax.seedcracker.cracker;
 
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.biomeutils.source.BiomeSource;
+import kaptainwutax.seedcracker.SeedCracker;
+import kaptainwutax.seedutils.mc.MCVersion;
 
 public class BiomeData {
 
@@ -16,7 +18,11 @@ public class BiomeData {
     }
 
     public boolean test(BiomeSource source) {
-        return source.getBiomeForNoiseGen(this.x, 0, this.z) == this.biome;
+        if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_13)) {
+            return source.getBiomeForNoiseGen(this.x, 0, this.z) == this.biome;
+        }else {
+            return source.getBiome(this.x, 0, this.z) == this.biome;
+        }
     }
 
     @Override

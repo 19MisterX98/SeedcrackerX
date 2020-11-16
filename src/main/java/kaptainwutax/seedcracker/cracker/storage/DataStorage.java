@@ -47,8 +47,8 @@ public class DataStorage {
 	protected PillarData pillarData = null;
 	protected ScheduledSet<Entry<Feature.Data<?>>> baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 	protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
-	protected HashedSeedData hashedSeedData = null;
-	public List<Long> dungeon12StructureSeeds = new ArrayList<Long>();
+	public HashedSeedData hashedSeedData = null;
+	public List<Long> dungeon12StructureSeeds = new ArrayList<>();
 
 	public void tick() {
 		if(!this.timeMachine.isRunning) {

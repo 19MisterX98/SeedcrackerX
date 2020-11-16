@@ -4,6 +4,7 @@ import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.seedcracker.SeedCracker;
 import kaptainwutax.seedcracker.cracker.storage.DataStorage;
 import kaptainwutax.seedcracker.cracker.storage.TimeMachine;
+import kaptainwutax.seedcracker.profile.config.ConfigScreen;
 import kaptainwutax.seedcracker.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.seedutils.mc.ChunkRand;
@@ -132,7 +133,13 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			if(dataStorage.getTimeMachine().worldSeeds != null) return;
 
 			Log.warn("Short-cutting to dungeons...");
-
+			if(ConfigScreen.getConfig().isDEBUG()) {
+				String floorString = "";
+				for(int floorCall:this.floorCalls){
+					floorString = floorString + floorCall;
+				}
+				Log.printDungeonInfo(this.blockX + ", " + this.blockY + ", " + this.blockZ + ", " + floorString);
+			}
 			JavaRandomDevice device = new JavaRandomDevice();
 
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_15)) {
@@ -173,9 +180,6 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				
 					for (int i = 0; i < 200; i++) {
 						for(long structureSeed:ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2)) {
-						
-							//Log.printSeed("Found structure seed ${SEED}.", s);
-							//System.out.println("structureseed: " + s);
 							if(dataStorage.addDungeon12StructureSeed(structureSeed)) {
 								break;
 							}

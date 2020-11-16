@@ -2,9 +2,7 @@ package kaptainwutax.seedcracker.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcracker.SeedCracker;
-import kaptainwutax.seedcracker.finder.Finder;
-import kaptainwutax.seedcracker.finder.FinderQueue;
-import kaptainwutax.seedcracker.util.Log;
+import kaptainwutax.seedcracker.profile.config.ConfigScreen;
 import net.minecraft.server.command.ServerCommandSource;
 
 
@@ -21,7 +19,11 @@ public class CrackerCommand extends ClientCommand {
 	public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
 		builder.then(literal("ON").executes(context -> this.setActive(true)))
 				.then(literal("OFF").executes(context -> this.setActive(false)));
-		builder.then(literal("debug").executes(context -> this.debug()));
+
+		builder.then(literal("debug")
+					.then(literal("ON").executes(context -> this.setDebug(true)))
+					.then(literal("OFF").executes(context -> this.setDebug(false)))
+				.executes(context -> this.toggleDebug()));
 	}
 
 
@@ -30,10 +32,13 @@ public class CrackerCommand extends ClientCommand {
 		return 0;
 	}
 
-	private int debug() {
-		Log.warn(String.valueOf(FinderQueue.get().finderProfile.getActive(Finder.Type.DUNGEON)).toUpperCase());
-
+	private int toggleDebug() {
+		ConfigScreen.getConfig().setDEBUG(!ConfigScreen.getConfig().isDEBUG());
 		return 0;
 	}
 
+	private int setDebug(boolean debug) {
+		ConfigScreen.getConfig().setDEBUG(debug);
+		return 0;
+	}
 }

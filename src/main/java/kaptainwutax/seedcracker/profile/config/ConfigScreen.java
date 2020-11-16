@@ -5,10 +5,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 
 import com.google.gson.Gson;
 
 
+import kaptainwutax.seedcracker.cracker.HashedSeedData;
 import kaptainwutax.seedcracker.finder.FinderQueue;
 import kaptainwutax.seedcracker.finder.FinderQueue.RenderType;
 import kaptainwutax.seedutils.mc.MCVersion;
@@ -19,6 +21,7 @@ import kaptainwutax.seedcracker.finder.Finder;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
@@ -29,6 +32,7 @@ public class ConfigScreen {
 
     private boolean resetToDefault = false;
     private static ConfigObj config = new ConfigObj();
+
     private static File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(),"seedcracker.json");
 
     public Screen getConfigScreenByCloth(Screen parent) {
@@ -51,7 +55,7 @@ public class ConfigScreen {
                 general.addEntry(eb.startTextDescription(new LiteralText("This settings-page only only sets sets settings for one ingame session. Go to \"Profile\" tab to change settings longterm")).build());
 
             general.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
-
+                general.addEntry(eb.startBooleanToggle(new LiteralText("Active"), SeedCracker.get().isActive()).setSaveConsumer(val -> SeedCracker.get().setActive(val)).build());
                 general.addEntry(eb.startTextDescription(new LiteralText("Version(1.8-1.16 Support for old chunks; versions before 1.16 are only tested for dungeon-shortcutting)")).build());
                 general.addEntry(eb.startEnumSelector(new LiteralText("Version"), MCVersion.class, SeedCracker.MC_VERSION).setSaveConsumer(val -> {SeedCracker.MC_VERSION = val; Features.init(SeedCracker.MC_VERSION);}).build());
 
@@ -70,6 +74,7 @@ public class ConfigScreen {
         ConfigCategory config = builder.getOrCreateCategory(new TranslatableText("config.category.profile"));
 
                 config.addEntry(eb.startTextDescription(new LiteralText("the seedcracker will reset to this state after /seed data clear relogging or pressing \"reset to this profile after pressing save & quit\"")).build());
+                config.addEntry(eb.startBooleanToggle(new LiteralText("Active"), ConfigScreen.config.isActive()).setSaveConsumer(val -> ConfigScreen.config.Active = val).build());
                 config.addEntry(eb.startEnumSelector(new LiteralText("Version"), MCVersion.class, ConfigScreen.config.VERSION).setSaveConsumer(val -> ConfigScreen.config.VERSION = val).build());
 
             config.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
@@ -97,11 +102,69 @@ public class ConfigScreen {
             config.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
 
                 config.addEntry(eb.startBooleanToggle(new LiteralText("reset to this profile after pressing save & quit\""), resetToDefault).setSaveConsumer(val -> resetToDefault = val).build());
+        ConfigCategory info = builder.getOrCreateCategory(new TranslatableText("config.category.info"));
+        //List worldseeds
+        List<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
+        if(worldSeeds != null) {
+            SubCategoryBuilder world = eb.startSubCategory(new LiteralText("Worldseeds"));
+            for(long worldSeed:worldSeeds) {
+                world.add(eb.startTextField(new LiteralText(""), String.valueOf(worldSeed)).build());
+            }
+            info.addEntry(world.setExpanded(true).build());
+        } else {
+            info.addEntry(eb.startTextDescription(new LiteralText("No worldseeds found")).build());
+        }
+        //List structureseeds
+        List<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
+        if(structureSeeds != null) {
+            SubCategoryBuilder struc = eb.startSubCategory(new LiteralText("Structureseeds"));
+            for(long structureSeed:structureSeeds) {
+                struc.add(eb.startTextField(new LiteralText(""),String.valueOf(structureSeed)).build());
+            }
+            info.addEntry(struc.setExpanded(true).build());
+        } else {
+            info.addEntry(eb.startTextDescription(new LiteralText("No structureseeds found")).build());
+        }
+
+
+
+        if(getConfig().isDEBUG()) {
+            //List Dungeonseeds von 1.12 Dungeons
+            List<Long> structure12Seeds = SeedCracker.get().getDataStorage().dungeon12StructureSeeds;
+            if(structure12Seeds.size() != 0) {
+                SubCategoryBuilder dungeon12 = eb.startSubCategory(new LiteralText("Structureseeds of dungeons that need to be checked against another dungeon to get the right one(for 1.12 and below"));
+                for(long structure12Seed:structure12Seeds) {
+                    dungeon12.add(eb.startTextField(new LiteralText(""),String.valueOf(structure12Seed)).build());
+                }
+                info.addEntry(dungeon12.setExpanded(true).build());
+            } else {
+                info.addEntry(eb.startTextDescription(new LiteralText("No structureseeds of old dungeons found")).build());
+            }
+            //List pillarseeds
+            List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
+            if(pillarSeeds != null) {
+                SubCategoryBuilder pillar = eb.startSubCategory(new LiteralText("Pillarseeds"));
+                for(long structureSeed:pillarSeeds) {
+                    pillar.add(eb.startTextField(new LiteralText(""),String.valueOf(structureSeed)).build());
+                }
+                info.addEntry(pillar.setExpanded(true).build());
+            } else {
+                info.addEntry(eb.startTextDescription(new LiteralText("No Pillarseeds found")).build());
+            }
+            HashedSeedData hashedSeed = SeedCracker.get().getDataStorage().hashedSeedData;
+            if(hashedSeed != null) {
+                info.addEntry(eb.startTextField(new LiteralText("Hashed seed"),String.valueOf(hashedSeed.getHashedSeed())).build());
+            } else {
+                info.addEntry(eb.startTextDescription(new LiteralText("no hashed seed found")).build());
+            }
+        }
 
         builder.setSavingRunnable(() -> {
             saveConfig(file);
             loadConfig();
             if(resetToDefault) {
+                Features.init(getConfig().VERSION);
+                SeedCracker.get().setActive(getConfig().Active);
                 FinderQueue.get().clear();
                 resetToDefault = false;
             }
@@ -116,7 +179,7 @@ public class ConfigScreen {
         try (FileWriter writer = new FileWriter(file)) {
             gson.toJson(config, writer);
         } catch (IOException e) {
-            System.out.println("could't save config");
+            System.out.println("seedcracker could't save config");
             e.printStackTrace();
         }
     }
@@ -127,8 +190,7 @@ public class ConfigScreen {
         try (Reader reader = new FileReader(file)) {
             config = gson.fromJson(reader, ConfigObj.class);
         } catch (IOException e){
-            System.out.println("couldn't find/load config");
-            e.printStackTrace();
+            System.out.println("seedcracker couldn't find/load config");
         }
     }
 

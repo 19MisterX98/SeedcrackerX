@@ -3,9 +3,11 @@ package kaptainwutax.seedcracker.finder;
 import kaptainwutax.seedcracker.SeedCracker;
 import kaptainwutax.seedcracker.cracker.BiomeData;
 import kaptainwutax.seedcracker.cracker.DataAddedEvent;
+import kaptainwutax.seedcracker.profile.config.ConfigScreen;
 import kaptainwutax.seedcracker.render.Color;
 import kaptainwutax.seedcracker.render.Cube;
 import kaptainwutax.seedcracker.util.BiomeFixer;
+import kaptainwutax.seedcracker.util.Log;
 import kaptainwutax.seedutils.mc.MCVersion;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -32,7 +34,7 @@ public class BiomeFinder extends Finder {
             for(int z = 0; z < 16; z += 4) {
                 BlockPos blockPos = this.chunkPos.getStartPos().add(x, 0, z);
                 Biome biome;
-                if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_13)) {
+                if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_15)) {
                     biome = this.world.getBiomeForNoiseGen(blockPos.getX() >> 2, 0, blockPos.getZ() >> 2);
                 } else {
                     biome = this.world.getBiome(blockPos);
@@ -44,18 +46,18 @@ public class BiomeFinder extends Finder {
                 }
                 BiomeData data;
                 kaptainwutax.biomeutils.Biome otherBiome = BiomeFixer.swap(biome);
-                if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_13)) {
+                if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_15)) {
                     data = new BiomeData(otherBiome, blockPos.getX() >> 2, blockPos.getZ() >> 2);
                 } else {
                     data = new BiomeData(otherBiome, blockPos.getX(), blockPos.getZ());
                 }
                 if(SeedCracker.get().getDataStorage().addBiomeData(data, DataAddedEvent.POKE_BIOMES)) {
                     blockPos = this.world.getTopPosition(Heightmap.Type.WORLD_SURFACE, blockPos).down();
+                    if(ConfigScreen.getConfig().isDEBUG()) Log.warn(blockPos.toShortString()+ ", "+otherBiome.getName());
                     result.add(blockPos);
                 }
             }
         }
-
         result.forEach(pos -> this.renderers.add(new Cube(pos, new Color(51, 204, 128))));
 
         return result;

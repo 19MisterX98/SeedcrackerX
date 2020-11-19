@@ -153,13 +153,13 @@ public class TimeMachine {
 
 	protected boolean pokeBiomes() {
 		if(this.structureSeeds == null || this.structureSeeds.isEmpty()|| this.worldSeeds != null)return false;
-		if(this.dataStorage.hashedSeedData == null &&
-				(this.dataStorage.biomeSeedData.size() < 8 || this.structureSeeds.size() > 20))return false;
+		if((this.dataStorage.hashedSeedData == null || this.dataStorage.hashedSeedData.getHashedSeed() == 0) &&
+				(this.dataStorage.biomeSeedData.size() < 5 || this.structureSeeds.size() > 20))return false;
 
 		this.worldSeeds = new ArrayList<>();
 		Log.debug("====================================");
 
-		if(this.dataStorage.hashedSeedData != null) {
+		if(this.dataStorage.hashedSeedData != null && this.dataStorage.hashedSeedData.getHashedSeed() != 0) {
 			Log.warn("Looking for world seeds...");
 
 			for(long structureSeed: this.structureSeeds) {
@@ -181,7 +181,7 @@ public class TimeMachine {
 			}
 		}
 
-		Log.warn("Looking for world seeds...");
+		Log.warn("Looking for world seeds with "+ this.dataStorage.biomeSeedData.size() + " biomes...");
 		for(long structureSeed : this.structureSeeds) {
 			for(long upperBits = 0; upperBits < 1 << 16 && !this.shouldTerminate; upperBits++) {
 				long worldSeed = (upperBits << 48) | structureSeed;
@@ -216,13 +216,17 @@ public class TimeMachine {
 		}
 
 		dispSearchEnd();
-		if(worldSeeds.size() != 1) {
-			Log.warn("Looking for NextLong world seeds(might all be wrong)");
+		if(this.worldSeeds.size() != 1) {
+			Log.warn("Looking for world seeds that are possible if the world uses a random seed");
 			for (long structureSeed : this.structureSeeds) {
-				worldSeeds.addAll(StructureSeed.toRandomWorldSeeds(structureSeed));
-			}
-			for (Long worldSeed : worldSeeds) {
-				Log.printSeed("Found world seed ${SEED}.", worldSeed);
+				StructureSeed.toRandomWorldSeeds(structureSeed).forEach(s -> {
+					if(this.worldSeeds.contains(s)) {
+						Log.printSeed("Found world seed that also matches biomes ${SEED}.", s);
+					} else {
+						this.worldSeeds.add(s);
+						Log.printSeed("Found world seed ${SEED}.", s);
+					}
+				});
 			}
 			dispSearchEnd();
 		}

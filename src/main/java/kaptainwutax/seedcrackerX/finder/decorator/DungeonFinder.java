@@ -28,6 +28,10 @@ import java.util.List;
 import java.util.Set;
 
 public class DungeonFinder extends BlockFinder {
+    private static boolean xRayDetected = false;
+    public static void resetXRayDetected() {
+        xRayDetected = false;
+    }
 
     protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
         return false;
@@ -57,10 +61,13 @@ public class DungeonFinder extends BlockFinder {
                 currentPos.move(0, -1, 0);
                 posCheck = this.world.getBlockState(currentPos).getBlock();
                 if (posCheck != Blocks.COBBLESTONE && posCheck != Blocks.MOSSY_COBBLESTONE) {
-                    Log.error("This server probably uses AntiXray");
-                    //TODO link a video that explains it better
-                    Log.error("You may need to dig out the walls at footlevel in the marked dungeon");
-                    Log.error("Reload the area so the mod scans again");
+                    if(!xRayDetected) {
+                        xRayDetected = true;
+                        Log.error("This server probably uses AntiXray");
+                        //TODO link a video that explains it better
+                        Log.error("You may need to dig out the walls at footlevel in the marked dungeon");
+                        Log.error("Reload the area so the mod scans again");
+                    }
                     this.renderers.add(new Cube(currentPos, new Color(255, 0, 157)));
                     return true;
                 }
@@ -184,8 +191,7 @@ public class DungeonFinder extends BlockFinder {
         finders.add(new DungeonFinder(world, chunkPos));
 
 
-        //what is this for???
-        /*finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
+        finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
         finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
         finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
 
@@ -194,7 +200,7 @@ public class DungeonFinder extends BlockFinder {
         finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z + 1)));
 
         finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z - 1)));
-        finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z + 1)));*/
+        finders.add(new DungeonFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z + 1)));
         return finders;
     }
 

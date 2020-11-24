@@ -15,12 +15,12 @@ public class SeedCracker implements ModInitializer {
 
     private static final SeedCracker INSTANCE = new SeedCracker();
     private final DataStorage dataStorage = new DataStorage();
-	private boolean active = true;
+	private static boolean active;
 
 	@Override
 	public void onInitialize() {
 		ConfigScreen.loadConfig();
-		this.active = ConfigScreen.getConfig().isActive();
+		active = ConfigScreen.getConfig().isActive();
 		Features.init(MC_VERSION);
 		RenderQueue.get().add("hand", FinderQueue.get()::renderFinders);
 	}
@@ -34,14 +34,14 @@ public class SeedCracker implements ModInitializer {
 	}
 
 	public boolean isActive() {
-		return this.active;
+		return active;
 	}
 
     public void setActive(boolean active) {
-		if(this.active == active) return;
-		this.active = active;
+		if(SeedCracker.active == active) return;
+		SeedCracker.active = active;
 
-	    if(this.active) {
+	    if(active) {
 		    ClientCommand.sendFeedback("SeedCracker is active.", Formatting.GREEN, true);
 	    } else {
 		    ClientCommand.sendFeedback("SeedCracker is not active.", Formatting.RED, true);
@@ -52,5 +52,4 @@ public class SeedCracker implements ModInitializer {
 		SeedCracker.get().getDataStorage().clear();
 		FinderQueue.get().clear();
 	}
-
 }

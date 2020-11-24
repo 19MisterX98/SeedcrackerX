@@ -181,6 +181,8 @@ public class TimeMachine {
 			}
 		}
 
+		if(this.dataStorage.biomeSeedData.size() < 5 || this.structureSeeds.size() > 20) return false;
+
 		Log.warn("Looking for world seeds with "+ this.dataStorage.biomeSeedData.size() + " biomes...");
 		for(long structureSeed : this.structureSeeds) {
 			for(long upperBits = 0; upperBits < 1 << 16 && !this.shouldTerminate; upperBits++) {

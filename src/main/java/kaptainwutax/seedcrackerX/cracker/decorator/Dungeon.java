@@ -91,7 +91,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 		public static final int COBBLESTONE_CALL = 0;
 		public static final int MOSSY_COBBLESTONE_CALL = 1;
 		public static final float MIN_FLOOR_BITS = 26.0F;
-		public static final float MAX_FLOOR_BITS = 48.0F;
+		public static final float MAX_FLOOR_BITS = 64.0F;
 
 		public final int offsetX;
 		public final int blockX;
@@ -188,7 +188,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					}
 				}
 				if(dataStorage.getTimeMachine().worldSeeds == null) {
-					Log.warn("finished structure seed search");
+					Log.warn("finished structure seed search. You'll need another dungeon");
 				}
 			}else {
 				LCG failedDungeon = LCG.JAVA.combine(-5);

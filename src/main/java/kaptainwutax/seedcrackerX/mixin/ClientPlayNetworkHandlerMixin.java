@@ -69,8 +69,6 @@ public abstract class ClientPlayNetworkHandlerMixin {
         if(SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES)) {
             Log.warn("Fetched hashed world seed [" + hashedSeedData.getHashedSeed() + "].");
         }
-
-        SeedCracker.get().setActive(SeedCracker.get().isActive());
     }
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))

@@ -22,11 +22,10 @@ public class ConfigObj{
     protected boolean BIOME = true;
     protected MCVersion VERSION = MCVersion.v1_16_2;
     protected RenderType RENDER = RenderType.XRAY;
-
     protected boolean Active = true;
 
     public boolean isActive() {
-        return Active;
+        return this.Active;
     }
 
     public boolean isDEBUG() {

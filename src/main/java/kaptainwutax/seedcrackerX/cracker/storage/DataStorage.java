@@ -14,6 +14,7 @@ import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
+import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
 import kaptainwutax.seedcrackerX.util.Log;
 
 import java.util.ArrayList;
@@ -178,6 +179,7 @@ public class DataStorage {
 		this.hashedSeedData = null;
 		this.timeMachine.shouldTerminate = true;
 		this.timeMachine = new TimeMachine(this);
+		DungeonFinder.resetXRayDetected();
 	}
 
 	public static class Entry<T> {

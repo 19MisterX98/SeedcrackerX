@@ -112,3 +112,10 @@ publishing {
 		// mavenLocal()
 	}
 }
+project.ext.credentials = new Properties()
+try {
+	project.ext.credentials.load(new FileReader(file('credentials.properties')))
+} catch (IOException ignore) {
+}
+
+apply from: 'setupRealMcAccount.gradle'

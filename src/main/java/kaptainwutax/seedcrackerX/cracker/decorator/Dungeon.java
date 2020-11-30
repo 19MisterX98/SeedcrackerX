@@ -181,7 +181,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					for (int i = 0; i < 200; i++) {
 						for(long structureSeed:ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2)) {
 							if(dataStorage.addDungeon12StructureSeed(structureSeed)) {
-								break;
+								return;
 							}
 						}
 						decoratorSeed = LCG.JAVA.combine(-1).nextSeed(decoratorSeed);

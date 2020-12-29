@@ -3,12 +3,14 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
+import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class FinderCommand extends ClientCommand {
+    ReloadFinders reloadFinders = new ReloadFinders();
 
     @Override
     public String getName() {
@@ -34,6 +36,7 @@ public class FinderCommand extends ClientCommand {
                     .executes(context -> this.printFinderCategory(finderCategory))
             );
         }
+        builder.then(literal("reload").executes(context -> this.reload()));
     }
 
     private int printFinderCategory(Finder.Category finderCategory) {
@@ -58,6 +61,11 @@ public class FinderCommand extends ClientCommand {
             sendFeedback("Your current finder profile is locked and cannot be modified. Please make a copy first.", Formatting.RED, false);
         }
 
+        return 0;
+    }
+
+    private int reload() {
+        reloadFinders.reload();
         return 0;
     }
 

@@ -6,6 +6,7 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
+import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.client.MinecraftClient;

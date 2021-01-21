@@ -1,26 +1,26 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
+
+import com.seedfinding.latticg.reversal.DynamicProgram;
+import com.seedfinding.latticg.reversal.calltype.java.JavaCalls;
+import com.seedfinding.latticg.util.LCG;
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.util.Log;
-import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.seedutils.mc.ChunkRand;
 import kaptainwutax.seedutils.mc.Dimension;
 import kaptainwutax.seedutils.mc.MCVersion;
 import kaptainwutax.seedutils.mc.VersionMap;
 import mjtb49.hashreversals.ChunkRandomReverser;
 import net.minecraft.util.math.Vec3i;
-import randomreverser.call.java.FilteredSkip;
-import randomreverser.call.java.NextInt;
-import randomreverser.device.JavaRandomDevice;
-import randomreverser.device.LCGReverserDevice;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
@@ -140,33 +140,36 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				}
 				Log.printDungeonInfo(this.blockX + ", " + this.blockY + ", " + this.blockZ + ", " + floorString);
 			}
-			JavaRandomDevice device = new JavaRandomDevice();
+			DynamicProgram device = DynamicProgram.create(LCG.JAVA);
 
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_15)) {
-				device.addCall(NextInt.withValue(16, this.offsetX));
-				device.addCall(NextInt.withValue(256, this.blockY));
-				device.addCall(NextInt.withValue(16, this.offsetZ));
+				device.add(JavaCalls.nextInt(16).equalTo(this.offsetX));
+				device.add(JavaCalls.nextInt(255).equalTo(this.blockY));
+				device.add(JavaCalls.nextInt(16).equalTo(this.offsetZ));
 			} else {
-				device.addCall(NextInt.withValue(16, this.offsetX));
-				device.addCall(NextInt.withValue(16, this.offsetZ));
-				device.addCall(NextInt.withValue(256, this.blockY));
+				device.add(JavaCalls.nextInt(16).equalTo(this.offsetX));
+				device.add(JavaCalls.nextInt(16).equalTo(this.offsetZ));
+				device.add(JavaCalls.nextInt(255).equalTo(this.blockY));
 			}
-
-			device.addCall(NextInt.consume(2, 2)); //Skip size.
+			device.skip(2);
 
 			for(int call: this.floorCalls) {
 				if(call == COBBLESTONE_CALL) {
-					device.addCall(NextInt.withValue(4, 0));
+					device.add(JavaCalls.nextInt(4).equalTo(0));
 				} else if(call == MOSSY_COBBLESTONE_CALL) {
 					//Skip mossy, brute-force later.
-					device.addCall(FilteredSkip.filter(LCG.JAVA, r -> r.nextInt(4) != 0, 1));
+					device.add(JavaCalls.nextInt(4).notEqualTo(0));
+					//device.addCall(FilteredSkip.filter(LCG.JAVA, r -> r.nextInt(4) != 0, 1));
 				} else if(call == 2){
 					//unkown
-					device.addCall(NextInt.consume(4,1));
+					device.skip(1);
+					//device.addCall(NextInt.consume(4,1));
 				}
 			}
+			LongStream longStream = device.reverse().limit(1);
 
-			Set<Long> decoratorSeeds = device.streamSeeds(LCGReverserDevice.Process.EVERYTHING).sequential().limit(1).collect(Collectors.toSet());
+			Set<Long> decoratorSeeds = new HashSet<>();
+			longStream.forEach(decoratorSeeds::add);
 
 			if(decoratorSeeds.isEmpty()) {
 				Log.error("Finished dungeon search with no seeds.");

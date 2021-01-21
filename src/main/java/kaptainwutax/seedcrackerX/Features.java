@@ -5,6 +5,7 @@ import kaptainwutax.featureutils.decorator.EndGateway;
 import kaptainwutax.featureutils.structure.*;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
+import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedutils.mc.MCVersion;
 
 public class Features {
@@ -32,6 +33,7 @@ public class Features {
 	public static DesertWell DESERT_WELL;
 	public static EmeraldOre EMERALD_ORE;
 	public static Dungeon DUNGEON;
+	public static WarpedFungus WARPED_FUNGUS;
 	
 	public static void init(MCVersion version) {
 		safe(() -> BASTION_REMNANT = new BastionRemnant(version));
@@ -57,6 +59,7 @@ public class Features {
 		safe(() -> DESERT_WELL = new DesertWell(version));
 		safe(() -> EMERALD_ORE = new EmeraldOre(version));
 		safe(() -> DUNGEON = new Dungeon(version));
+		safe(() -> WARPED_FUNGUS = new WarpedFungus(version));
 	}
 
 	private static void safe(Runnable runnable) {

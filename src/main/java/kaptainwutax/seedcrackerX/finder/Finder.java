@@ -1,9 +1,6 @@
 package kaptainwutax.seedcrackerX.finder;
 
-import kaptainwutax.seedcrackerX.finder.decorator.DesertWellFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.EndGatewayFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.EndPillarsFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.*;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
 import kaptainwutax.seedcrackerX.finder.structure.*;
 import kaptainwutax.seedcrackerX.render.Renderer;
@@ -132,6 +129,7 @@ public abstract class Finder {
         DUNGEON(DungeonFinder::create, Category.DECORATORS),
         EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS),
         DESERT_WELL(DesertWellFinder::create, Category.DECORATORS),
+        WARPED_FUNGUS(WarpedFungusFinder::create,Category.DECORATORS),
         BIOME(BiomeFinder::create, Category.BIOMES);
 
         public final FinderBuilder finderBuilder;

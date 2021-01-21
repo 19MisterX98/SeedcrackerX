@@ -19,6 +19,7 @@ public class ConfigObj{
     protected boolean DUNGEON = true;
     protected boolean EMERALD_ORE = true;
     protected boolean DESERT_WELL = true;
+    protected boolean WARPED_FUNGUS = true;
     protected boolean BIOME = true;
     protected MCVersion VERSION = MCVersion.v1_16_2;
     protected RenderType RENDER = RenderType.XRAY;
@@ -90,6 +91,10 @@ public class ConfigObj{
 
     public boolean isDESERT_WELL() {
         return this.DESERT_WELL;
+    }
+
+    public boolean isWARPED_FUNGUS() {
+        return WARPED_FUNGUS;
     }
 
     public boolean isBIOME() {

@@ -10,33 +10,39 @@ public class FullFungusData {
     public boolean big;
     public int height;
     public int vineLayerSize;
+    public final ArrayList<Integer> bigtrunkData = new ArrayList<>();
 
-    public FullFungusData(List<Integer> layerSizes, int[][][] layers, List<Integer> vines, boolean big, int height, int vineLayerSize) {
+    public FullFungusData(List<Integer> layerSizes, int[][][] layers, ArrayList<Integer> vines, boolean big, int height, int vineLayerSize, ArrayList<Integer> bigTrunkData) {
         this.layerSizes.addAll(layerSizes);
         this.layers = layers.clone();
         this.vines.addAll(vines);
         this.big = big;
         this.height = height;
         this.vineLayerSize = vineLayerSize;
+        this.bigtrunkData.addAll(bigTrunkData);
     }
 
     public int getData() {
         //this is dirty. I have no clue on how to do this right
         int data= 0;
-        for(int vine:vines) {
+        for(int vine:this.vines) {
             if(vine != 0) {
                 data++;
             }
         }
-        data += layerSizes.size();
-        if(big) {
+        data += this.layerSizes.size();
+        if(this.big) {
             data += 2;
+            for (int i:this.bigtrunkData) {
+                if(i == 1)
+                    data++;
+            }
         }
         return data;
     }
 
     public static FullFungusData getBestFungus(List<FullFungusData> fungusList) {
-        int data = 17;
+        int data = 0;
         FullFungusData out = null;
 
         for(FullFungusData fungus:fungusList) {

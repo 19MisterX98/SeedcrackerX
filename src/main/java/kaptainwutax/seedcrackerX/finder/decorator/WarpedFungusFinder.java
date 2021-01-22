@@ -13,6 +13,7 @@ import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -72,6 +73,31 @@ public class WarpedFungusFinder extends BlockFinder {
             if(i < 4 || i >26 || (i>14 && i % 2 ==1)) {
                 return false;
             }
+
+            int dataCounter = 0;
+            ArrayList<Integer> bigTrunkData = new ArrayList<>();
+            if(big) {
+                dataCounter++;
+                    for (int x = -1; x <2; x +=2) {
+                        for (int z = -1; z <2; z+=2) {
+                            for(int height = 0;height < i; height++) {
+                            Block block = this.world.getBlockState(trunk.add(x, height, z)).getBlock();
+                            if (block.is(Blocks.WARPED_STEM)) {
+                                dataCounter++;
+                                bigTrunkData.add(1);
+                                //this.renderers.add(new Cube(trunk.add(x,height,z),Color.WHITE));
+                            } else if (block.getDefaultState().getMaterial() == Material.PLANT || block.getDefaultState().getMaterial() == Material.SOLID_ORGANIC || block.is(Blocks.AIR)){
+                                bigTrunkData.add(0);
+                            } else {
+                                bigTrunkData.add(0);
+                                //System.out.println("skip");
+                            }
+
+                            //System.out.println(trunk.add(x,height,z).toShortString()+"   "/*+bigTrunkData.get(bigTrunkData.size()-1)*/);
+                        }
+                    }
+                }
+            }
             //BlockBox box = new BlockBox(pos,pos.add(1,i,1));
             //this.renderers.add(new Cuboid(box, new Color(0, 255, 255)));
 
@@ -79,7 +105,7 @@ public class WarpedFungusFinder extends BlockFinder {
             boolean validLayer;
             int height = i;
 
-            List<Integer> layerSizes = new ArrayList<>();
+            ArrayList<Integer> layerSizes = new ArrayList<>();
             int upperLayerSize = 1;
             do {
                 validLayer = false;
@@ -116,14 +142,15 @@ public class WarpedFungusFinder extends BlockFinder {
             for (int y = i-2;y <= i;y++) {
                 for (int x = -vineRingSize+1; x < vineRingSize;x++) {
                     for (int z = -vineRingSize+1; z < vineRingSize; z++) {
+                        if(big && -2 < x && x < 2 && -2 < z && z < 2) continue;
                         if (x == 0 && z == 0) continue;
                         Block block = this.world.getBlockState(pos.add(x, y, z)).getBlock();
-                        if (block != Blocks.AIR) return false;
+                        if (block.getDefaultState().getMaterial() != Material.PLANT && !block.is(Blocks.AIR)) return false;
                     }
                 }
             }
             //vine data
-            List<Integer> vine = new ArrayList<>();
+            ArrayList<Integer> vine = new ArrayList<>();
             for (int x = -vineRingSize;x <= vineRingSize;x++) {
                 for (int z = -vineRingSize;z <= vineRingSize;z++) {
                     if(Math.abs(x) != vineRingSize && Math.abs(z) != vineRingSize) continue;
@@ -135,7 +162,8 @@ public class WarpedFungusFinder extends BlockFinder {
                             vine.add(i-y+1);
                             //System.out.println(i-y+1+" at x: "+ x+" z: "+z);
                             isVine = true;
-                        }else if(!block.is(Blocks.AIR) || isVine) {
+                            dataCounter++;
+                        }else if(block.getDefaultState().getMaterial() != Material.PLANT && !block.is(Blocks.AIR) || isVine) {
                             return false;
                         }else if (y ==i) {
                             vine.add(0);
@@ -167,6 +195,7 @@ public class WarpedFungusFinder extends BlockFinder {
                         } else if(block.is(Blocks.WARPED_WART_BLOCK)) {
                             blocktype = 1;
                         } else if(block.is(Blocks.SHROOMLIGHT)) {
+                            dataCounter++;
                             blocktype = 2;
                         } else if(block.is(Blocks.WARPED_STEM)) {
                             blocktype = 3;
@@ -179,9 +208,9 @@ public class WarpedFungusFinder extends BlockFinder {
                 }
                 counter++;
             }
-            FullFungusData fungusData = new FullFungusData(layerSizes,layers,vine,false,height,vineRingSize);
+            FullFungusData fungusData = new FullFungusData(layerSizes,layers,vine,big,height,vineRingSize,bigTrunkData);
 
-            if(fungusData.getData() < 18) return true;
+            if(dataCounter < 15) return true;
 
             fullFungusData.add(fungusData);
 

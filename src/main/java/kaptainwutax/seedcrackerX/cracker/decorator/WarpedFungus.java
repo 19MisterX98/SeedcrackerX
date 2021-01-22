@@ -6,6 +6,7 @@ import com.seedfinding.latticg.util.LCG;
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
+import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.mc.ChunkRand;
 import kaptainwutax.seedutils.mc.Dimension;
@@ -17,10 +18,7 @@ import mjtb49.hashreversals.PopulationReverser;
 import net.minecraft.util.math.BlockPos;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
@@ -77,9 +75,10 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             BlockX = blockX;
             BlockZ = blockZ;
         }
-        //public ChunkRand rand = new ChunkRand(169031210908165L,false);
+        public ChunkRand rand = new ChunkRand(224974476960896L,false);
 
         public void onDataAdded(DataStorage dataStorage) {
+            if(dataStorage.getTimeMachine().worldSeeds != null) return;
 
 
             int hoehe = fullFungi.height;
@@ -91,8 +90,10 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
             int[][][] bottomLayer = fullFungi.layers;
 
+            ArrayList<Integer> trunkdata = new ArrayList<>(fullFungi.bigtrunkData);
 
-            System.out.println("running cracker at "+fungiPoses[0][0]+" "+fungiPoses[0][1]);
+
+            //System.out.println("running cracker at "+fungiPoses[0][0]+" "+fungiPoses[0][1]);
             Log.warn("running cracker at "+fungiPoses[0][0]+" "+fungiPoses[0][1]);
 
 
@@ -120,49 +121,42 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             DynamicProgram dynamicProgram = DynamicProgram.create(LCG.JAVA);
             if(doppelt < 2) {
                 dynamicProgram.skip(2);
-                //rand.advance(2);
+                rand.advance(2);
                 //dynamicProgram.add(JavaCalls.nextInt(12).greaterThan(0));
                 //dynamicProgram.add(JavaCalls.nextInt(10).equalTo(hoehe - 4));
             } else {
                 //dynamicProgram.add(JavaCalls.nextInt(10).equalTo((hoehe/2) -4));
                 dynamicProgram.skip(1);
                 dynamicProgram.add(JavaCalls.nextInt(12).equalTo(0));
-                //rand.advance(1);
-                //System.out.println("next int 12"+(rand.nextInt(12) == 0));
+                rand.advance(1);
+                System.out.println("next int 12"+(rand.nextInt(12) == 0));
             }
             if(breit){
                 dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.06F));
-
+                System.out.println(rand.nextFloat()<0.06F);
             } else {
                 dynamicProgram.skip(1);
-                //rand.advance(1);
+                rand.advance(1);
                 //dynamicProgram.add(JavaCalls.nextFloat().greaterOrEqual(0.06F));
             }
-            /*
+
             if(breit) {
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < hoehe; j++) {
-
-                        if (trunkdata[i][j] == 0) {
-                            dynamicProgram.skip(1);
-
-                        } else if (trunkdata[i][j] == 1) {
-                            dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.1F));
-
-                        } else if (trunkdata[i][j] == 2) {
-                            dynamicProgram.skip(1);
-
-                        } else {
-                            System.out.println("failed to read array " + i + " number " + j);
-
-                        }
+                for (int blockdata:trunkdata) {
+                    if(blockdata == 0) {
+                        System.out.println("nextfloat >0.1" +(rand.nextFloat()>=0.1F));
+                        dynamicProgram.skip(1);
+                    } else if (blockdata == 1) {
+                        System.out.println("nextfloat <0.1 " + (rand.nextFloat()<0.1F));
+                        dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.1F));
+                    } else {
+                        System.out.println("this shouldnt be possible, but just in case here is your error message");
                     }
+                    System.out.println(blockdata);
                 }
             }
-             */
 
             dynamicProgram.skip(2);
-            //rand.advance(2);
+            rand.advance(2);
 
             ArrayList<Integer> done = new ArrayList<>();
             for (int j= 3;j > 0;j--) {
@@ -172,21 +166,21 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
                 for (int i = 0; i < hatSizeVine*8; i++) {
                     if(vine[i] == 0 && !done.contains(i)) {
                         dynamicProgram.skip(1);
-                        //rand.advance(1);
+                        rand.advance(1);
 
                     } else if (vine[i] == j) {
                         done.add(i);
                         dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.15F));
-                        //System.out.println("nextfloat < 0.15"+(rand.nextFloat() < 0.15F));
+                        System.out.println("nextfloat < 0.15"+(rand.nextFloat() < 0.15F));
 
                     }else if(!done.contains(i)) {
                         count++;
                         dynamicProgram.skip(1);
-                        //rand.advance(1);
+                        rand.advance(1);
                     }
                 }
                 dynamicProgram.skip(1);
-                //rand.advance(1);
+                rand.advance(1);
             }
             int relativePos;
             int blockType;
@@ -209,48 +203,44 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
                         blockType = bottomLayer[layer][x][z];
 
-                        generateBlock(relativePos,blockType,dynamicProgram);
+                        generateBlock(relativePos,blockType,dynamicProgram,rand);
                     }
                 }
 
                 dynamicProgram.skip(1);
-                //rand.advance(1);
+                rand.advance(1);
                 layer++;
             }
 
 
 
             LongStream longStream = dynamicProgram.reverse();
-            System.out.println("============");
+
             ArrayList<Long> longs = new ArrayList<>();
             longStream.forEach(longs::add);
-            longs.forEach(System.out::println);
+            Log.debug("====================================");
             longs.forEach(s -> {Log.printSeed("fungus seed: ${SEED}.",s);});
-            System.out.println("============");
+
             if(longs.isEmpty()) {
                 System.out.println("tree data wrong");
-                Log.warn("wrong data");
+                Log.warn("wrong fungus data.");
+                return;
+            }
+            Log.debug("====================================");
+
+            longs.forEach(this::reverseToDecoratorSeed);
+            if(structureSeedList.isEmpty()) {
+                Log.warn("no seeds found for this Fungus.");
                 return;
             }
 
-            longs.forEach(this::reverseToDecoratorSeed);
-
-            System.out.println("got Seeds: ");
-            Log.warn("got Seeds: ");
+            Log.warn("got structure seeds: ");
+            dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
             structureSeedList.forEach(s -> {
-                System.out.println("structureseed:"+s);
-                //Log.printSeed("structureseed ${SEED}",s);
-                //StructureSeed.toRandomWorldSeeds(s).forEach(w -> System.out.println("Worldseed equivalent: "+ w));
+                Log.printSeed("structureseed ${SEED}.",s);
+                dataStorage.getTimeMachine().structureSeeds.add(s);
             });
-            List<Long> worldSeeds = new ArrayList<>();
-            if(dataStorage.hashedSeedData == null || dataStorage.hashedSeedData.getHashedSeed() == 0) return;
-            structureSeedList.forEach(s -> {
-                worldSeeds.addAll(WorldSeed.fromHash(s,dataStorage.hashedSeedData.getHashedSeed()));
-            });
-            System.out.println("Worldseed by hash:");
-            worldSeeds.forEach(System.out::println);
-            Log.warn("Worldseed by hash:");
-            worldSeeds.forEach(s -> Log.printSeed("Worldseed ${SEED}.",s));
+            dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
         }
 
 
@@ -324,7 +314,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             }
         }
 
-        private void generateBlock(int relativePos, int blockType, DynamicProgram dynamicProgram) {
+        private void generateBlock(int relativePos, int blockType, DynamicProgram dynamicProgram, ChunkRand rand) {
             //System.out.println("Block: "+blockType +" "+"pos: "+relativePos);
             if(blockType == 3) return;
             switch (relativePos) {
@@ -333,12 +323,11 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
                     switch (blockType) {
                         case 0:
                             dynamicProgram.skip(2);
-                            //rand.advance(2);
+                            rand.advance(2);
                             break;
                         case 1:
-                            //dynamicProgram.skip(3);
                             dynamicProgram.skip(3);
-                            //rand.advance(3);
+                            rand.advance(3);
                             //dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.2F));
                             //System.out.println("nextFloat < 0.2F"+(rand.nextFloat() < 0.2F));
                             //dynamicProgram.skip(1);
@@ -346,7 +335,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
                             break;
                         case 2:
                             dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.1F));
-                            //System.out.println("nextFloat < 0.1F"+(rand.nextFloat() < 0.1F));
+                            System.out.println("nextFloat < 0.1F"+(rand.nextFloat() < 0.1F));
                     }
                     break;
                 case 1:
@@ -355,33 +344,33 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
                         case 0:
                             dynamicProgram.skip(1);
                             dynamicProgram.add(JavaCalls.nextFloat().greaterThanEqual(0.98F));
-                            //rand.advance(1);
-                            //System.out.println("nextFloat > 0.98F"+(rand.nextFloat() >= 0.98));
+                            rand.advance(1);
+                            System.out.println("nextFloat > 0.98F"+(rand.nextFloat() >= 0.98));
                             break;
                         case 1:
-                            //rand.advance(3);
+                            rand.advance(3);
                             dynamicProgram.skip(3);
                             break;
                         case 2:
                             dynamicProgram.add(JavaCalls.nextFloat().lessThan(5.0E-4F));
-                            //System.out.println("nextFloat < 5.0E-4F"+(rand.nextFloat() <5.0E-4F));
+                            System.out.println("nextFloat < 5.0E-4F"+(rand.nextFloat() <5.0E-4F));
                     }
                     break;
                 case 2:
                     //Corner
                     switch (blockType) {
                         case 0:
-                            //rand.advance(2);
+                            rand.advance(2);
                             dynamicProgram.skip(2);
                             break;
                         case 1:
                             dynamicProgram.skip(3);
-                            //rand.advance(3);
+                            rand.advance(3);
                             break;
                         case 2:
 
                             dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.01F));
-                            //System.out.println("nextFloat < 0.01F"+(rand.nextFloat() < 0.01F));
+                            System.out.println("nextFloat < 0.01F"+(rand.nextFloat() < 0.01F));
                     }
                     break;
             }

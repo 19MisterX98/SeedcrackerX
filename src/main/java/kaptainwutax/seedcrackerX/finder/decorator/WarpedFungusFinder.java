@@ -61,7 +61,6 @@ public class WarpedFungusFinder extends BlockFinder {
             if(bigCount != 0 && bigCount != 4) return true;
             boolean big = bigCount == 4;
 
-            this.renderers.add(new Cube(pos, new Color(255, 50, 157)));
             newResult.add(pos);
 
             BlockPos.Mutable trunk = pos.mutableCopy();
@@ -223,6 +222,10 @@ public class WarpedFungusFinder extends BlockFinder {
 
             for (BlockBox box:renderBox) {
                 this.renderers.add(new Cuboid(box, new Color(0, 255, 255)));
+            }
+
+            for (BlockPos pos:newResult) {
+                this.renderers.add(new Cube(pos, new Color(255, 30, 0)));
             }
         }
         return newResult;

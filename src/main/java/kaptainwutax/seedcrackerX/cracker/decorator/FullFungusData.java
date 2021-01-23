@@ -1,9 +1,16 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
+import com.seedfinding.latticg.reversal.DynamicProgram;
+import com.seedfinding.latticg.reversal.calltype.java.JavaCalls;
+import com.seedfinding.latticg.util.LCG;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.LongStream;
 
 public class FullFungusData {
+
+
     public final ArrayList<Integer> layerSizes = new ArrayList<>();
     public final int[][][] layers;
     public final ArrayList<Integer> vines = new ArrayList<>();
@@ -11,8 +18,9 @@ public class FullFungusData {
     public int height;
     public int vineLayerSize;
     public final ArrayList<Integer> bigtrunkData = new ArrayList<>();
+    public final int estimatedData;
 
-    public FullFungusData(List<Integer> layerSizes, int[][][] layers, ArrayList<Integer> vines, boolean big, int height, int vineLayerSize, ArrayList<Integer> bigTrunkData) {
+    public FullFungusData(List<Integer> layerSizes, int[][][] layers, ArrayList<Integer> vines, boolean big, int height, int vineLayerSize, ArrayList<Integer> bigTrunkData, int estimatedData) {
         this.layerSizes.addAll(layerSizes);
         this.layers = layers.clone();
         this.vines.addAll(vines);
@@ -20,33 +28,16 @@ public class FullFungusData {
         this.height = height;
         this.vineLayerSize = vineLayerSize;
         this.bigtrunkData.addAll(bigTrunkData);
+        this.estimatedData = estimatedData;
     }
 
-    public int getData() {
-        //this is dirty. I have no clue on how to do this right
-        int data= 0;
-        for(int vine:this.vines) {
-            if(vine != 0) {
-                data++;
-            }
-        }
-        data += this.layerSizes.size();
-        if(this.big) {
-            data += 2;
-            for (int i:this.bigtrunkData) {
-                if(i == 1)
-                    data++;
-            }
-        }
-        return data;
-    }
 
     public static FullFungusData getBestFungus(List<FullFungusData> fungusList) {
         int data = 0;
         FullFungusData out = null;
 
         for(FullFungusData fungus:fungusList) {
-            int fungusData = fungus.getData();
+            int fungusData = fungus.estimatedData;
             if(fungusData>data) {
                 data = fungusData;
                 out = fungus;
@@ -54,5 +45,134 @@ public class FullFungusData {
         }
 
         return out;
+    }
+
+    public LongStream crackSeed() {
+        int doppelt = 0;
+        if(height > 7 && height % 2 == 0) {
+            doppelt = 1;
+            if(height > 13){
+                doppelt = 2;
+            }
+        }
+
+        DynamicProgram dynamicProgram = DynamicProgram.create(LCG.JAVA);
+        if(doppelt < 2) {
+            dynamicProgram.skip(2);
+        } else {
+            dynamicProgram.skip(1);
+            dynamicProgram.add(JavaCalls.nextInt(12).equalTo(0));
+        }
+        if(big){
+            dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.06F));
+        } else {
+            dynamicProgram.skip(1);
+        }
+
+        if(big) {
+            for (int blockdata:bigtrunkData) {
+                if(blockdata == 0) {
+                    dynamicProgram.skip(1);
+                } else if (blockdata == 1) {
+                    dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.1F));
+                }
+                System.out.println(blockdata);
+            }
+        }
+
+        dynamicProgram.skip(2);
+
+        ArrayList<Integer> done = new ArrayList<>();
+        for (int j= 3;j > 0;j--) {
+
+            for (int i = 0; i < vineLayerSize*8; i++) {
+                if(vines.get(i) == 0 && !done.contains(i)) {
+                    dynamicProgram.skip(1);
+
+                } else if (vines.get(i) == j) {
+                    done.add(i);
+                    dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.15F));
+
+                }else if(!done.contains(i)) {
+                    dynamicProgram.skip(1);
+
+                }
+            }
+
+            dynamicProgram.skip(1);
+        }
+        int relativePos;
+        int blockType;
+        int layer = 0;
+
+        for(int size:layerSizes) {
+            size *=2;
+
+            for(int x = 0; x <= size; x++) {
+
+                boolean siteX = x == 0 || x == size;
+                for (int z = 0; z <= size; z++) {
+
+                    boolean siteZ = z == 0 || z == size;
+
+                    relativePos = (siteX ? 1:0) + (siteZ ? 1:0);
+
+                    blockType = layers[layer][x][z];
+
+                    generateBlock(relativePos,blockType,dynamicProgram);
+                }
+            }
+
+            dynamicProgram.skip(1);
+            layer++;
+        }
+        return dynamicProgram.reverse();
+    }
+
+    private void generateBlock(int relativePos, int blockType, DynamicProgram dynamicProgram) {
+
+        if(blockType == 3) return;
+        switch (relativePos) {
+            case 0:
+                //Inside
+                switch (blockType) {
+                    case 0:
+                        dynamicProgram.skip(2);
+                        break;
+                    case 1:
+                        dynamicProgram.skip(3);
+                        break;
+                    case 2:
+                        dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.1F));
+                }
+                break;
+            case 1:
+                //Wall
+                switch (blockType) {
+                    case 0:
+                        dynamicProgram.skip(1);
+                        dynamicProgram.add(JavaCalls.nextFloat().greaterThanEqual(0.98F));
+                        break;
+                    case 1:
+                        dynamicProgram.skip(3);
+                        break;
+                    case 2:
+                        dynamicProgram.add(JavaCalls.nextFloat().lessThan(5.0E-4F));
+                }
+                break;
+            case 2:
+                //Corner
+                switch (blockType) {
+                    case 0:
+                        dynamicProgram.skip(2);
+                        break;
+                    case 1:
+                        dynamicProgram.skip(3);
+                        break;
+                    case 2:
+                        dynamicProgram.add(JavaCalls.nextFloat().lessThan(0.01F));
+                }
+                break;
+        }
     }
 }

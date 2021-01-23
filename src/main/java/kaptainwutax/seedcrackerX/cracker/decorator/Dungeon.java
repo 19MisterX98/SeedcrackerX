@@ -144,12 +144,12 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_15)) {
 				device.add(JavaCalls.nextInt(16).equalTo(this.offsetX));
-				device.add(JavaCalls.nextInt(255).equalTo(this.blockY));
+				device.add(JavaCalls.nextInt(256).equalTo(this.blockY));
 				device.add(JavaCalls.nextInt(16).equalTo(this.offsetZ));
 			} else {
 				device.add(JavaCalls.nextInt(16).equalTo(this.offsetX));
 				device.add(JavaCalls.nextInt(16).equalTo(this.offsetZ));
-				device.add(JavaCalls.nextInt(255).equalTo(this.blockY));
+				device.add(JavaCalls.nextInt(256).equalTo(this.blockY));
 			}
 			device.skip(2);
 
@@ -157,13 +157,10 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				if(call == COBBLESTONE_CALL) {
 					device.add(JavaCalls.nextInt(4).equalTo(0));
 				} else if(call == MOSSY_COBBLESTONE_CALL) {
-					//Skip mossy, brute-force later.
 					device.add(JavaCalls.nextInt(4).notEqualTo(0));
-					//device.addCall(FilteredSkip.filter(LCG.JAVA, r -> r.nextInt(4) != 0, 1));
 				} else if(call == 2){
 					//unkown
 					device.skip(1);
-					//device.addCall(NextInt.consume(4,1));
 				}
 			}
 			LongStream longStream = device.reverse().limit(1);

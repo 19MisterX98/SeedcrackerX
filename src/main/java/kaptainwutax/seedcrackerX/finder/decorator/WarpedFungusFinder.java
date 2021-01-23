@@ -10,7 +10,6 @@ import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
-import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
@@ -62,7 +61,7 @@ public class WarpedFungusFinder extends BlockFinder {
             if(bigCount != 0 && bigCount != 4) return true;
             boolean big = bigCount == 4;
 
-            //this.renderers.add(new Cube(pos, new Color(255, 50, 157)));
+            this.renderers.add(new Cube(pos, new Color(255, 50, 157)));
             newResult.add(pos);
 
             BlockPos.Mutable trunk = pos.mutableCopy();
@@ -78,29 +77,23 @@ public class WarpedFungusFinder extends BlockFinder {
             ArrayList<Integer> bigTrunkData = new ArrayList<>();
             if(big) {
                 dataCounter++;
-                    for (int x = -1; x <2; x +=2) {
-                        for (int z = -1; z <2; z+=2) {
-                            for(int height = 0;height < i; height++) {
+                for (int x = -1; x <2; x +=2) {
+                    for (int z = -1; z <2; z+=2) {
+                        for(int height = 0;height < i; height++) {
+
                             Block block = this.world.getBlockState(trunk.add(x, height, z)).getBlock();
                             if (block.is(Blocks.WARPED_STEM)) {
                                 dataCounter++;
                                 bigTrunkData.add(1);
-                                //this.renderers.add(new Cube(trunk.add(x,height,z),Color.WHITE));
+
                             } else if (block.getDefaultState().getMaterial() == Material.PLANT || block.getDefaultState().getMaterial() == Material.SOLID_ORGANIC || block.is(Blocks.AIR)){
                                 bigTrunkData.add(0);
-                            } else {
-                                bigTrunkData.add(0);
-                                //System.out.println("skip");
-                            }
 
-                            //System.out.println(trunk.add(x,height,z).toShortString()+"   "/*+bigTrunkData.get(bigTrunkData.size()-1)*/);
                         }
                     }
                 }
+                }
             }
-            //BlockBox box = new BlockBox(pos,pos.add(1,i,1));
-            //this.renderers.add(new Cuboid(box, new Color(0, 255, 255)));
-
 
             boolean validLayer;
             int height = i;
@@ -110,21 +103,20 @@ public class WarpedFungusFinder extends BlockFinder {
             do {
                 validLayer = false;
                 for(int layerSize = upperLayerSize+1;upperLayerSize-1<=layerSize;layerSize--) {
+
                     if(layerSize < 1) break;
                     int countRing = countRing(pos.add(0,i,0),layerSize);
-                    //System.out.println(countRing);
-                    if(countRing == 0) {
 
+                    if(countRing == 0) {
                         i--;
                         layerSizes.add(layerSize);
                         upperLayerSize = layerSize;
                         validLayer = true;
-                        //BlockBox box = new BlockBox(pos.add(layerSize+1,i+1,layerSize+1),pos.add(-layerSize,i+2,-layerSize));
-
                         break;
+
                     } else if (countRing == 3) {
                         return false; //found a wrong block
-                    }else if (countRing == 2) {break;} //not enough blocks for a full layer, might be vines
+                    }else if (countRing == 2) break; //not enough blocks for a full layer, might be vines
 
                 }
             } while (validLayer);
@@ -173,14 +165,6 @@ public class WarpedFungusFinder extends BlockFinder {
                 }
             }
 
-            for (int layerSize : layerSizes) {
-                renderBox.add(new BlockBox(pos.add(layerSize + 1, heeeight, layerSize + 1), pos.add(-layerSize, heeeight + 1, -layerSize)));
-
-                heeeight--;
-            }
-            renderBox.add(new BlockBox(pos.add(-vineRingSize+1,i-2,-vineRingSize+1),pos.add(vineRingSize,i+1,vineRingSize)));
-            renderBox.add(new BlockBox(pos.add(-vineRingSize,i-2,-vineRingSize),pos.add(vineRingSize+1,i+1,vineRingSize+1)));
-
             Collections.reverse(layerSizes);
             int counter = 0;
             int[][][] layers = new int[layerSizes.size()][11][11];
@@ -208,27 +192,28 @@ public class WarpedFungusFinder extends BlockFinder {
                 }
                 counter++;
             }
-            FullFungusData fungusData = new FullFungusData(layerSizes,layers,vine,big,height,vineRingSize,bigTrunkData);
+            if(dataCounter < 13) return true;
 
-            if(dataCounter < 15) return true;
-
+            FullFungusData fungusData = new FullFungusData(layerSizes,layers,vine,big,height,vineRingSize,bigTrunkData,dataCounter);
             fullFungusData.add(fungusData);
 
-            //System.out.println("Fungus at: "+pos.toShortString()+" layers: " +layerSizes.size()+"in chunk "+this.chunkPos.x+" "+this.chunkPos.z);
+            Collections.reverse(layerSizes);
+            for (int layerSize : layerSizes) {
+                renderBox.add(new BlockBox(pos.add(layerSize + 1, heeeight, layerSize + 1), pos.add(-layerSize, heeeight + 1, -layerSize)));
+                heeeight--;
+            }
+            renderBox.add(new BlockBox(pos.add(-vineRingSize+1,i-2,-vineRingSize+1),pos.add(vineRingSize,i+1,vineRingSize)));
+            renderBox.add(new BlockBox(pos.add(-vineRingSize,i-2,-vineRingSize),pos.add(vineRingSize+1,i+1,vineRingSize+1)));
 
             return false;
         });
 
-        //System.out.println(newResult.size()+" fullFungi: "+fullFungusData.size()+" "+this.chunkPos.x+" "+this.chunkPos.z);
         if(fullFungusData.isEmpty()) return new ArrayList<>();
-
         if(newResult.size() < 5) return new ArrayList<>();
 
         FullFungusData bestFungus = FullFungusData.getBestFungus(fullFungusData);
 
         if(bestFungus == null) return new ArrayList<>();
-
-        System.out.println(newResult.size()+" fungi in chunk: "+this.chunkPos.x+" "+this.chunkPos.z);
 
         WarpedFungus.Data data = Features.WARPED_FUNGUS.at(chunkPos.getStartX(),chunkPos.getStartZ(),BiomeFixer.swap(biome),newResult,bestFungus);
 
@@ -236,36 +221,12 @@ public class WarpedFungusFinder extends BlockFinder {
 
         if(SeedCracker.get().getDataStorage().addBaseData(data, data::onDataAdded)) {
 
-            Log.warn("Looking with positions: ");
-            for(BlockPos pos:newResult) {
-                Log.warn(pos.toShortString());
-                this.renderers.add(new Cube(pos,new Color(200,0,0)));
-            }
-            System.out.println("best Fungus has "+bestFungus.layerSizes.size()+" layers in "+this.chunkPos.x+" "+this.chunkPos.z);
             for (BlockBox box:renderBox) {
-                //todo add renderers to every fungus individualy
                 this.renderers.add(new Cuboid(box, new Color(0, 255, 255)));
             }
-            /*
-            FullFungusData using = FullFungusData.getBestFungus(fullFungusData);
-            for(int i = 0; i <= using.layerSizes.size();i++) {
-                for (int x = 0;x <= using.layerSizes.get(i)*2;x++) {
-                    String printer = "";
-                    for (int z = 0;z <= using.layerSizes.get(i)*2;z++) {
-                        printer += using.layers[i][x][z];
-                    }
-                    Log.debug(printer);
-                }
-                Log.debug("============");
-            }*/
         }
         return newResult;
     }
-
-
-
-
-
 
 
 
@@ -277,7 +238,6 @@ public class WarpedFungusFinder extends BlockFinder {
         int counter = 0;
         int deco =0;
 
-        //todo check only rings
         for(int x = -ringSize;x <= ringSize; x++) {
             for(int z = -ringSize;z <= ringSize; z++) {
                 if(Math.abs(x) != ringSize && Math.abs(z) != ringSize) continue;
@@ -310,8 +270,6 @@ public class WarpedFungusFinder extends BlockFinder {
         List<Finder> finders = new ArrayList<>();
         finders.add(new WarpedFungusFinder(world, chunkPos));
 
-
-        /*
         finders.add(new WarpedFungusFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
         finders.add(new WarpedFungusFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
         finders.add(new WarpedFungusFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
@@ -322,7 +280,6 @@ public class WarpedFungusFinder extends BlockFinder {
 
         finders.add(new WarpedFungusFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z - 1)));
         finders.add(new WarpedFungusFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z + 1)));
-         */
 
         return finders;
     }

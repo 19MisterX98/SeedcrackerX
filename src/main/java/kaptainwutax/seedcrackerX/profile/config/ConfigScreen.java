@@ -98,7 +98,9 @@ public class ConfigScreen {
                 config.addEntry(eb.startBooleanToggle(new LiteralText("Dungeon"), ConfigScreen.config.DUNGEON).setSaveConsumer(val -> ConfigScreen.config.DUNGEON = val).build());
                 config.addEntry(eb.startBooleanToggle(new LiteralText("Emerald ore"), ConfigScreen.config.EMERALD_ORE).setSaveConsumer(val -> ConfigScreen.config.EMERALD_ORE = val).build());
                 config.addEntry(eb.startBooleanToggle(new LiteralText("Desert well"), ConfigScreen.config.DESERT_WELL).setSaveConsumer(val -> ConfigScreen.config.DESERT_WELL = val).build());
+                config.addEntry(eb.startBooleanToggle(new LiteralText("Warped fungus"),ConfigScreen.config.WARPED_FUNGUS).setSaveConsumer(val -> ConfigScreen.config.WARPED_FUNGUS = val).build());
                 config.addEntry(eb.startBooleanToggle(new LiteralText("Biome"), ConfigScreen.config.BIOME).setSaveConsumer(val -> ConfigScreen.config.BIOME = val).build());
+
 
             config.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
 

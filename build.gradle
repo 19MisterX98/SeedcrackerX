@@ -19,9 +19,6 @@ repositories {
 		url "https://jitpack.io"
 	}
 	maven { url "https://maven.latticg.com/"}
-	maven {
-		url 'https://dl.bintray.com/earthcomputer/mods'
-	}
 }
 
 
@@ -35,7 +32,6 @@ dependencies {
 	modApi("me.shedaniel.cloth:config-2:4.8.1") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modImplementation 'net.earthcomputer:multiconnect:1.3.34'
 	
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
 
@@ -45,14 +41,16 @@ dependencies {
 	implementation('com.github.KaptainWutax:FeatureUtils:0bd98a8dd892ff8d7292bcf5545f79a91a5eecca') {transitive = false}
 	implementation('com.github.KaptainWutax:BiomeUtils:62b374f2def7e09240447aceeb12a0a601b59a2b') {transitive = false}
 	implementation('com.github.KaptainWutax:ChunkRandomReversal:209eefb8ed2bd097e3c55d3934ba508b664443da') {transitive = false}
-	implementation 'com.seedfinding:latticg:1.03@jar'
+	implementation 'com.github.KaptainWutax:LattiCG:b2a338f7bd765dcd184136c2245ea5765b75edf8'
+	implementation 'com.seedfinding:latticg:1.05@jar'
 
 	include('com.github.KaptainWutax:MathUtils:6c2d50eacad0241ff76119e6e703b70bac4b4bce') {transitive = false}
 	include('com.github.KaptainWutax:SeedUtils:0de70bc772fef95d8acfa6991e7278ee53a8b46c') {transitive = false}
 	include('com.github.KaptainWutax:FeatureUtils:0bd98a8dd892ff8d7292bcf5545f79a91a5eecca') {transitive = false}
 	include('com.github.KaptainWutax:BiomeUtils:62b374f2def7e09240447aceeb12a0a601b59a2b') {transitive = false}
 	include('com.github.KaptainWutax:ChunkRandomReversal:209eefb8ed2bd097e3c55d3934ba508b664443da') {transitive = false}
-	include 'com.seedfinding:latticg:1.03@jar'
+	include 'com.github.KaptainWutax:LattiCG:b2a338f7bd765dcd184136c2245ea5765b75edf8'
+	include 'com.seedfinding:latticg:1.05@jar'
 	include "me.shedaniel.cloth:config-2:4.8.1"
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"

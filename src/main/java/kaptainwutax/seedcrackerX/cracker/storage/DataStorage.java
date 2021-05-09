@@ -178,7 +178,7 @@ public class DataStorage {
 		this.dungeon12StructureSeeds = new ArrayList<>();
 		this.baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 		this.biomeSeedData = new ScheduledSet<>(null);
-		this.hashedSeedData = null;
+		//this.hashedSeedData = null;
 		this.timeMachine.shouldTerminate = true;
 		this.timeMachine = new TimeMachine(this);
 		DungeonFinder.resetXRayDetected();

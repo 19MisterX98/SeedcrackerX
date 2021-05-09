@@ -63,10 +63,11 @@ public class DungeonFinder extends BlockFinder {
                 if (posCheck != Blocks.COBBLESTONE && posCheck != Blocks.MOSSY_COBBLESTONE) {
                     if(!xRayDetected) {
                         xRayDetected = true;
-                        Log.error("This server probably uses AntiXray");
-                        //TODO link a video that explains it better
-                        Log.error("You may need to dig out the walls at footlevel in the marked dungeon");
-                        Log.error("Reload the area so the mod scans again");
+                        Log.error("This server probably uses AntiXray if the floor of the dungeon at coordinates "+pos.toShortString()+ " is not damaged in any way");
+                        Log.error("You have two options.");
+                        Log.error("1. You can find another dungeon which has more data in the visible floor");
+                        Log.error("2. You need to remove the walls so the complete dungeon floor is visible. " +
+                                "After that you can reload the dungeon by typing \"/seed data clear\" and then \"/seed finder reload\"");
                     }
                     this.renderers.add(new Cube(currentPos, new Color(255, 0, 157)));
                     return true;
@@ -100,9 +101,7 @@ public class DungeonFinder extends BlockFinder {
                     count++;
                 }
             }
-            if (count < 20) return true;
-            AntiXRay(pos);
-            return false;
+            return count < 20;
         });
 
         if(result.size() != 1)return new ArrayList<>();
@@ -111,6 +110,7 @@ public class DungeonFinder extends BlockFinder {
         BlockPos pos = result.get(0);
         Vec3i size = this.getDungeonSizeXray(pos);
         int[] floorCalls = this.getFloorCalls(size, pos);
+        AntiXRay(pos);
 
         Dungeon.Data data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), size, floorCalls, BiomeFixer.swap(biome));
 
@@ -176,9 +176,6 @@ public class DungeonFinder extends BlockFinder {
         }
         
         return floorCalls;
-    }
-    public enum DungeonSize {
-
     }
 
     @Override

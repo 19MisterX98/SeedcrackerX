@@ -1,26 +1,26 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
 
-import com.seedfinding.latticg.reversal.DynamicProgram;
-import com.seedfinding.latticg.reversal.calltype.java.JavaCalls;
-import com.seedfinding.latticg.util.LCG;
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.util.Log;
+import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.seedutils.mc.ChunkRand;
 import kaptainwutax.seedutils.mc.Dimension;
 import kaptainwutax.seedutils.mc.MCVersion;
 import kaptainwutax.seedutils.mc.VersionMap;
 import mjtb49.hashreversals.ChunkRandomReverser;
 import net.minecraft.util.math.Vec3i;
+import randomreverser.ReverserDevice;
+import randomreverser.call.FilteredSkip;
+import randomreverser.call.NextInt;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.LongStream;
+import java.util.stream.Collectors;
 
 public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
@@ -91,7 +91,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 		public static final int COBBLESTONE_CALL = 0;
 		public static final int MOSSY_COBBLESTONE_CALL = 1;
 		public static final float MIN_FLOOR_BITS = 26.0F;
-		public static final float MAX_FLOOR_BITS = 64.0F;
+		public static final float MAX_FLOOR_BITS = 48.0F;
 
 		public final int offsetX;
 		public final int blockX;
@@ -134,50 +134,54 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 			Log.warn("Short-cutting to dungeons...");
 			if(ConfigScreen.getConfig().isDEBUG()) {
-				String floorString = "";
+				StringBuilder floorString = new StringBuilder();
 				for(int floorCall:this.floorCalls){
-					floorString = floorString + floorCall;
+					floorString.append(floorCall);
 				}
-				Log.printDungeonInfo(this.blockX + ", " + this.blockY + ", " + this.blockZ + ", " + floorString);
+				Log.printDungeonInfo(this.blockX + ", " + this.blockY + ", " + this.blockZ + ", \"" + floorString + "\"");
+				Log.warn("Dungeonbiome: "+this.biome.getName());
 			}
-			DynamicProgram device = DynamicProgram.create(LCG.JAVA);
+			ReverserDevice device = new ReverserDevice();
 
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_15)) {
-				device.add(JavaCalls.nextInt(16).equalTo(this.offsetX));
-				device.add(JavaCalls.nextInt(256).equalTo(this.blockY));
-				device.add(JavaCalls.nextInt(16).equalTo(this.offsetZ));
+				device.addCall(NextInt.withValue(16,this.offsetX));
+				device.addCall(NextInt.withValue(256,this.blockY));
+				device.addCall(NextInt.withValue(16,this.offsetZ));
 			} else {
-				device.add(JavaCalls.nextInt(16).equalTo(this.offsetX));
-				device.add(JavaCalls.nextInt(16).equalTo(this.offsetZ));
-				device.add(JavaCalls.nextInt(256).equalTo(this.blockY));
+				device.addCall(NextInt.withValue(16,this.offsetX));
+				device.addCall(NextInt.withValue(16,this.offsetZ));
+				device.addCall(NextInt.withValue(256,this.blockY));
 			}
 			device.skip(2);
 
 			for(int call: this.floorCalls) {
 				if(call == COBBLESTONE_CALL) {
-					device.add(JavaCalls.nextInt(4).equalTo(0));
+					device.addCall(NextInt.withValue(4, 0));
 				} else if(call == MOSSY_COBBLESTONE_CALL) {
-					device.add(JavaCalls.nextInt(4).notEqualTo(0));
+					//Skip mossy, brute-force later.
+					device.addCall(FilteredSkip.filter(r -> r.nextInt(4) != 0));
 				} else if(call == 2){
-					//unkown
-					device.skip(1);
+					device.addCall(NextInt.consume(4, 1));
 				}
 			}
-			LongStream longStream = device.reverse().limit(1);
 
-			Set<Long> decoratorSeeds = new HashSet<>();
-			longStream.forEach(decoratorSeeds::add);
+			Set<Long> decoratorSeeds = device.streamSeeds().sequential().collect(Collectors.toSet());
 
 			if(decoratorSeeds.isEmpty()) {
 				Log.error("Finished dungeon search with no seeds.");
 				return;
+			}
+			if(ConfigScreen.getConfig().isDEBUG()) {
+				for(long decoratorSeed : decoratorSeeds) {
+					Log.warn("Dungeonseed: " + decoratorSeed);
+				}
 			}
 
 			dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
 			
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) {
 				for (long decoratorSeed : decoratorSeeds) {
-				
+
 					for (int i = 0; i < 200; i++) {
 						for(long structureSeed:ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2)) {
 							if(dataStorage.addDungeon12StructureSeed(structureSeed)) {

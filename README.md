@@ -1,4 +1,4 @@
-# SeedCracker [![Github All Releases](https://img.shields.io/github/downloads/KaptainWutax/SeedCracker/total.svg)]()
+# SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]()
 
 ## Installation
 
@@ -7,15 +7,27 @@
   Download and install the [fabric mod loader](https://fabricmc.net/use/).
 
  ### MultiMC
-
+ 
   Add a new minecraft instance and press "Install Fabric" in the instance options.
 
-
-  Then download the lastest [release](https://github.com/KaptainWutax/SeedCracker/releases) of SeedCracker and put the `.jar` file    in your mods directory, either `%appdata%/.minecraft/mods/` folder for the vanilla launcher or your own MultiMC instance folder.
-
+ ### Mod Installation
+ 
+  Download the lastest [release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
+  
+  Download the lastest [release](https://www.curseforge.com/minecraft/mc-mods/modmenu/files) of ModMenu
+  
+  Download the lastest [release](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files) of Fabric API
+  
+  
+  put the .jar files in your mods directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own MultiMC instance folder.
+  
+ #### Optional
+  
+  Download the lastest [release](https://github.com/Earthcomputer/multiconnect/releases) of Multiconnect to connect to servers on lower MC versions
+  
 ## Usage
 
-  Run minecraft with the mod installed and run around in the world. Once the mod has collected enough data, it will start the cracking process automatically and output the seed in chat. For the process to start, the amount of data that needs to be collected varies depending on the type of feature. `/seed data bits` can be used to see how much progress has been done. 
+  Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automaticly. If it doesnt get you a world seed you may want to find another dungeon. This mod also supports cracking the seed via [structures and endpillars](https://youtu.be/aUuPSZVPH8E?t=462) and [warped fungus](https://www.youtube.com/watch?v=HKjwgofhKs4)
   
   ### Supported Structures
     - Ocean Monument
@@ -31,8 +43,9 @@
     - End Gateway
     - Desert Well
     - Emerald Ore
+    - Warped Fungus
 
-## Commands
+## Commands(Deprecated, use the GUI instead)
 
   The command prefix for this mod is /seed.
   
@@ -47,6 +60,10 @@
   -`/seed finder category (BIOMES/ORES/OTHERS/STRUCTURES) (ON/OFF)`
   
   This command is used to disable finders in case you are aware the data is wrong. For example, a map generated in 1.14 has different decorators and would require you to disable them while going through those chunks.
+  
+  -`/seed finder reload`
+  
+  Searches the loaded area again
 
   ### Data Command
   - `/seed data clear`
@@ -62,19 +79,22 @@
  
   Enables or disables the mod completely. Unlike the other commands, this one is persistent across reloads.
   
-## Video Tutorial
+  - `/seed cracker debug`
+
+  Additional info is shown
+  
+## Video Tutorials
 
 https://youtu.be/1ChmLi9og8Q
+
+https://youtu.be/8ytfZ2MXosY
 
 ## Upcoming Features
 
 A list of features I have on my mind... they won't necessarily be implemented in this order if at all.
 
-    - SHA2 brute-forcing, auxiliary to biomes search. /implemented
-    - Dungeon floor cracker, fast lattice reversal. /implemented
     - Stronghold portal room cracker. (alternative to dungeon floor?)
-    - Faster brute-forcing by reorganizing located features list. /implemented
-    - End and nether biome finders. (nether would mostly be in preparation for 1.16) /implemented
+    - Tree data collection (probably only oak and birch. Puts info into a file that can be compiled to run on GPU)
 
 ## Setting up the Workspace
 
@@ -95,3 +115,5 @@ A list of features I have on my mind... they won't necessarily be implemented in
 [neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) - Video Tutorial
 
 [Nekzuris](https://github.com/Nekzuris) - README
+
+[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Author of this fork

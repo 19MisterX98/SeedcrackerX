@@ -81,11 +81,11 @@ public class WarpedFungusFinder extends BlockFinder {
                         for(int height = 0;height < i; height++) {
 
                             Block block = this.world.getBlockState(trunk.add(x, height, z)).getBlock();
-                            if (block.is(Blocks.WARPED_STEM)) {
+                            if (block == Blocks.WARPED_STEM) {
                                 dataCounter++;
                                 bigTrunkData.add(1);
 
-                            } else if (block.getDefaultState().getMaterial() == Material.PLANT || block.getDefaultState().getMaterial() == Material.SOLID_ORGANIC || block.is(Blocks.AIR)){
+                            } else if (block.getDefaultState().getMaterial() == Material.PLANT || block.getDefaultState().getMaterial() == Material.SOLID_ORGANIC || block == Blocks.AIR){
                                 bigTrunkData.add(0);
 
                         }
@@ -136,7 +136,7 @@ public class WarpedFungusFinder extends BlockFinder {
                         if(big && -2 < x && x < 2 && -2 < z && z < 2) continue;
                         if (x == 0 && z == 0) continue;
                         Block block = this.world.getBlockState(pos.add(x, y, z)).getBlock();
-                        if (block.getDefaultState().getMaterial() != Material.PLANT && !block.is(Blocks.AIR)) return false;
+                        if (block.getDefaultState().getMaterial() != Material.PLANT && block != Blocks.AIR) return false;
                     }
                 }
             }
@@ -148,13 +148,13 @@ public class WarpedFungusFinder extends BlockFinder {
                     boolean isVine = false;
                     for (int y = i-2;y <= i;y++) {
                         Block block = this.world.getBlockState(pos.add(x, y, z)).getBlock();
-                        if(block.is(Blocks.WARPED_WART_BLOCK)) {
+                        if(block == Blocks.WARPED_WART_BLOCK) {
                             if(isVine) continue;
                             vine.add(i-y+1);
                             //System.out.println(i-y+1+" at x: "+ x+" z: "+z);
                             isVine = true;
                             dataCounter++;
-                        }else if(block.getDefaultState().getMaterial() != Material.PLANT && !block.is(Blocks.AIR) || isVine) {
+                        }else if(block.getDefaultState().getMaterial() != Material.PLANT && block != Blocks.AIR || isVine) {
                             return false;
                         }else if (y ==i) {
                             vine.add(0);
@@ -173,14 +173,14 @@ public class WarpedFungusFinder extends BlockFinder {
                     for (int z = -layerSize;z<=layerSize;z++) {
                         Block block = this.world.getBlockState(pos.add(x, y, z)).getBlock();
                         int blocktype = -1;
-                        if(block.is(Blocks.AIR)) {
+                        if(block == Blocks.AIR) {
                             blocktype = 0;
-                        } else if(block.is(Blocks.WARPED_WART_BLOCK)) {
+                        } else if(block == Blocks.WARPED_WART_BLOCK) {
                             blocktype = 1;
-                        } else if(block.is(Blocks.SHROOMLIGHT)) {
+                        } else if(block == Blocks.SHROOMLIGHT) {
                             dataCounter++;
                             blocktype = 2;
-                        } else if(block.is(Blocks.WARPED_STEM)) {
+                        } else if(block == Blocks.WARPED_STEM) {
                             blocktype = 3;
                         } else {
                             blocktype = 0;
@@ -198,11 +198,11 @@ public class WarpedFungusFinder extends BlockFinder {
 
             Collections.reverse(layerSizes);
             for (int layerSize : layerSizes) {
-                renderBox.add(new BlockBox(pos.add(layerSize + 1, heeeight, layerSize + 1), pos.add(-layerSize, heeeight + 1, -layerSize)));
+                renderBox.add(BlockBox.create(pos.add(layerSize + 1, heeeight, layerSize + 1), pos.add(-layerSize, heeeight + 1, -layerSize)));
                 heeeight--;
             }
-            renderBox.add(new BlockBox(pos.add(-vineRingSize+1,i-2,-vineRingSize+1),pos.add(vineRingSize,i+1,vineRingSize)));
-            renderBox.add(new BlockBox(pos.add(-vineRingSize,i-2,-vineRingSize),pos.add(vineRingSize+1,i+1,vineRingSize+1)));
+            renderBox.add(BlockBox.create(pos.add(-vineRingSize+1,i-2,-vineRingSize+1),pos.add(vineRingSize,i+1,vineRingSize)));
+            renderBox.add(BlockBox.create(pos.add(-vineRingSize,i-2,-vineRingSize),pos.add(vineRingSize+1,i+1,vineRingSize+1)));
 
             return false;
         });

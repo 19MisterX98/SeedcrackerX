@@ -24,7 +24,7 @@ public class Cuboid extends Renderer {
     }
 
     public Cuboid(BlockBox box, Color color) {
-        this(new BlockPos(box.minX, box.minY, box.minZ), new BlockPos(box.maxX, box.maxY, box.maxZ), color);
+        this(new BlockPos(box.getMinX(), box.getMinY(), box.getMinZ()), new BlockPos(box.getMaxX(), box.getMaxY(), box.getMaxZ()), color);
     }
 
     public Cuboid(BlockPos start, Vec3i size, Color color) {

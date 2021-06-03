@@ -138,11 +138,11 @@ public class PieceFinder extends Finder {
             switch(this.facing) {
                 case NORTH:
                 case SOUTH:
-                    return this.boundingBox.minX + x;
+                    return this.boundingBox.getMinX() + x;
                 case WEST:
-                    return this.boundingBox.maxX - z;
+                    return this.boundingBox.getMaxY() - z;
                 case EAST:
-                    return this.boundingBox.minX + z;
+                    return this.boundingBox.getMinX() + z;
                 default:
                     return x;
             }
@@ -150,7 +150,7 @@ public class PieceFinder extends Finder {
     }
 
     protected int applyYTransform(int y) {
-        return this.facing == null ? y : y + this.boundingBox.minY;
+        return this.facing == null ? y : y + this.boundingBox.getMinY();
     }
 
     protected int applyZTransform(int x, int z) {
@@ -159,12 +159,12 @@ public class PieceFinder extends Finder {
         } else {
             switch(this.facing) {
                 case NORTH:
-                    return this.boundingBox.maxZ - z;
+                    return this.boundingBox.getMaxZ() - z;
                 case SOUTH:
-                    return this.boundingBox.minZ + z;
+                    return this.boundingBox.getMinZ() + z;
                 case WEST:
                 case EAST:
-                    return this.boundingBox.minZ + x;
+                    return this.boundingBox.getMinZ() + x;
                 default:
                     return z;
             }

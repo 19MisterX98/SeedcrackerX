@@ -6,13 +6,11 @@
   "mixins": [
   ],
   "client": [
-    "DummyProfilerMixin",
-    "GameRendererMixin",
+    "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
-    "ClientPlayerEntityMixin",
-    "ServerChunkManagerMixin",
-    "DimensionTypeMixin"
+    "DimensionTypeMixin",
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

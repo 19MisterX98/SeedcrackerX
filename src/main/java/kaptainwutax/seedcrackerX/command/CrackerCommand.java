@@ -5,7 +5,6 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import net.minecraft.server.command.ServerCommandSource;
 
-
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class CrackerCommand extends ClientCommand {

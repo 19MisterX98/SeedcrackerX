@@ -1,10 +1,7 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
-import com.seedfinding.latticg.reversal.DynamicProgram;
-import com.seedfinding.latticg.reversal.calltype.java.JavaCalls;
 import com.seedfinding.latticg.util.LCG;
 import kaptainwutax.biomeutils.Biome;
-import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.Log;
@@ -12,14 +9,12 @@ import kaptainwutax.seedutils.mc.ChunkRand;
 import kaptainwutax.seedutils.mc.Dimension;
 import kaptainwutax.seedutils.mc.MCVersion;
 import kaptainwutax.seedutils.mc.VersionMap;
-import kaptainwutax.seedutils.mc.seed.StructureSeed;
-import kaptainwutax.seedutils.mc.seed.WorldSeed;
 import mjtb49.hashreversals.PopulationReverser;
 import net.minecraft.util.math.BlockPos;
 
-
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.stream.LongStream;
 
 public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data> {

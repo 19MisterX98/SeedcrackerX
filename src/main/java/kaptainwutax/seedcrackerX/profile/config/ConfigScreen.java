@@ -1,23 +1,13 @@
 package kaptainwutax.seedcrackerX.profile.config;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.List;
-
 import com.google.gson.Gson;
-
-
+import kaptainwutax.seedcrackerX.Features;
+import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
+import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.finder.FinderQueue.RenderType;
 import kaptainwutax.seedutils.mc.MCVersion;
-import kaptainwutax.seedcrackerX.Features;
-import kaptainwutax.seedcrackerX.SeedCracker;
-
-import kaptainwutax.seedcrackerX.finder.Finder;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -25,6 +15,9 @@ import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+
+import java.io.*;
+import java.util.List;
 
 
 

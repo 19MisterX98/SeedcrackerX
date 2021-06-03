@@ -3,7 +3,6 @@ package kaptainwutax.seedcrackerX.cracker;
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.biomeutils.source.BiomeSource;
 import kaptainwutax.seedcrackerX.SeedCracker;
-
 import kaptainwutax.seedutils.mc.MCVersion;
 
 public class BiomeData {

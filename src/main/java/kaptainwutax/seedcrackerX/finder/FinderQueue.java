@@ -5,8 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.profile.FinderConfig;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -50,26 +52,40 @@ public class FinderQueue {
         });
     }
 
-    public void renderFinders(MatrixStack matrixStack) {
+    public void renderFinders(MatrixStack matrixStack, Camera camera) {
         if(this.renderType == RenderType.OFF)return;
 
-        RenderSystem.pushMatrix();
-        RenderSystem.multMatrix(matrixStack.peek().getModel());
+        matrixStack.push();
 
-        GlStateManager.disableTexture();
+        Vec3d camPos = camera.getPos();
+        matrixStack.translate(-camPos.x, -camPos.y, -camPos.z);
 
-        //Makes it render through blocks.
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
         if(this.renderType == RenderType.XRAY) {
-            GlStateManager.disableDepthTest();
+            RenderSystem.disableDepthTest();
         }
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+        RenderSystem.lineWidth(2.0f);
+
+        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
         this.finderProfile.getActiveFinders().forEach(finder -> {
             if(finder.shouldRender()) {
-                finder.render();
+                finder.render(matrixStack, buffer);
             }
         });
 
-        RenderSystem.popMatrix();
+        if(buffer.isBuilding()) {
+            tessellator.draw();
+        }
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+
+        matrixStack.pop();
     }
 
     public void clear() {

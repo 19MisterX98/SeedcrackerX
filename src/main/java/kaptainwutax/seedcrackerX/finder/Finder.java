@@ -5,6 +5,8 @@ import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
 import kaptainwutax.seedcrackerX.finder.structure.*;
 import kaptainwutax.seedcrackerX.render.Renderer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -73,8 +75,8 @@ public abstract class Finder {
         return false;
     }
 
-    public void render() {
-        this.renderers.forEach(Renderer::render);
+    public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer) {
+        this.renderers.forEach(renderer -> renderer.render(matrixStack, vertexConsumer));
     }
 
     public boolean isUseless() {

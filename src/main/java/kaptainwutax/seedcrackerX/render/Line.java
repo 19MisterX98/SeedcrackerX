@@ -1,10 +1,7 @@
 package kaptainwutax.seedcrackerX.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -29,30 +26,17 @@ public class Line extends Renderer {
     }
 
     @Override
-    public void render() {
-        if(this.start == null || this.end == null || this.color == null)return;
-
-        Vec3d camPos = this.mc.gameRenderer.getCamera().getPos();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-
-        //This is how thick the line is.
-        RenderSystem.lineWidth(2.0f);
-        buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-
-        //Put the start and end vertices in the buffer.
-        this.putVertex(buffer, camPos, this.start);
-        this.putVertex(buffer, camPos, this.end);
-
-        //Draw it all.
-        tessellator.draw();
+    public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer) {
+        this.putVertex(vertexConsumer, matrixStack, this.start);
+        this.putVertex(vertexConsumer, matrixStack, this.end);
     }
 
-    protected void putVertex(BufferBuilder buffer, Vec3d camPos, Vec3d pos) {
-        buffer.vertex(
-                pos.getX() - camPos.x,
-                pos.getY() - camPos.y,
-                pos.getZ() - camPos.z
+    protected void putVertex(VertexConsumer vertexConsumer, MatrixStack matrixStack, Vec3d pos) {
+        vertexConsumer.vertex(
+                matrixStack.peek().getModel(),
+                (float)(pos.getX()),
+                (float)(pos.getY()),
+                (float)(pos.getZ())
         ).color(
                 this.color.getFRed(),
                 this.color.getFGreen(),

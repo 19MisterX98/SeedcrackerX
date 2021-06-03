@@ -4,7 +4,6 @@ import kaptainwutax.seedcrackerX.command.ClientCommand;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
-import kaptainwutax.seedcrackerX.render.RenderQueue;
 import kaptainwutax.seedutils.mc.MCVersion;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Formatting;
@@ -22,7 +21,6 @@ public class SeedCracker implements ModInitializer {
 		ConfigScreen.loadConfig();
 		active = ConfigScreen.getConfig().isActive();
 		Features.init(MC_VERSION);
-		RenderQueue.get().add("hand", FinderQueue.get()::renderFinders);
 	}
 
 	public static SeedCracker get() {

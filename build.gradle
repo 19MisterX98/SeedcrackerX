@@ -51,12 +51,7 @@ dependencies {
 	include('com.github.KaptainWutax:ChunkRandomReversal:209eefb8ed2bd097e3c55d3934ba508b664443da') {transitive = false}
 	include 'com.github.KaptainWutax:LattiCG:b2a338f7bd765dcd184136c2245ea5765b75edf8'
 	include 'com.seedfinding:latticg:1.05@jar'
-	//include "me.shedaniel.cloth:config-2:4.8.1"
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	// modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
+	include "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 }
 
 processResources {

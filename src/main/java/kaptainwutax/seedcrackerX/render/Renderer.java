@@ -10,7 +10,7 @@ public abstract class Renderer {
 
     protected MinecraftClient mc = MinecraftClient.getInstance();
 
-    public abstract void render(MatrixStack matrixStack, VertexConsumer vertexConsumer);
+    public abstract void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, Vec3d cameraPos);
 
     public abstract BlockPos getPos();
 

@@ -26,17 +26,17 @@ public class Line extends Renderer {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer) {
-        this.putVertex(vertexConsumer, matrixStack, this.start);
-        this.putVertex(vertexConsumer, matrixStack, this.end);
+    public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, Vec3d cameraPos) {
+        this.putVertex(vertexConsumer, matrixStack, this.start, cameraPos);
+        this.putVertex(vertexConsumer, matrixStack, this.end, cameraPos);
     }
 
-    protected void putVertex(VertexConsumer vertexConsumer, MatrixStack matrixStack, Vec3d pos) {
+    protected void putVertex(VertexConsumer vertexConsumer, MatrixStack matrixStack, Vec3d pos, Vec3d cameraPos) {
         vertexConsumer.vertex(
                 matrixStack.peek().getModel(),
-                (float)(pos.getX()),
-                (float)(pos.getY()),
-                (float)(pos.getZ())
+                (float)(pos.x-cameraPos.x),
+                (float)(pos.y-cameraPos.y),
+                (float)(pos.z-cameraPos.z)
         ).color(
                 this.color.getFRed(),
                 this.color.getFGreen(),

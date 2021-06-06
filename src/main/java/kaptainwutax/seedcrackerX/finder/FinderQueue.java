@@ -58,7 +58,6 @@ public class FinderQueue {
         matrixStack.push();
 
         Vec3d camPos = camera.getPos();
-        matrixStack.translate(-camPos.x, -camPos.y, -camPos.z);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
@@ -75,7 +74,7 @@ public class FinderQueue {
 
         this.finderProfile.getActiveFinders().forEach(finder -> {
             if(finder.shouldRender()) {
-                finder.render(matrixStack, buffer);
+                finder.render(matrixStack, buffer, camPos);
             }
         });
 

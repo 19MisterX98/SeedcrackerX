@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class EndPillarsFinder extends Finder {
 
-    private boolean alreadyFound;
+    private final boolean alreadyFound;
     protected BedrockMarkerFinder[] bedrockMarkers = new BedrockMarkerFinder[10];
 
     public EndPillarsFinder(World world, ChunkPos chunkPos) {
@@ -73,8 +73,7 @@ public class EndPillarsFinder extends Finder {
 
         protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
             if(pos.getY() < 76)return true;
-            if(pos.getY() > 76 + 3 * 10)return true;
-            return false;
+            return pos.getY() > 76 + 3 * 10;
         });
 
         public BedrockMarkerFinder(World world, ChunkPos chunkPos, BlockPos xz) {

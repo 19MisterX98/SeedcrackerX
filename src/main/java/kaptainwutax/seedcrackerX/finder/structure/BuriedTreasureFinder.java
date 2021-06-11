@@ -28,8 +28,7 @@ public class BuriedTreasureFinder extends BlockFinder {
         int localX = pos.getX() & 15;
         int localZ = pos.getZ() & 15;
         if(localX != 9 || localZ != 9)return true;
-        if(pos.getY() > 90)return true;
-        return false;
+        return pos.getY() > 90;
     });
 
     protected static final List<BlockState> CHEST_HOLDERS = new ArrayList<>();
@@ -67,9 +66,7 @@ public class BuriedTreasureFinder extends BlockFinder {
             if(chest.get(ChestBlock.WATERLOGGED))return true;
 
             BlockState chestHolder = world.getBlockState(pos.down());
-            if(!CHEST_HOLDERS.contains(chestHolder))return true;
-
-            return false;
+            return !CHEST_HOLDERS.contains(chestHolder);
         });
 
         result.forEach(pos -> {

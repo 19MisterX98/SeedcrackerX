@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
+import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
@@ -28,8 +29,9 @@ public class DataCommand extends ClientCommand {
 	}
 
 	public int clear(CommandContext<ServerCommandSource> context) {
-		SeedCracker.get().reset();
-		sendFeedback("Cleared data storage and finders.", Formatting.GREEN, false);
+		SeedCracker.get().getDataStorage().clear();
+		FinderQueue.get().finderProfile.deleteFinders();
+		sendFeedback("Cleared data storage", Formatting.GREEN, false);
 		return 0;
 	}
 

@@ -28,8 +28,7 @@ public class MansionFinder extends Finder {
 
     protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
         if((pos.getX() & 15) != 0)return true;
-        if((pos.getZ() & 15) != 0)return true;
-        return false;
+        return (pos.getZ() & 15) != 0;
     });
 
     protected List<PieceFinder> finders = new ArrayList<>();

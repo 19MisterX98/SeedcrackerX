@@ -1,16 +1,16 @@
 package kaptainwutax.seedcrackerX;
 
+import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.command.ClientCommand;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
-import kaptainwutax.seedutils.mc.MCVersion;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Formatting;
 
 public class SeedCracker implements ModInitializer {
 
-	public static MCVersion MC_VERSION = MCVersion.v1_16_2;
+	public static MCVersion MC_VERSION = MCVersion.v1_17;
 
     private static final SeedCracker INSTANCE = new SeedCracker();
     private final DataStorage dataStorage = new DataStorage();

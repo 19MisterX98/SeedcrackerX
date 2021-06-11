@@ -1,10 +1,11 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
-import kaptainwutax.biomeutils.Biome;
+import kaptainwutax.biomeutils.biome.Biome;
 import kaptainwutax.biomeutils.source.BiomeSource;
 import kaptainwutax.featureutils.Feature;
-import kaptainwutax.seedutils.mc.ChunkRand;
-import kaptainwutax.seedutils.mc.MCVersion;
+import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.version.MCVersion;
+import kaptainwutax.terrainutils.TerrainGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,11 @@ public abstract class Decorator<C extends Decorator.Config, D extends Decorator.
 	public boolean canStart(D data, long structureSeed, ChunkRand rand) {
 		rand.setDecoratorSeed(structureSeed, data.chunkX << 4, data.chunkZ << 4,
 				this.getIndex(data.biome), this.getStep(data.biome), this.getVersion());
+		return true;
+	}
+
+	@Override
+	public boolean canGenerate(D data, TerrainGenerator generator) {
 		return true;
 	}
 

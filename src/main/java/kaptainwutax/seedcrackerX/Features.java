@@ -3,10 +3,11 @@ package kaptainwutax.seedcrackerX;
 import kaptainwutax.featureutils.decorator.DesertWell;
 import kaptainwutax.featureutils.decorator.EndGateway;
 import kaptainwutax.featureutils.structure.*;
+import kaptainwutax.mcutils.state.Dimension;
+import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
-import kaptainwutax.seedutils.mc.MCVersion;
 
 public class Features {
 
@@ -23,7 +24,8 @@ public class Features {
 	public static NetherFossil NETHER_FOSSIL;
 	public static OceanRuin OCEAN_RUIN;
 	public static PillagerOutpost PILLAGER_OUTPOST;
-	public static RuinedPortal RUINED_PORTAL;
+	public static RuinedPortal RUINED_PORTAL_OW;
+	public static RuinedPortal RUINED_PORTAL_NE;
 	public static Shipwreck SHIPWRECK;
 	public static Stronghold STRONGHOLD;
 	public static SwampHut SWAMP_HUT;
@@ -49,7 +51,8 @@ public class Features {
 		safe(() -> NETHER_FOSSIL = new NetherFossil(version));
 		safe(() -> OCEAN_RUIN = new OceanRuin(version));
 		safe(() -> PILLAGER_OUTPOST = new PillagerOutpost(version));
-		safe(() -> RUINED_PORTAL = new RuinedPortal(version));
+		safe(() -> RUINED_PORTAL_OW = new RuinedPortal(Dimension.OVERWORLD, version));
+		safe(() -> RUINED_PORTAL_NE = new RuinedPortal(Dimension.NETHER, version));
 		safe(() -> SHIPWRECK = new Shipwreck(version));
 		safe(() -> STRONGHOLD = new Stronghold(version));
 		safe(() -> SWAMP_HUT = new SwampHut(version));

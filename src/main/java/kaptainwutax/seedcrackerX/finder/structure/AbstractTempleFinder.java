@@ -23,8 +23,7 @@ public abstract class AbstractTempleFinder extends Finder {
     protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
         if(pos.getX() != 0)return true;
         if(pos.getY() < 63)return true;
-        if(pos.getZ() != 0)return true;
-        return false;
+        return pos.getZ() != 0;
     });
 
     protected List<PieceFinder> finders = new ArrayList<>();

@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class PillarData {
 
-	private List<Integer> heights;
+	private final List<Integer> heights;
 
 	public PillarData(List<Integer> heights) {
 		this.heights = heights;

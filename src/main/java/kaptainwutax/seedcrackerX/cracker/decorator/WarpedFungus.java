@@ -1,14 +1,15 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
-import com.seedfinding.latticg.util.LCG;
-import kaptainwutax.biomeutils.Biome;
+import kaptainwutax.biomeutils.biome.Biome;
+import kaptainwutax.biomeutils.biome.Biomes;
+import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.state.Dimension;
+import kaptainwutax.mcutils.version.MCVersion;
+import kaptainwutax.mcutils.version.VersionMap;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.Log;
-import kaptainwutax.seedutils.mc.ChunkRand;
-import kaptainwutax.seedutils.mc.Dimension;
-import kaptainwutax.seedutils.mc.MCVersion;
-import kaptainwutax.seedutils.mc.VersionMap;
+import kaptainwutax.seedutils.lcg.LCG;
 import mjtb49.hashreversals.PopulationReverser;
 import net.minecraft.util.math.BlockPos;
 
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.stream.LongStream;
 
 public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data> {
-    public static final VersionMap<Decorator.Config> CONFIGS = new VersionMap<Decorator.Config>()
+    public static final VersionMap<Config> CONFIGS = new VersionMap<Decorator.Config>()
             .add(MCVersion.v1_16, new Decorator.Config(8,3));
 
     public WarpedFungus(MCVersion version) {
@@ -45,8 +46,13 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
     }
 
     @Override
+    public Dimension getValidDimension() {
+        return  Dimension.NETHER;
+    }
+
+    @Override
     public boolean isValidBiome(Biome biome) {
-        return biome == Biome.WARPED_FOREST;
+        return biome == Biomes.WARPED_FOREST;
     }
 
     public static class Data extends Decorator.Data<WarpedFungus> {
@@ -162,14 +168,14 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             return false;
         }
 
-        private LinkedHashSet<Long> structureSeedList = new LinkedHashSet<>();
+        private final LinkedHashSet<Long> structureSeedList = new LinkedHashSet<>();
 
         private void GeneratestructureSeeds(long probableDecoSeed) {
             System.out.println("deco seed "+probableDecoSeed);
             ChunkRand rand = new ChunkRand(probableDecoSeed,false);
             List<Long> populationSeeds = new ArrayList<>();
             for(int i = 0; i <8; i++) {
-                populationSeeds.add((rand.getSeed()^LCG.JAVA.multiplier) -80003);
+                populationSeeds.add((rand.getSeed()^ LCG.JAVA.multiplier) -80003);
                 rand.advance(-2);
             }
             for(long populationSeed:populationSeeds) {
@@ -178,48 +184,4 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
         }
     }
 }
-/*
--240 -432
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: Populationseed predicted: 149636112698497
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: Real Populationseed: 4200046090827860341
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: Decoratorseed predicted: 149610919486313
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: nether_wastes
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]:
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: GenerationStep: 157983577057173
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]:
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: CountMultiLayer: 157983577057173
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: CountMultiLayer End: 169031210908165
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-230, y=33, z=-432}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-236, y=32, z=-432}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-225, y=84, z=-429}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-240, y=32, z=-429}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-227, y=34, z=-432}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-228, y=83, z=-426}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-227, y=83, z=-417}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-229, y=83, z=-417}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-231, y=82, z=-417}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-238, y=82, z=-417}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-232, y=34, z=-423}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-231, y=33, z=-421}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-236, y=33, z=-423}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-239, y=32, z=-424}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-237, y=32, z=-426}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: BlockPos{x=-226, y=41, z=-424}
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  169031210908165
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  94331504874167
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  149673006709824
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  149673006709824
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  194173828600607
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  221601071175728
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  221601071175728
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  240751030614193
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  104383998894144
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  241560011140570
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  78955321765150
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  184470836086137
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  264030243626129
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  17053199488173
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  172243565469685
-[18:27:09] [Worker-Main-18/INFO] (Minecraft) [STDOUT]: generating fungus now  177911228238399
- */
 

@@ -1,9 +1,9 @@
 package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
-import kaptainwutax.seedutils.mc.MCVersion;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 

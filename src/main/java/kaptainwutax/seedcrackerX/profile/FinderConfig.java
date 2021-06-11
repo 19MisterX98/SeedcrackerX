@@ -18,6 +18,10 @@ public class FinderConfig {
 
     }
 
+    public void deleteFinders() {
+        this.activeFinders.clear();
+    }
+
     public List<Finder.Type> getActiveFinderTypes() {
         return this.finderProfile.typeStates.entrySet().stream()
                 .filter(Map.Entry::getValue)

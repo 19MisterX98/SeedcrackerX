@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public abstract class BlockFinder extends Finder {
 
-    private Set<BlockState> targetBlockStates = new HashSet<>();
+    private final Set<BlockState> targetBlockStates = new HashSet<>();
     protected List<BlockPos> searchPositions = new ArrayList<>();
 
     public BlockFinder(World world, ChunkPos chunkPos, Block block) {

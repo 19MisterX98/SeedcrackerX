@@ -1,14 +1,15 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
-import kaptainwutax.biomeutils.Biome;
-import kaptainwutax.seedutils.mc.ChunkRand;
-import kaptainwutax.seedutils.mc.Dimension;
-import kaptainwutax.seedutils.mc.MCVersion;
-import kaptainwutax.seedutils.mc.VersionMap;
+import kaptainwutax.biomeutils.biome.Biome;
+import kaptainwutax.biomeutils.biome.Biomes;
+import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.state.Dimension;
+import kaptainwutax.mcutils.version.MCVersion;
+import kaptainwutax.mcutils.version.VersionMap;
 
 public class EmeraldOre extends Decorator<Decorator.Config, EmeraldOre.Data> {
 
-	public static final VersionMap<Decorator.Config> CONFIGS = new VersionMap<Config>()
+	public static final VersionMap<Config> CONFIGS = new VersionMap<Config>()
 			.add(MCVersion.v1_13, new Decorator.Config(4, 14))
 			.add(MCVersion.v1_16, new EmeraldOre.Config(6, 14));
 
@@ -59,9 +60,15 @@ public class EmeraldOre extends Decorator<Decorator.Config, EmeraldOre.Data> {
 
 	@Override
 	public boolean isValidBiome(Biome biome) {
-		return biome == Biome.GRAVELLY_MOUNTAINS || biome == Biome.MODIFIED_GRAVELLY_MOUNTAINS
-				|| biome == Biome.MOUNTAINS || biome == Biome.WOODED_MOUNTAINS || biome == Biome.MOUNTAIN_EDGE;
+		return biome == Biomes.GRAVELLY_MOUNTAINS || biome == Biomes.MODIFIED_GRAVELLY_MOUNTAINS
+				|| biome == Biomes.MOUNTAINS || biome == Biomes.WOODED_MOUNTAINS || biome == Biomes.MOUNTAIN_EDGE;
 	}
+
+	@Override
+	public Dimension getValidDimension() {
+		return  Dimension.OVERWORLD;
+	}
+
 
 	public EmeraldOre.Data at(int blockX, int blockY, int blockZ, Biome biome) {
 		return new EmeraldOre.Data(this, blockX, blockY, blockZ, biome);

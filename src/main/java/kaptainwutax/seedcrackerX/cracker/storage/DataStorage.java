@@ -112,6 +112,7 @@ public class DataStorage {
 		if(this.dungeon12StructureSeeds.contains(structureSeed)) {
 			//found matching structureseed
 			Log.printSeed("found two matching structureseeds ${SEED}.", structureSeed);
+			getTimeMachine().structureSeeds = new ArrayList<>();
 			getTimeMachine().structureSeeds.add(structureSeed);
 			getTimeMachine().poke(TimeMachine.Phase.STRUCTURES);
 			getTimeMachine().poke(TimeMachine.Phase.BIOMES);
@@ -172,13 +173,17 @@ public class DataStorage {
 		throw new UnsupportedOperationException("go do implement bits count for " + feature.getName() + " you fool");
 	}
 
+	public boolean notEnoughBiomeData() {
+		return this.biomeSeedData.size() < 5;
+	}
+
 	public void clear() {
 		this.scheduledData = new ConcurrentSet<>();
 		this.pillarData = null;
 		this.dungeon12StructureSeeds = new ArrayList<>();
 		this.baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 		this.biomeSeedData = new ScheduledSet<>(null);
-		//this.hashedSeedData = null;
+		this.hashedSeedData = null;
 		this.timeMachine.shouldTerminate = true;
 		this.timeMachine = new TimeMachine(this);
 		DungeonFinder.resetXRayDetected();

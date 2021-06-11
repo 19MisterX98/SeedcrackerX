@@ -2,13 +2,13 @@ package kaptainwutax.seedcrackerX.cracker.storage;
 
 import kaptainwutax.biomeutils.source.OverworldBiomeSource;
 import kaptainwutax.featureutils.Feature;
+import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.rand.seed.StructureSeed;
+import kaptainwutax.mcutils.rand.seed.WorldSeed;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
-import kaptainwutax.seedutils.mc.ChunkRand;
-import kaptainwutax.seedutils.mc.seed.StructureSeed;
-import kaptainwutax.seedutils.mc.seed.WorldSeed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class TimeMachine {
 
 	public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 
-	private LCG inverseLCG = LCG.JAVA.combine(-2);
+	private final LCG inverseLCG = LCG.JAVA.combine(-2);
 	protected DataStorage dataStorage;
 
 	public boolean isRunning = false;
@@ -154,7 +154,7 @@ public class TimeMachine {
 	protected boolean pokeBiomes() {
 		if(this.structureSeeds == null || this.structureSeeds.isEmpty()|| this.worldSeeds != null)return false;
 		if((this.dataStorage.hashedSeedData == null || this.dataStorage.hashedSeedData.getHashedSeed() == 0) &&
-				(this.dataStorage.biomeSeedData.size() < 5 || this.structureSeeds.size() > 20))return false;
+				(this.dataStorage.notEnoughBiomeData() || this.structureSeeds.size() > 20))return false;
 
 		this.worldSeeds = new ArrayList<>();
 		Log.debug("====================================");
@@ -181,7 +181,7 @@ public class TimeMachine {
 			}
 		}
 
-		if(this.dataStorage.biomeSeedData.size() < 5 || this.structureSeeds.size() > 20) return false;
+		if(this.dataStorage.notEnoughBiomeData() || this.structureSeeds.size() > 20) return false;
 
 		Log.warn("Looking for world seeds with "+ this.dataStorage.biomeSeedData.size() + " biomes...");
 		for(long structureSeed : this.structureSeeds) {

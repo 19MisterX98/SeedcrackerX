@@ -23,8 +23,7 @@ public class EmeraldOreFinder extends BlockFinder {
 
     protected static List<BlockPos> SEARCH_POSITIONS = Finder.buildSearchPositions(Finder.CHUNK_POSITIONS, pos -> {
         if(pos.getY() < 4)return true;
-        if(pos.getY() > 28 + 4)return true;
-        return false;
+        return pos.getY() > 28 + 4;
     });
 
     public EmeraldOreFinder(World world, ChunkPos chunkPos) {

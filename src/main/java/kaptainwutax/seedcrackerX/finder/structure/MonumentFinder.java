@@ -25,8 +25,7 @@ import java.util.Map;
 public class MonumentFinder extends Finder {
 
     protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-        if(pos.getY() != 56)return true;
-        return false;
+        return pos.getY() != 56;
     });
 
     protected List<PieceFinder> finders = new ArrayList<>();

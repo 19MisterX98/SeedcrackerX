@@ -1,22 +1,24 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
 
-import kaptainwutax.biomeutils.Biome;
+import kaptainwutax.biomeutils.biome.Biome;
+import kaptainwutax.biomeutils.biome.Biomes;
+import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.state.Dimension;
+import kaptainwutax.mcutils.version.MCVersion;
+import kaptainwutax.mcutils.version.VersionMap;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
-import kaptainwutax.seedutils.mc.ChunkRand;
-import kaptainwutax.seedutils.mc.Dimension;
-import kaptainwutax.seedutils.mc.MCVersion;
-import kaptainwutax.seedutils.mc.VersionMap;
 import mjtb49.hashreversals.ChunkRandomReverser;
 import net.minecraft.util.math.Vec3i;
-import randomreverser.ReverserDevice;
-import randomreverser.call.FilteredSkip;
-import randomreverser.call.NextInt;
+import randomreverser.call.java.FilteredSkip;
+import randomreverser.call.java.NextInt;
+import randomreverser.device.JavaRandomDevice;
+import randomreverser.device.LCGReverserDevice;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -24,10 +26,10 @@ import java.util.stream.Collectors;
 
 public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
-	public static final VersionMap<Decorator.Config> CONFIGS = new VersionMap<Decorator.Config>()
+	public static final VersionMap<Config> CONFIGS = new VersionMap<Decorator.Config>()
 			.add(MCVersion.v1_13, new Decorator.Config(2, 3))
 			.add(MCVersion.v1_16, new Decorator.Config(3, 2)
-									.add(3, 3, Biome.DESERT, Biome.SWAMP, Biome.SWAMP_HILLS));
+									.add(3, 3, Biomes.DESERT, Biomes.SWAMP, Biomes.SWAMP_HILLS));
 
 	public Dungeon(MCVersion version) {
 		super(CONFIGS.getAsOf(version), version);
@@ -76,11 +78,16 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 	}
 
 	@Override
+	public Dimension getValidDimension() {
+		return  Dimension.OVERWORLD;
+	}
+
+	@Override
 	public boolean isValidBiome(Biome biome) {
-		return biome != Biome.NETHER_WASTES && biome != Biome.SOUL_SAND_VALLEY && biome != Biome.WARPED_FOREST
-					&& biome != Biome.CRIMSON_FOREST && biome != Biome.BASALT_DELTAS && biome != Biome.END_MIDLANDS
-					&& biome != Biome.END_HIGHLANDS && biome != Biome.END_BARRENS && biome != Biome.SMALL_END_ISLANDS
-					&& biome != Biome.THE_VOID && biome == Biome.THE_END;
+		return biome != Biomes.NETHER_WASTES && biome != Biomes.SOUL_SAND_VALLEY && biome != Biomes.WARPED_FOREST
+					&& biome != Biomes.CRIMSON_FOREST && biome != Biomes.BASALT_DELTAS && biome != Biomes.END_MIDLANDS
+					&& biome != Biomes.END_HIGHLANDS && biome != Biomes.END_BARRENS && biome != Biomes.SMALL_END_ISLANDS
+					&& biome != Biomes.THE_VOID && biome == Biomes.THE_END;
 	}
 
 	public Dungeon.Data at(int blockX, int blockY, int blockZ, Vec3i size, int[] floorCalls, Biome biome) {
@@ -141,7 +148,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				Log.printDungeonInfo(this.blockX + ", " + this.blockY + ", " + this.blockZ + ", \"" + floorString + "\"");
 				Log.warn("Dungeonbiome: "+this.biome.getName());
 			}
-			ReverserDevice device = new ReverserDevice();
+			JavaRandomDevice device = new JavaRandomDevice();
 
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_15)) {
 				device.addCall(NextInt.withValue(16,this.offsetX));
@@ -159,13 +166,13 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					device.addCall(NextInt.withValue(4, 0));
 				} else if(call == MOSSY_COBBLESTONE_CALL) {
 					//Skip mossy, brute-force later.
-					device.addCall(FilteredSkip.filter(r -> r.nextInt(4) != 0));
+					device.addCall(FilteredSkip.filter(LCG.JAVA, r -> r.nextInt(4) != 0, 1));
 				} else if(call == 2){
 					device.addCall(NextInt.consume(4, 1));
 				}
 			}
 
-			Set<Long> decoratorSeeds = device.streamSeeds().sequential().collect(Collectors.toSet());
+			Set<Long> decoratorSeeds = device.streamSeeds(LCGReverserDevice.Process.EVERYTHING).boxed().collect(Collectors.toSet());
 
 			if(decoratorSeeds.isEmpty()) {
 				Log.error("Finished dungeon search with no seeds.");
@@ -176,8 +183,6 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					Log.warn("Dungeonseed: " + decoratorSeed);
 				}
 			}
-
-			dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
 			
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) {
 				for (long decoratorSeed : decoratorSeeds) {
@@ -195,6 +200,8 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					Log.warn("finished structure seed search. You'll need another dungeon");
 				}
 			}else {
+				dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
+
 				LCG failedDungeon = LCG.JAVA.combine(-5);
 
 				for(long decoratorSeed: decoratorSeeds) {

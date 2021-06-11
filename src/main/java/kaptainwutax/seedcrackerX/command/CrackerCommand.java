@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.Formatting;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -23,6 +24,8 @@ public class CrackerCommand extends ClientCommand {
 					.then(literal("ON").executes(context -> this.setDebug(true)))
 					.then(literal("OFF").executes(context -> this.setDebug(false)))
 				.executes(context -> this.toggleDebug()));
+
+		builder.then(literal("reset").executes(context -> this.reset()));
 	}
 
 
@@ -38,6 +41,12 @@ public class CrackerCommand extends ClientCommand {
 
 	private int setDebug(boolean debug) {
 		ConfigScreen.getConfig().setDEBUG(debug);
+		return 0;
+	}
+
+	private int reset() {
+		SeedCracker.get().reset();
+		sendFeedback("Reset", Formatting.GREEN, false);
 		return 0;
 	}
 }

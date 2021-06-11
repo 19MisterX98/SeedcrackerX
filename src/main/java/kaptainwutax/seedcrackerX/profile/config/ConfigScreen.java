@@ -1,22 +1,24 @@
 package kaptainwutax.seedcrackerX.profile.config;
 
 import com.google.gson.Gson;
+import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.finder.FinderQueue.RenderType;
-import kaptainwutax.seedutils.mc.MCVersion;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,7 +29,17 @@ public class ConfigScreen {
     boolean dataClear = false;
     private static ConfigObj config = new ConfigObj();
 
-    private static File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(),"seedcracker.json");
+    private ArrayList<MCVersion> getSupportedVersions() {
+        ArrayList<MCVersion> newerVersions = new ArrayList<>();
+        for(MCVersion version:MCVersion.values()) {
+            if(version.isOlderThan(MCVersion.v1_8))continue;
+            newerVersions.add(version);
+        }
+        return newerVersions;
+    }
+
+
+    private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(),"seedcracker.json");
 
     public Screen getConfigScreenByCloth(Screen parent) {
         
@@ -51,7 +63,12 @@ public class ConfigScreen {
             general.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
                 general.addEntry(eb.startBooleanToggle(new LiteralText("Active"), SeedCracker.get().isActive()).setSaveConsumer(val -> SeedCracker.get().setActive(val)).build());
                 general.addEntry(eb.startTextDescription(new LiteralText("Version(1.8-1.16 Support for old chunks; versions before 1.16 are only tested for dungeon-shortcutting)")).build());
-                general.addEntry(eb.startEnumSelector(new LiteralText("Version"), MCVersion.class, SeedCracker.MC_VERSION).setSaveConsumer(val -> {SeedCracker.MC_VERSION = val; Features.init(SeedCracker.MC_VERSION);}).build());
+                general.addEntry(eb.startDropdownMenu(new LiteralText("Version"), DropdownMenuBuilder.TopCellElementBuilder.of(SeedCracker.MC_VERSION,MCVersion::fromString))
+                    .setSelections(getSupportedVersions())
+                    .setSuggestionMode(false)
+                    .setDefaultValue(SeedCracker.MC_VERSION)
+                    .setSaveConsumer(val -> {SeedCracker.MC_VERSION = val; Features.init(SeedCracker.MC_VERSION);})
+                    .build());
 
             general.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
 
@@ -69,7 +86,12 @@ public class ConfigScreen {
 
                 config.addEntry(eb.startTextDescription(new LiteralText("the seedcracker will reset to this state after /seed data clear relogging or pressing \"reset to this profile after pressing save & quit\"")).build());
                 config.addEntry(eb.startBooleanToggle(new LiteralText("Active"), ConfigScreen.config.isActive()).setSaveConsumer(val -> ConfigScreen.config.Active = val).build());
-                config.addEntry(eb.startEnumSelector(new LiteralText("Version"), MCVersion.class, ConfigScreen.config.VERSION).setSaveConsumer(val -> ConfigScreen.config.VERSION = val).build());
+                config.addEntry(eb.startDropdownMenu(new LiteralText("Version"), DropdownMenuBuilder.TopCellElementBuilder.of(ConfigScreen.config.VERSION,MCVersion::fromString))
+                    .setSelections(getSupportedVersions())
+                    .setSuggestionMode(false)
+                    .setDefaultValue(ConfigScreen.config.VERSION)
+                    .setSaveConsumer(val -> ConfigScreen.config.VERSION = val)
+                    .build());
 
             config.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
             

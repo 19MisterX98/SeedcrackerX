@@ -13,7 +13,7 @@ public class Cuboid extends Renderer {
     public Vec3i size;
     public BlockPos pos;
 
-    private Line[] edges = new Line[12];
+    private final Line[] edges = new Line[12];
 
     public Cuboid() {
         this(BlockPos.ORIGIN, BlockPos.ORIGIN, Color.WHITE);

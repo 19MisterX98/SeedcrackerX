@@ -18,7 +18,7 @@ import java.util.Map;
 public class PieceFinder extends Finder {
 
     protected Map<BlockPos, BlockState> structure = new LinkedHashMap<>();
-    private BlockBox boundingBox;
+    private final BlockBox boundingBox;
     protected List<BlockPos> searchPositions = new ArrayList<>();
 
     protected Direction facing;

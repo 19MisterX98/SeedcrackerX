@@ -131,7 +131,8 @@ public abstract class Finder {
         DUNGEON(DungeonFinder::create, Category.DECORATORS),
         EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS),
         DESERT_WELL(DesertWellFinder::create, Category.DECORATORS),
-        WARPED_FUNGUS(WarpedFungusFinder::create,Category.DECORATORS),
+        WARPED_FUNGUS(WarpedFungusFinder::create, Category.DECORATORS),
+        TREE(TreeFinder::create, Category.DECORATORS),
         BIOME(BiomeFinder::create, Category.BIOMES);
 
         public final FinderBuilder finderBuilder;

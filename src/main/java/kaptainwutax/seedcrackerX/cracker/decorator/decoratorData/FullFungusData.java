@@ -1,4 +1,4 @@
-package kaptainwutax.seedcrackerX.cracker.decorator;
+package kaptainwutax.seedcrackerX.cracker.decorator.decoratorData;
 
 import randomreverser.call.java.NextFloat;
 import randomreverser.call.java.NextInt;

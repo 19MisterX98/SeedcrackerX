@@ -7,6 +7,7 @@ import kaptainwutax.mcutils.state.Dimension;
 import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
+import kaptainwutax.seedcrackerX.cracker.decorator.Tree;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 
 public class Features {
@@ -35,6 +36,7 @@ public class Features {
 	public static DesertWell DESERT_WELL;
 	public static EmeraldOre EMERALD_ORE;
 	public static Dungeon DUNGEON;
+	public static Tree TREE;
 	public static WarpedFungus WARPED_FUNGUS;
 	
 	public static void init(MCVersion version) {
@@ -62,6 +64,7 @@ public class Features {
 		safe(() -> DESERT_WELL = new DesertWell(version));
 		safe(() -> EMERALD_ORE = new EmeraldOre(version));
 		safe(() -> DUNGEON = new Dungeon(version));
+		safe(() -> TREE = new Tree(version));
 		safe(() -> WARPED_FUNGUS = new WarpedFungus(version));
 	}
 

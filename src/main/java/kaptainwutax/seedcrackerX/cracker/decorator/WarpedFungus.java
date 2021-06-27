@@ -6,6 +6,7 @@ import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.mcutils.state.Dimension;
 import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.mcutils.version.VersionMap;
+import kaptainwutax.seedcrackerX.cracker.decorator.decoratorData.FullFungusData;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.Log;

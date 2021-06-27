@@ -14,6 +14,7 @@ import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
+import kaptainwutax.seedcrackerX.cracker.decorator.Tree;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
 import kaptainwutax.seedcrackerX.util.Log;
@@ -169,6 +170,7 @@ public class DataStorage {
 		if(feature instanceof EmeraldOre)return Math.log(28 * 16 * 16 * 0.5D) / Math.log(2);
 		if(feature instanceof EndGateway)return Math.log(700 * 16 * 16 * 7) / Math.log(2);
 		if(feature instanceof WarpedFungus)return 0;
+		if(feature instanceof Tree)return 0;
 
 		throw new UnsupportedOperationException("go do implement bits count for " + feature.getName() + " you fool");
 	}

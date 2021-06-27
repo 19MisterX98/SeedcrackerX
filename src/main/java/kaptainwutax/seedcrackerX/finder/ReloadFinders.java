@@ -10,8 +10,8 @@ public class ReloadFinders {
 
         int playerChunkX = (int) (Math.round(client.player.getX()) >> 4);
         int playerChunkZ = (int) (Math.round(client.player.getZ()) >> 4);
-        for(int i = playerChunkX - renderdistance;i < playerChunkX + renderdistance; i++) {
-            for(int j = playerChunkZ - renderdistance;j < playerChunkZ + renderdistance; j++) {
+        for(int i = playerChunkX - renderdistance;i <= playerChunkX + renderdistance; i++) {
+            for(int j = playerChunkZ - renderdistance;j <= playerChunkZ + renderdistance; j++) {
                 FinderQueue.get().onChunkData(client.world, new ChunkPos(i, j));
             }
         }

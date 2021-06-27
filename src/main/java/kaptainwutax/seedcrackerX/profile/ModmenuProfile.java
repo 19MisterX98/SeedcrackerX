@@ -23,6 +23,7 @@ public class ModmenuProfile extends CustomProfile {
 		this.setTypeState(Finder.Type.EMERALD_ORE,ConfigScreen.getConfig().isEMERALD_ORE());
 		this.setTypeState(Finder.Type.DESERT_WELL,ConfigScreen.getConfig().isDESERT_WELL());
 		this.setTypeState(Finder.Type.WARPED_FUNGUS,ConfigScreen.getConfig().isWARPED_FUNGUS());
+		this.setTypeState(Finder.Type.TREE,ConfigScreen.getConfig().isTREE());
 		this.setTypeState(Finder.Type.BIOME,ConfigScreen.getConfig().isBIOME());
 		SeedCracker.MC_VERSION = ConfigScreen.getConfig().getVERSION();
 		Features.init(SeedCracker.MC_VERSION);

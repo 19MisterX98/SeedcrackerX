@@ -2,7 +2,7 @@ package kaptainwutax.seedcrackerX.finder.decorator;
 
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
-import kaptainwutax.seedcrackerX.cracker.decorator.FullFungusData;
+import kaptainwutax.seedcrackerX.cracker.decorator.decoratorData.FullFungusData;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;

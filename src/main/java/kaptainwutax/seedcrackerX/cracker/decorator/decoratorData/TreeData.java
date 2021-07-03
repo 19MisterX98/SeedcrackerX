@@ -15,6 +15,7 @@ public class TreeData {
     public int height;
     public Simple116BlobTree.Simple116BlobTreeConfig type;
     public String name;
+    public boolean complete = true;
 
     public void setType(Block log) {
         if (log.equals(Blocks.OAK_LOG)) {
@@ -28,7 +29,7 @@ public class TreeData {
 
     public String leavesToString() {
         if (leaves.isEmpty())
-            return null;
+            return "noLeaveData";
         StringBuilder result = new StringBuilder();
         for (Integer leave : this.leaves) {
             result.append(leave);
@@ -47,6 +48,10 @@ public class TreeData {
 
     public int[] leavesToArray() {
         int[] result = new int[12];
+        if(leaves.isEmpty()) {
+            System.out.println("tried to retrieve empty leave array");
+            return result;
+        }
         for(int i = 0; i < 12; i++) {
             result[i] = leaves.get(i);
         }

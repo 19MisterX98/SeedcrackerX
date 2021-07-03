@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        TreeCrackerProgram program = new TreeCrackerProgram(
-                new Simple116BlobTree(Simple116BlobTree.FOREST_OAK_TREE, new TreePos(5, 13), 4, new int[]{1,0,0,0,1,0,0,1,0,1,0,1}),
-                new Simple116BlobTree(Simple116BlobTree.FOREST_OAK_TREE, new TreePos(11, 5), 6, new int[]{0,0,0,1,0,1,1,1,1,0,0,1}),
-                new Simple116BlobTree(Simple116BlobTree.FOREST_OAK_TREE, new TreePos(13, 14), 5, new int[]{1,1,1,0,0,0,1,0,0,0,1,0})
-        );
+        //TreeCrackerProgram program = new TreeCrackerProgram(
+        //        new Simple116BlobTree(Simple116BlobTree.FOREST_OAK_TREE, new TreePos(5, 13), 4, new int[]{1,0,0,0,1,0,0,1,0,1,0,1}),
+        //        new Simple116BlobTree(Simple116BlobTree.FOREST_OAK_TREE, new TreePos(11, 5), 6, new int[]{0,0,0,1,0,1,1,1,1,0,0,1}),
+        //        new Simple116BlobTree(Simple116BlobTree.FOREST_OAK_TREE, new TreePos(13, 14), 5, new int[]{1,1,1,0,0,0,1,0,0,0,1,0})
+        //);
 
 
 
@@ -34,7 +34,7 @@ public class Main {
 
         );*/
 
-        program.generateCracker().exportSource(new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "out.cu"));
+        //program.generateCracker().exportSource(new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "out.cu"));
 
 
 

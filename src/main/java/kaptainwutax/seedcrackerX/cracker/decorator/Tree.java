@@ -132,21 +132,21 @@ public class Tree extends Decorator<Decorator.Config, Tree.Data> {
                     e.printStackTrace();
                 }
 
-                String treeSeed = "0";
+                String treeSeed;
+                Set<Long> structureSeeds = new HashSet<>();
                 try {
                     Scanner scanner = new Scanner(outputFile);
-                    if(scanner.hasNextLine()) {
+                    while (scanner.hasNextLine()) {
                         treeSeed = scanner.nextLine();
-                        reverseToDecoratorSeed(Long.parseLong(treeSeed));
+                        Log.warn("cracked seed: " + treeSeed);
+                        structureSeeds.addAll(reverse(Long.parseLong(treeSeed)));
                     }
                 } catch (FileNotFoundException ignored) {
                 }
 
-                Set<Long> structureSeeds = reverseToDecoratorSeed(Long.parseLong(treeSeed));
-                System.out.println(structureSeeds);
+                Log.debug("====================================");
+                structureSeeds.forEach(seed -> Log.printSeed("Found structure seed ${SEED}.", seed));
                 System.out.println();
-                System.out.println("cracked seed:");
-                System.out.println(treeSeed);
                 dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
                 dataStorage.getTimeMachine().structureSeeds.addAll(structureSeeds);
                 dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
@@ -154,28 +154,41 @@ public class Tree extends Decorator<Decorator.Config, Tree.Data> {
             }
         }
 
-
-
-        private Set<Long> reverseToDecoratorSeed(long treeSeed) {
+        private Set<Long> reverse(long treeSeed) {
             Set<Long> seeds = new HashSet<>();
             ChunkRand backwardRand = new ChunkRand(treeSeed,false);
-            ChunkRand simRand = new ChunkRand(treeSeed,false);
-            for (int i = 0; i <= 100; i++) {
-                int finalI = i;
-                incompleteTrees.forEach(tree -> {
+            ChunkRand simRand = new ChunkRand();
+            backwardRand.advance(-200);
+            for (int i = 200; i > 0; i--) {
+                for (TreeData tree : incompleteTrees) {
                     simRand.setSeed(backwardRand.getSeed(), false);
-                    if (tree.pos.getX() != simRand.nextInt(16) || tree.pos.getZ() != simRand.nextInt(16)) return;
-                    if (tree.type.equals(Simple116BlobTree.FOREST_OAK_TREE)) {
-                        if (simRand.nextFloat() < 0.2F || simRand.nextFloat() < 0.1F || tree.height != simRand.nextInt(3) + 4) return;
-                    } else if (tree.type.equals(Simple116BlobTree.FOREST_BIRCH_TREE)) {
-                        if (simRand.nextFloat() > 0.2F || tree.height != simRand.nextInt(3) + 5) return;
-                    } else return;
-                    System.out.println("index before tree: "+ finalI);
-                    generatestructureSeeds(backwardRand.getSeed(), seeds);
-                });
-                backwardRand.advance(-1);
+                    if (testTree(tree, simRand)) {
+                        System.out.println("index before tree: "+ i);
+                        generatestructureSeeds(backwardRand.getSeed(), seeds);
+                        return seeds;
+                    }
+                }
+                backwardRand.advance(1);
             }
             return seeds;
+        }
+
+        private boolean testTree(TreeData tree, ChunkRand simRand) {
+            if (tree.pos.getX() != simRand.nextInt(16) || tree.pos.getZ() != simRand.nextInt(16)) return false;
+            if (tree.type.equals(Simple116BlobTree.FOREST_OAK_TREE)) {
+                if (simRand.nextFloat() < 0.2F || simRand.nextFloat() < 0.1F || tree.height != simRand.nextInt(3) + 4) return false;
+            } else if (tree.type.equals(Simple116BlobTree.FOREST_BIRCH_TREE)) {
+                if (simRand.nextFloat() > 0.2F || tree.height != simRand.nextInt(3) + 5) return false;
+            } else return false;
+            System.out.println(tree.leaves);
+            //skip 2nd random height and 4 always false leaves
+            simRand.advance(5);
+            for (Integer leave : tree.leaves) {
+                if (simRand.nextInt(2) != leave) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private void generatestructureSeeds(long firstTreeSeed, Set<Long> seeds) {
@@ -186,7 +199,7 @@ public class Tree extends Decorator<Decorator.Config, Tree.Data> {
 
             treeToStructureSeed(rand.getSeed(), seeds);
             rand.advance(-3);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 10; i++) {
                 treeToStructureSeed(rand.getSeed(), seeds);
                 rand.advance(-1);
             }

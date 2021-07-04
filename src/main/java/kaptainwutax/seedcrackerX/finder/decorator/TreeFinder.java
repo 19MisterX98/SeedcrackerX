@@ -14,9 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ public class TreeFinder extends Finder {
     private final List<TreeData> treeDataList = new ArrayList<>();
     private final List<Renderer> importantLeaves = new ArrayList<>();
     private final List<Renderer> finalRenderers = new ArrayList<>();
+    private boolean bigTree = false;
 
     public TreeFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos);
@@ -43,41 +42,43 @@ public class TreeFinder extends Finder {
 
         result.removeIf(pos -> {
             importantLeaves.clear();
-            if (!this.world.getBlockState(pos.add(0, -1, 0)).getBlock().equals(Blocks.DIRT))
+            if (bigTree || !this.world.getBlockState(pos.add(0, -1, 0)).getBlock().equals(Blocks.DIRT))
                 return true;
             Block type = this.world.getBlockState(pos).getBlock();
             int height = 0;
             while (this.world.getBlockState(pos.add(0,height,0)).getBlock() == type) {
                 height++;
             }
-            BlockPos trunk = pos.add(0,height,0).mutableCopy();
+            BlockPos trunk = pos.add(0,height,0);
             Block leaves = this.world.getBlockState(trunk).getBlock();
             if (leaves.equals(Blocks.OAK_LEAVES)) {
-                if (height < 4 || height > 6)
+                if (height < 4)
                     return true;
+                if (height > 6) {
+                    this.bigTree = true;
+                    return true;
+                }
             } else if (leaves.equals(Blocks.BIRCH_LEAVES)) {
                 if (height < 5 || height > 7)
                     return true;
             } else {
                 return true;
             }
+
+            if (!this.world.getBlockState(trunk.up()).getBlock().equals(Blocks.AIR)) {
+                bigTree = true;
+                return true;
+            }
+
             TreeData data = new TreeData();
 
-            BlockPos leaveLayer = trunk.add(0, -1,0);
-
-            //this.renderers.add(new Cube(leaveLayer, new Color(255, 0, 0)));
-            if (testLeaves(leaveLayer, leaves, 2, data))
+            if (testLeaves(trunk.down(1), leaves, 2, data)) {
                 data.complete = false;
-
-            leaveLayer = leaveLayer.add(0, -1, 0);
-
-            if (testLeaves(leaveLayer, leaves, 3, data))
+            } else if (testLeaves(trunk.down(2), leaves, 3, data)) {
                 data.complete = false;
-
-            leaveLayer = leaveLayer.add(0, -1, 0);
-
-            if (testLeaves(leaveLayer, leaves, 3, data))
+            } else if (testLeaves(trunk.down(3), leaves, 3, data)) {
                 data.complete = false;
+            }
 
             data.setType(type);
             data.pos = new BlockPos(pos.getX() & 15, pos.getY(), pos.getZ() & 15);
@@ -90,7 +91,7 @@ public class TreeFinder extends Finder {
             return false;
         });
 
-        if (treeDataList.stream().filter(data -> data.complete).count() < 3)
+        if (treeDataList.stream().filter(data -> data.complete).count() < 3 || bigTree)
             return new ArrayList<>();
 
         Tree.Data data = Features.TREE.at(this.chunkPos.x, this.chunkPos.z, Biomes.FOREST, treeDataList);
@@ -118,7 +119,6 @@ public class TreeFinder extends Finder {
                             data.leaves.add(0);
                             importantLeaves.add(new Cube(leaveLayer.add(x, 0, z), new Color(255, 0, 0)));
                         } else {
-                            data.leaves.add(-1);
                             return true;
                         }
                     } else {

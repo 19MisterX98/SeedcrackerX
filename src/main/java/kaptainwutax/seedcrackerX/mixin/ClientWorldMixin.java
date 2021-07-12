@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
+
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
 
@@ -29,7 +31,8 @@ public abstract class ClientWorldMixin {
 
     @Inject(method = "getGeneratorStoredBiome", at = @At("HEAD"), cancellable = true)
     private void getGeneratorStoredBiome(int x, int y, int z, CallbackInfoReturnable<Biome> ci) {
-        ci.setReturnValue(getRegistryManager().get(Registry.BIOME_KEY).getOrThrow(BiomeKeys.THE_VOID));
+        Optional<Biome> biome = getRegistryManager().get(Registry.BIOME_KEY).getOrEmpty(BiomeKeys.THE_VOID);
+        ci.setReturnValue(biome.orElse(BuiltinBiomes.THE_VOID));
     }
 
 }

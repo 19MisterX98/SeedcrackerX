@@ -28,13 +28,9 @@ import java.util.List;
 
 public class ShipwreckFinder extends BlockFinder {
 
-    protected static List<BlockPos> SEARCH_POSITIONS = Finder.buildSearchPositions(Finder.CHUNK_POSITIONS, pos -> {
-        return false;
-    });
-
     public ShipwreckFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.CHEST);
-        this.searchPositions = SEARCH_POSITIONS;
+        this.searchPositions = CHUNK_POSITIONS;
     }
 
     @Override

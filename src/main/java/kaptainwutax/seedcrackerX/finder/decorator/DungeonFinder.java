@@ -33,10 +33,6 @@ public class DungeonFinder extends BlockFinder {
         xRayDetected = false;
     }
 
-    protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-        return false;
-    });
-
     protected static Set<BlockPos> POSSIBLE_FLOOR_POSITIONS = PosIterator.create(
             new BlockPos(-4, -1, -4),
             new BlockPos(4, -1, 4)
@@ -79,7 +75,7 @@ public class DungeonFinder extends BlockFinder {
 
     public DungeonFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.SPAWNER);
-        this.searchPositions = SEARCH_POSITIONS;
+        this.searchPositions = CHUNK_POSITIONS;
     }
 
     @Override
@@ -112,7 +108,7 @@ public class DungeonFinder extends BlockFinder {
         int[] floorCalls = this.getFloorCalls(size, pos);
         AntiXRay(pos);
 
-        Dungeon.Data data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), size, floorCalls, BiomeFixer.swap(biome));
+        Dungeon.Data data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), size, floorCalls, BiomeFixer.swap(biome), heightContext);
 
         if(SeedCracker.get().getDataStorage().addBaseData(data, data::onDataAdded)) {
             this.renderers.add(new Cube(pos, new Color(255, 0, 0)));

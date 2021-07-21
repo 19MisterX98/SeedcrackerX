@@ -4,6 +4,7 @@ import kaptainwutax.seedcrackerX.finder.decorator.*;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
 import kaptainwutax.seedcrackerX.finder.structure.*;
 import kaptainwutax.seedcrackerX.render.Renderer;
+import kaptainwutax.seedcrackerX.util.HeightContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,6 +25,7 @@ public abstract class Finder {
 
     protected static final List<BlockPos> CHUNK_POSITIONS = new ArrayList<>();
     protected static final List<BlockPos> SUB_CHUNK_POSITIONS = new ArrayList<>();
+    protected static HeightContext heightContext;
 
     protected MinecraftClient mc = MinecraftClient.getInstance();
     protected List<Renderer> renderers = new ArrayList<>();
@@ -33,10 +35,8 @@ public abstract class Finder {
     static {
         for(int x = 0; x < 16; x++) {
             for(int z = 0; z < 16; z++) {
-                for(int y = 0; y < 256; y++) {
-                    BlockPos pos = new BlockPos(x, y, z);
-                    if(y < 16)SUB_CHUNK_POSITIONS.add(pos);
-                    CHUNK_POSITIONS.add(pos);
+                for(int y = 0; y < 16; y++) {
+                    SUB_CHUNK_POSITIONS.add(new BlockPos(x, y, z));
                 }
             }
         }

@@ -11,10 +11,12 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
+import kaptainwutax.seedcrackerX.util.HeightContext;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
 import mjtb49.hashreversals.ChunkRandomReverser;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.gen.YOffset;
 import randomreverser.call.java.FilteredSkip;
 import randomreverser.call.java.NextInt;
 import randomreverser.device.JavaRandomDevice;
@@ -58,7 +60,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			} else {
 				x = rand.nextInt(16);
 				z = rand.nextInt(16);
-				y = rand.nextInt(256);
+				y = rand.nextInt();
 			}
 
 			if(y == data.blockY && x == data.offsetX && z == data.offsetZ) {
@@ -90,8 +92,8 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					&& biome != Biomes.THE_VOID && biome == Biomes.THE_END;
 	}
 
-	public Dungeon.Data at(int blockX, int blockY, int blockZ, Vec3i size, int[] floorCalls, Biome biome) {
-		return new Dungeon.Data(this, blockX, blockY, blockZ, size, floorCalls, biome);
+	public Dungeon.Data at(int blockX, int blockY, int blockZ, Vec3i size, int[] floorCalls, Biome biome, HeightContext heightContext) {
+		return new Dungeon.Data(this, blockX, blockY, blockZ, size, floorCalls, biome, heightContext);
 	}
 
 	public static class Data extends Decorator.Data<Dungeon> {
@@ -108,8 +110,9 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 		public final Vec3i size;
 		public final int[] floorCalls;
 		public float bitsCount;
+		public HeightContext heightContext;
 
-		public Data(Dungeon feature, int blockX, int blockY, int blockZ, Vec3i size, int[] floorCalls, Biome biome) {
+		public Data(Dungeon feature, int blockX, int blockY, int blockZ, Vec3i size, int[] floorCalls, Biome biome, HeightContext heightContext) {
 			super(feature, blockX >> 4, blockZ >> 4, biome);
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) { //1.12
 				blockX -= 8;
@@ -122,6 +125,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			this.floorCalls = floorCalls;
 			this.blockX = blockX;
 			this.blockZ = blockZ;
+			this.heightContext = heightContext;
 
 			if(floorCalls != null) {
 				for(int call: floorCalls) {
@@ -157,7 +161,8 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			} else {
 				device.addCall(NextInt.withValue(16,this.offsetX));
 				device.addCall(NextInt.withValue(16,this.offsetZ));
-				device.addCall(NextInt.withValue(256,this.blockY));
+				System.out.println();
+				device.addCall(NextInt.withValue(heightContext.getHeight(), heightContext.getDistanceToBottom(this.blockY)));
 			}
 			device.skip(2);
 

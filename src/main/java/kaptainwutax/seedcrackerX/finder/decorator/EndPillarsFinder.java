@@ -71,10 +71,14 @@ public class EndPillarsFinder extends Finder {
 
     public static class BedrockMarkerFinder extends BlockFinder {
 
-        protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-            if(pos.getY() < 76)return true;
-            return pos.getY() > 76 + 3 * 10;
-        });
+        protected static List<BlockPos> SEARCH_POSITIONS;
+
+        public static void reloadSearchPositions() {
+            SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
+                if(pos.getY() < 76)return true;
+                return pos.getY() > 76 + 3 * 10;
+            });
+        }
 
         public BedrockMarkerFinder(World world, ChunkPos chunkPos, BlockPos xz) {
             super(world, chunkPos, Blocks.BEDROCK);

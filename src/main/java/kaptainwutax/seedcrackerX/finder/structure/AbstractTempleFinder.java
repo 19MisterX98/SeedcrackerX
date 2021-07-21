@@ -20,11 +20,15 @@ import java.util.Map;
 
 public abstract class AbstractTempleFinder extends Finder {
 
-    protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-        if(pos.getX() != 0)return true;
-        if(pos.getY() < 63)return true;
-        return pos.getZ() != 0;
-    });
+    protected static List<BlockPos> SEARCH_POSITIONS;
+
+    public static void reloadSearchPositions() {
+        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
+            if(pos.getX() != 0)return true;
+            if(pos.getY() < 63)return true;
+            return pos.getZ() != 0;
+        });
+    }
 
     protected List<PieceFinder> finders = new ArrayList<>();
     protected final Vec3i size;

@@ -5,7 +5,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
+import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
+import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.client.MinecraftClient;
@@ -20,6 +22,7 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -53,27 +56,16 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        //PRE-1.16 SUPPORTED GENERATOR TYPES
-        //GeneratorTypeData generatorTypeData = new GeneratorTypeData(packet.getGeneratorType());
-
-        //Log.warn("Fetched the generator type [" +
-        //        I18n.translate(generatorTypeData.getGeneratorType().getStoredName()).toUpperCase() + "].");
-
-        //if(!SeedCracker.get().getDataStorage().addGeneratorTypeData(generatorTypeData)) {
-        //    Log.error("THIS GENERATOR IS NOT SUPPORTED!");
-        //    Log.error("Overworld biome search WILL NOT run.");
-        //}
-
-        HashedSeedData hashedSeedData = new HashedSeedData(packet.getSha256Seed());
-
-        if(SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES)) {
-            Log.warn("Fetched hashed world seed [" + hashedSeedData.getHashedSeed() + "].");
-        }
+        newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()));
     }
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))
     public void onPlayerRespawn(PlayerRespawnS2CPacket packet, CallbackInfo ci) {
-        HashedSeedData hashedSeedData = new HashedSeedData(packet.getSha256Seed());
+        newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()));
+    }
+
+    public void newDimension(DimensionType dimension, HashedSeedData hashedSeedData) {
+        ReloadFinders.reloadHeight(dimension.getMinimumY(), dimension.getMinimumY() + dimension.getLogicalHeight());
 
         if(SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES)) {
             Log.warn("Fetched hashed world seed [" + hashedSeedData.getHashedSeed() + "].");

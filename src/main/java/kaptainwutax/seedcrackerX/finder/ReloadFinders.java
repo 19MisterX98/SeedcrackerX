@@ -1,6 +1,14 @@
 package kaptainwutax.seedcrackerX.finder;
 
+import kaptainwutax.seedcrackerX.finder.decorator.EndPillarsFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
+import kaptainwutax.seedcrackerX.finder.structure.AbstractTempleFinder;
+import kaptainwutax.seedcrackerX.finder.structure.BuriedTreasureFinder;
+import kaptainwutax.seedcrackerX.finder.structure.EndCityFinder;
+import kaptainwutax.seedcrackerX.finder.structure.MonumentFinder;
+import kaptainwutax.seedcrackerX.util.HeightContext;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 
 public class ReloadFinders {
@@ -15,5 +23,26 @@ public class ReloadFinders {
                 FinderQueue.get().onChunkData(client.world, new ChunkPos(i, j));
             }
         }
+    }
+
+    public static void reloadHeight(int minY, int maxY) {
+        Finder.CHUNK_POSITIONS.clear();
+        for(int x = 0; x < 16; x++) {
+            for(int z = 0; z < 16; z++) {
+                for(int y = minY; y < maxY; y++) {
+                    Finder.CHUNK_POSITIONS.add(new BlockPos(x, y, z));
+                }
+            }
+        }
+        Finder.heightContext = new HeightContext(minY, maxY);
+
+        EmeraldOreFinder.reloadSearchPositions();
+        EndPillarsFinder.BedrockMarkerFinder.reloadSearchPositions();
+        AbstractTempleFinder.reloadSearchPositions();
+        BuriedTreasureFinder.reloadSearchPositions();
+        EndCityFinder.reloadSearchPositions();
+        MonumentFinder.reloadSearchPositions();
+
+        System.out.println("minY "+minY + ",  " + "maxY " + maxY);
     }
 }

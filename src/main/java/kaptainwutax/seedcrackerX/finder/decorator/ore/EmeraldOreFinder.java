@@ -21,10 +21,14 @@ import java.util.List;
 
 public class EmeraldOreFinder extends BlockFinder {
 
-    protected static List<BlockPos> SEARCH_POSITIONS = Finder.buildSearchPositions(Finder.CHUNK_POSITIONS, pos -> {
-        if(pos.getY() < 4)return true;
-        return pos.getY() > 28 + 4;
-    });
+    protected static List<BlockPos> SEARCH_POSITIONS;
+
+    public static void reloadSearchPositions() {
+        SEARCH_POSITIONS = Finder.buildSearchPositions(Finder.CHUNK_POSITIONS, pos -> {
+            if(pos.getY() < 4)return true;
+            return pos.getY() > 28 + 4;
+        });
+    }
 
     public EmeraldOreFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.EMERALD_ORE);

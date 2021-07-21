@@ -25,15 +25,11 @@ import java.util.List;
 
 public class DesertWellFinder extends PieceFinder {
 
-	protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-		return false;
-	});
-
 	protected static Vec3i SIZE = new Vec3i(5, 6, 5);
 
 	public DesertWellFinder(World world, ChunkPos chunkPos) {
 		super(world, chunkPos, Direction.NORTH, SIZE);
-		this.searchPositions = SEARCH_POSITIONS;
+		this.searchPositions = CHUNK_POSITIONS;
 		this.buildStructure();
 	}
 

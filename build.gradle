@@ -35,8 +35,8 @@ dependencies {
 	
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
 
-	implementation('com.github.hube12:SEED:ea12580657506a6190c86f38d0cf29dd4786dbd1')
-	include('com.github.hube12:SEED:ea12580657506a6190c86f38d0cf29dd4786dbd1')
+	implementation('com.github.hube12:SEED:07d6f2502c0265703fe3a44a91af09141346f249')
+	include('com.github.hube12:SEED:07d6f2502c0265703fe3a44a91af09141346f249')
 }
 
 processResources {

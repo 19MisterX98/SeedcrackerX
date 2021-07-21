@@ -23,13 +23,17 @@ import java.util.List;
 
 public class BuriedTreasureFinder extends BlockFinder {
 
-    protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-        //Buried treasure chests always generate at (9, 9) within a chunk.
-        int localX = pos.getX() & 15;
-        int localZ = pos.getZ() & 15;
-        if(localX != 9 || localZ != 9)return true;
-        return pos.getY() > 90;
-    });
+    protected static List<BlockPos> SEARCH_POSITIONS;
+
+    public static void reloadSearchPositions() {
+        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
+            //Buried treasure chests always generate at (9, 9) within a chunk.
+            int localX = pos.getX() & 15;
+            int localZ = pos.getZ() & 15;
+            if(localX != 9 || localZ != 9)return true;
+            return pos.getY() > 90;
+        });
+    }
 
     protected static final List<BlockState> CHEST_HOLDERS = new ArrayList<>();
 

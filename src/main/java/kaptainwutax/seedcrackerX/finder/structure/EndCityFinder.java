@@ -25,9 +25,13 @@ import java.util.Map;
 
 public class EndCityFinder extends Finder {
 
-    protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-        return pos.getY() > 90;
-    });
+    protected static List<BlockPos> SEARCH_POSITIONS;
+
+    public static void reloadSearchPositions() {
+        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
+            return pos.getY() > 90;
+        });
+    }
 
     protected List<PieceFinder> finders = new ArrayList<>();
     protected final Vec3i size = new Vec3i(8, 4, 8);

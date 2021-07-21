@@ -26,11 +26,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class WarpedFungusFinder extends BlockFinder {
-    protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> pos.getY() > 127);
 
     public WarpedFungusFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.WARPED_STEM);
-        this.searchPositions = SEARCH_POSITIONS;
+        this.searchPositions = CHUNK_POSITIONS;
     }
 
     @Override

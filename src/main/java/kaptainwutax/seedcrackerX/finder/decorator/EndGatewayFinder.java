@@ -22,13 +22,9 @@ import java.util.List;
 
 public class EndGatewayFinder extends BlockFinder {
 
-    protected static List<BlockPos> SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-        return false;
-    });
-
     public EndGatewayFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.END_GATEWAY);
-        this.searchPositions = SEARCH_POSITIONS;
+        this.searchPositions = CHUNK_POSITIONS;
     }
 
     @Override

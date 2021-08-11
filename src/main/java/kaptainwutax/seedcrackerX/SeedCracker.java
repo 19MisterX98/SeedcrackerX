@@ -1,12 +1,16 @@
 package kaptainwutax.seedcrackerX;
 
 import kaptainwutax.mcutils.version.MCVersion;
+import kaptainwutax.seedcrackerX.api.SeedCrackerAPI;
 import kaptainwutax.seedcrackerX.command.ClientCommand;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Formatting;
+
+import java.util.ArrayList;
 
 public class SeedCracker implements ModInitializer {
 
@@ -15,12 +19,16 @@ public class SeedCracker implements ModInitializer {
     private static final SeedCracker INSTANCE = new SeedCracker();
     private final DataStorage dataStorage = new DataStorage();
 	private static boolean active;
+	public static final ArrayList<SeedCrackerAPI> entrypoints = new ArrayList<>();
 
 	@Override
 	public void onInitialize() {
 		ConfigScreen.loadConfig();
 		active = ConfigScreen.getConfig().isActive();
 		Features.init(MC_VERSION);
+		FabricLoader.getInstance().getEntrypointContainers("seedcrackerx", SeedCrackerAPI.class).forEach(entrypoint -> {
+			entrypoints.add(entrypoint.getEntrypoint());
+		});
 	}
 
 	public static SeedCracker get() {

@@ -175,6 +175,7 @@ public class TimeMachine {
 
 			if(!this.worldSeeds.isEmpty()) {
 				Log.warn("Finished searching for world seeds.");
+				SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.seedCollector(worldSeeds));
 				return true;
 			} else {
 				Log.error("Finished search with no results, reverting back to biomes.");

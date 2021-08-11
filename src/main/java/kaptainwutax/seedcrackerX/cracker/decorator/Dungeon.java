@@ -16,7 +16,6 @@ import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
 import mjtb49.hashreversals.ChunkRandomReverser;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.gen.YOffset;
 import randomreverser.call.java.FilteredSkip;
 import randomreverser.call.java.NextInt;
 import randomreverser.device.JavaRandomDevice;
@@ -60,7 +59,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			} else {
 				x = rand.nextInt(16);
 				z = rand.nextInt(16);
-				y = rand.nextInt();
+				y = rand.nextInt(data.heightContext.getHeight()) + data.heightContext.getBottomY();
 			}
 
 			if(y == data.blockY && x == data.offsetX && z == data.offsetZ) {
@@ -161,7 +160,6 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			} else {
 				device.addCall(NextInt.withValue(16,this.offsetX));
 				device.addCall(NextInt.withValue(16,this.offsetZ));
-				System.out.println();
 				device.addCall(NextInt.withValue(heightContext.getHeight(), heightContext.getDistanceToBottom(this.blockY)));
 			}
 			device.skip(2);

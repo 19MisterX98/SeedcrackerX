@@ -105,9 +105,17 @@ public class DungeonFinder extends BlockFinder {
 
         BlockPos pos = result.get(0);
         Vec3i size = this.getDungeonSizeXray(pos);
-        int[] floorCalls = this.getFloorCalls(size, pos);
-        AntiXRay(pos);
+        if(AntiXRay(pos)) {
 
+            if (waitUntilAntiXrayBypassed(pos, size)) {
+                if (AntiXRay(pos)) {
+                    Log.warn("helped");
+                } else {
+                    Log.warn("didnt help");
+                }
+            }
+        }
+        int[] floorCalls = this.getFloorCalls(size, pos);
         Dungeon.Data data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), size, floorCalls, BiomeFixer.swap(biome), heightContext);
 
         if(SeedCracker.get().getDataStorage().addBaseData(data, data::onDataAdded)) {
@@ -118,6 +126,26 @@ public class DungeonFinder extends BlockFinder {
             }
         }
         return result;
+    }
+
+    public boolean waitUntilAntiXrayBypassed(BlockPos pos, Vec3i size) {
+        ArrayList<BlockPos> floorBlocks = new ArrayList<>();
+        for(int xo = -size.getX(); xo <= size.getX(); xo++) {
+            for (int zo = -size.getZ(); zo <= size.getZ(); zo++) {
+                floorBlocks.add(pos.add(xo, -1, zo));
+            }
+        }
+        //ArrayList<BlockPos> floorblocks1 = new ArrayList<>(floorBlocks);
+        if (!SeedCracker.get().getDataStorage().blockUpdateQueue.add(floorBlocks, pos)) {
+            return false;
+        }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //floorblocks1.forEach(b -> System.out.println("new: "+MinecraftClient.getInstance().world.getBlockState(b)));
+        return true;
     }
 
     //getDungeonSize even if server uses antiXray

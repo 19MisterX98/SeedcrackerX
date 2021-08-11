@@ -15,6 +15,7 @@ import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
+import kaptainwutax.seedcrackerX.finder.BlockUpdateQueue;
 import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
 import kaptainwutax.seedcrackerX.util.Log;
 
@@ -45,17 +46,18 @@ public class DataStorage {
 
 	protected TimeMachine timeMachine = new TimeMachine(this);
 	protected Set<Consumer<DataStorage>> scheduledData = new ConcurrentSet<>();
-
 	protected PillarData pillarData = null;
 	protected ScheduledSet<Entry<Feature.Data<?>>> baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 	protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
 	public HashedSeedData hashedSeedData = null;
 	public List<Long> dungeon12StructureSeeds = new ArrayList<>();
+	public BlockUpdateQueue blockUpdateQueue = new BlockUpdateQueue();
 
 	public void tick() {
 		if(!this.timeMachine.isRunning) {
 			this.baseSeedData.dump();
 			this.biomeSeedData.dump();
+			blockUpdateQueue.tick();
 
 			this.timeMachine.isRunning = true;
 
@@ -186,6 +188,7 @@ public class DataStorage {
 		this.hashedSeedData = null;
 		this.timeMachine.shouldTerminate = true;
 		this.timeMachine = new TimeMachine(this);
+		blockUpdateQueue = new BlockUpdateQueue();
 		DungeonFinder.resetXRayDetected();
 	}
 

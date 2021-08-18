@@ -77,7 +77,6 @@ public class FullFungusData {
                 } else if (blockdata == 1) {
                     device.addCall(NextFloat.inRange(0, 0.1F));
                 }
-                System.out.println(blockdata);
             }
         }
 

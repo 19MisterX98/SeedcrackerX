@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
+	id 'fabric-loom' version '0.9-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -35,8 +35,8 @@ dependencies {
 	
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
 
-	implementation('com.github.hube12:SEED:07d6f2502c0265703fe3a44a91af09141346f249')
-	include('com.github.hube12:SEED:07d6f2502c0265703fe3a44a91af09141346f249')
+	implementation 'com.github.hube12:SEED:master-SNAPSHOT'
+	include 'com.github.hube12:SEED:master-SNAPSHOT'
 }
 
 processResources {

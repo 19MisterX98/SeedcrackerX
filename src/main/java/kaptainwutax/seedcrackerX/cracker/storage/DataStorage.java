@@ -16,13 +16,8 @@ import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.BlockUpdateQueue;
-import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
-import kaptainwutax.seedcrackerX.util.Log;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class DataStorage {
@@ -47,10 +42,9 @@ public class DataStorage {
 	protected TimeMachine timeMachine = new TimeMachine(this);
 	protected Set<Consumer<DataStorage>> scheduledData = new ConcurrentSet<>();
 	protected PillarData pillarData = null;
-	protected ScheduledSet<Entry<Feature.Data<?>>> baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
+	public ScheduledSet<Entry<Feature.Data<?>>> baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 	protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
 	public HashedSeedData hashedSeedData = null;
-	public List<Long> dungeon12StructureSeeds = new ArrayList<>();
 	public BlockUpdateQueue blockUpdateQueue = new BlockUpdateQueue();
 
 	public void tick() {
@@ -110,19 +104,6 @@ public class DataStorage {
 		this.schedule(event::onDataAdded);
 		return true;
 	}
-	public boolean addDungeon12StructureSeed(long structureSeed) {
-		if(this.dungeon12StructureSeeds.contains(structureSeed)) {
-			//found matching structureseed
-			Log.printSeed("found two matching structureseeds ${SEED}.", structureSeed);
-			getTimeMachine().structureSeeds = new ArrayList<>();
-			getTimeMachine().structureSeeds.add(structureSeed);
-			getTimeMachine().poke(TimeMachine.Phase.STRUCTURES);
-			getTimeMachine().poke(TimeMachine.Phase.BIOMES);
-			return true;
-		}
-		this.dungeon12StructureSeeds.add(structureSeed);
-		return false;
-	}
 
 	public synchronized boolean addHashedSeedData(HashedSeedData data, DataAddedEvent event) {
 		if(this.hashedSeedData == null || this.hashedSeedData.getHashedSeed() != data.getHashedSeed()) {
@@ -176,20 +157,18 @@ public class DataStorage {
 	}
 
 	public boolean notEnoughBiomeData() {
-		return this.biomeSeedData.size() < 5;
+		return this.biomeSeedData.size() < 7;
 	}
 
 	public void clear() {
 		this.scheduledData = new ConcurrentSet<>();
 		this.pillarData = null;
-		this.dungeon12StructureSeeds = new ArrayList<>();
 		this.baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
 		this.biomeSeedData = new ScheduledSet<>(null);
 		this.hashedSeedData = null;
 		this.timeMachine.shouldTerminate = true;
 		this.timeMachine = new TimeMachine(this);
-		blockUpdateQueue = new BlockUpdateQueue();
-		DungeonFinder.resetXRayDetected();
+		this.blockUpdateQueue = new BlockUpdateQueue();
 	}
 
 	public static class Entry<T> {
@@ -204,12 +183,9 @@ public class DataStorage {
 		@Override
 		public boolean equals(Object o) {
 			if(this == o)return true;
-			if(!(o instanceof Entry))return false;
-			Entry<?> entry = (Entry<?>)o;
+			if(!(o instanceof Entry<?> entry))return false;
 
-			if(this.data instanceof Feature.Data<?> && entry.data instanceof Feature.Data<?>) {
-				Feature.Data<?> d1 = (Feature.Data<?>)this.data;
-				Feature.Data<?> d2 = (Feature.Data<?>)entry.data;
+			if(this.data instanceof Feature.Data<?> d1 && entry.data instanceof Feature.Data<?> d2) {
 				return d1.feature == d2.feature && d1.chunkX == d2.chunkX && d1.chunkZ == d2.chunkZ;
 			} else if(this.data instanceof BiomeData && entry.data instanceof BiomeData) {
 				return this.data.equals(entry.data);

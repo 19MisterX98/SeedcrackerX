@@ -20,7 +20,7 @@ import net.minecraft.text.TranslatableText;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 
 
 public class ConfigScreen {
@@ -124,8 +124,8 @@ public class ConfigScreen {
         //Clear data
         info.addEntry(eb.startBooleanToggle(new LiteralText("Clear all data"),dataClear).setSaveConsumer(val -> dataClear = val).build());
         //List worldseeds
-        List<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
-        if(worldSeeds != null) {
+        Set<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
+        if(!worldSeeds.isEmpty()) {
             SubCategoryBuilder world = eb.startSubCategory(new LiteralText("Worldseeds"));
             for(long worldSeed:worldSeeds) {
                 world.add(eb.startTextField(new LiteralText(""), String.valueOf(worldSeed)).build());
@@ -135,8 +135,8 @@ public class ConfigScreen {
             info.addEntry(eb.startTextDescription(new LiteralText("No worldseeds found")).build());
         }
         //List structureseeds
-        List<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
-        if(structureSeeds != null) {
+        Set<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
+        if(!structureSeeds.isEmpty()) {
             SubCategoryBuilder struc = eb.startSubCategory(new LiteralText("Structureseeds"));
             for(long structureSeed:structureSeeds) {
                 struc.add(eb.startTextField(new LiteralText(""),String.valueOf(structureSeed)).build());
@@ -149,17 +149,6 @@ public class ConfigScreen {
 
 
         if(getConfig().isDEBUG()) {
-            //List Dungeonseeds von 1.12 Dungeons
-            List<Long> structure12Seeds = SeedCracker.get().getDataStorage().dungeon12StructureSeeds;
-            if(structure12Seeds.size() != 0) {
-                SubCategoryBuilder dungeon12 = eb.startSubCategory(new LiteralText("Structureseeds of dungeons that need to be checked against another dungeon to get the right one(for 1.12 and below"));
-                for(long structure12Seed:structure12Seeds) {
-                    dungeon12.add(eb.startTextField(new LiteralText(""),String.valueOf(structure12Seed)).build());
-                }
-                info.addEntry(dungeon12.setExpanded(true).build());
-            } else {
-                info.addEntry(eb.startTextDescription(new LiteralText("No structureseeds of old dungeons found")).build());
-            }
             //List pillarseeds
             List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
             if(pillarSeeds != null) {

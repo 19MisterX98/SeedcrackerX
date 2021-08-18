@@ -16,19 +16,19 @@ public class SeedCracker implements ModInitializer {
 
 	public static MCVersion MC_VERSION = MCVersion.v1_17;
 
-    private static final SeedCracker INSTANCE = new SeedCracker();
+    private static SeedCracker INSTANCE;
     private final DataStorage dataStorage = new DataStorage();
 	private static boolean active;
 	public static final ArrayList<SeedCrackerAPI> entrypoints = new ArrayList<>();
 
 	@Override
 	public void onInitialize() {
+		INSTANCE = this;
 		ConfigScreen.loadConfig();
 		active = ConfigScreen.getConfig().isActive();
 		Features.init(MC_VERSION);
-		FabricLoader.getInstance().getEntrypointContainers("seedcrackerx", SeedCrackerAPI.class).forEach(entrypoint -> {
-			entrypoints.add(entrypoint.getEntrypoint());
-		});
+		FabricLoader.getInstance().getEntrypointContainers("seedcrackerx", SeedCrackerAPI.class).forEach(entrypoint ->
+				entrypoints.add(entrypoint.getEntrypoint()));
 	}
 
 	public static SeedCracker get() {

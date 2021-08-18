@@ -21,7 +21,7 @@ import randomreverser.call.java.NextInt;
 import randomreverser.device.JavaRandomDevice;
 import randomreverser.device.LCGReverserDevice;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,10 +34,6 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 	public Dungeon(MCVersion version) {
 		super(CONFIGS.getAsOf(version), version);
-	}
-
-	public Dungeon(Decorator.Config config) {
-		super(config, null);
 	}
 
 	@Override
@@ -139,8 +135,10 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 		public void onDataAdded(DataStorage dataStorage) {
 			dataStorage.getTimeMachine().poke(TimeMachine.Phase.STRUCTURES);
-			if(this.floorCalls == null || !this.usesFloor())return;
-			if(dataStorage.getTimeMachine().worldSeeds != null) return;
+			if (dataStorage.getTimeMachine().worldSeeds.size() == 1) return;
+			if (dataStorage.getTimeMachine().structureSeeds.size() == 1) return;
+			if (this.floorCalls == null || !this.usesFloor())return;
+
 
 			Log.warn("Short-cutting to dungeons...");
 			if(ConfigScreen.getConfig().isDEBUG()) {
@@ -177,6 +175,10 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 			Set<Long> decoratorSeeds = device.streamSeeds(LCGReverserDevice.Process.EVERYTHING).boxed().collect(Collectors.toSet());
 
+			if (dataStorage.getTimeMachine().shouldTerminate) {
+				return;
+			}
+
 			if(decoratorSeeds.isEmpty()) {
 				Log.error("Finished dungeon search with no seeds.");
 				return;
@@ -186,25 +188,31 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					Log.warn("Dungeonseed: " + decoratorSeed);
 				}
 			}
+
+			Set<Long> result = new HashSet<>();
 			
 			if(this.feature.getVersion().isOlderThan(MCVersion.v1_13)) {
 				for (long decoratorSeed : decoratorSeeds) {
 
 					for (int i = 0; i < 200; i++) {
 						for(long structureSeed:ChunkRandomReverser.reversePopulationSeed(decoratorSeed ^ LCG.JAVA.multiplier, blockX >> 4, blockZ >> 4,MCVersion.v1_12_2)) {
-							if(dataStorage.addDungeon12StructureSeed(structureSeed)) {
-								return;
+							if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
+								result.add(structureSeed);
 							}
 						}
 						decoratorSeed = LCG.JAVA.combine(-1).nextSeed(decoratorSeed);
 					}
 				}
-				if(dataStorage.getTimeMachine().worldSeeds == null) {
+				if(result.isEmpty()) {
 					Log.warn("finished structure seed search. You'll need another dungeon");
+				} else if (result.size() == 1) {
+					result.forEach(seed -> Log.printSeed("Found structure seed ${SEED}.", seed));
+					dataStorage.getTimeMachine().structureSeeds = result;
+					dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
+				} else {
+					Log.warn("wtf, this message means something isnt working as it should");
 				}
 			}else {
-				dataStorage.getTimeMachine().structureSeeds = new ArrayList<>();
-
 				LCG failedDungeon = LCG.JAVA.combine(-5);
 
 				for(long decoratorSeed: decoratorSeeds) {
@@ -213,11 +221,17 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 										- this.feature.getConfig().getSalt(this.biome),
 								this.chunkX << 4, this.chunkZ << 4, SeedCracker.MC_VERSION).forEach(structureSeed -> {
 							Log.printSeed("Found structure seed ${SEED}.", structureSeed);
-							dataStorage.getTimeMachine().structureSeeds.add(structureSeed);
-							});
+							if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
+								result.add(structureSeed);
+							}
+						});
 
 						decoratorSeed = failedDungeon.nextSeed(decoratorSeed);
 					}
+				}
+				if (result.size() == 1) {
+					result.forEach(seed -> Log.printSeed("Cross-compared seeds and reduced to ${SEED}.", seed));
+					dataStorage.getTimeMachine().structureSeeds = result;
 				}
 				dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
 			}

@@ -11,14 +11,11 @@ public class EmeraldOre extends Decorator<Decorator.Config, EmeraldOre.Data> {
 
 	public static final VersionMap<Config> CONFIGS = new VersionMap<Config>()
 			.add(MCVersion.v1_13, new Decorator.Config(4, 14))
-			.add(MCVersion.v1_16, new EmeraldOre.Config(6, 14));
+			.add(MCVersion.v1_16, new Decorator.Config(6, 14))
+	        .add(MCVersion.v1_17, new Decorator.Config(6, 17));
 
 	public EmeraldOre(MCVersion version) {
 		super(CONFIGS.getAsOf(version), version);
-	}
-
-	public EmeraldOre(Decorator.Config config) {
-		super(config, null);
 	}
 
 	@Override
@@ -30,7 +27,7 @@ public class EmeraldOre extends Decorator<Decorator.Config, EmeraldOre.Data> {
 	public boolean canStart(Data data, long structureSeed, ChunkRand rand) {
 		super.canStart(data, structureSeed, rand);
 
-		int bound = rand.nextInt(6) + 3;
+		int bound = this.getVersion() == MCVersion.v1_17 ? rand.nextInt(19) + 6 : rand.nextInt(6) + 3;
 
 		for(int i = 0; i < bound; i++) {
 			int x, y, z;

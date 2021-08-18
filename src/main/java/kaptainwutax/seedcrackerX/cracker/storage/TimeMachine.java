@@ -3,15 +3,19 @@ package kaptainwutax.seedcrackerX.cracker.storage;
 import kaptainwutax.biomeutils.source.OverworldBiomeSource;
 import kaptainwutax.featureutils.Feature;
 import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.rand.seed.PillarSeed;
 import kaptainwutax.mcutils.rand.seed.StructureSeed;
 import kaptainwutax.mcutils.rand.seed.WorldSeed;
+import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,14 +31,15 @@ public class TimeMachine {
 	public boolean shouldTerminate = false;
 
 	public List<Integer> pillarSeeds = null;
-	public List<Long> structureSeeds = null;
-	public List<Long> worldSeeds = null;
+	public Set<Long> structureSeeds = new HashSet<>();
+	public Set<Long> worldSeeds = new HashSet<>();
 
 	public TimeMachine(DataStorage dataStorage) {
 		this.dataStorage = dataStorage;
 	}
 
 	public void poke(Phase phase) {
+		if (this.worldSeeds.size() == 1) return;
 		this.isRunning = true;
 
 		final Phase[] finalPhase = {phase};
@@ -46,9 +51,15 @@ public class TimeMachine {
 				if(!this.pokeStructures())break;
 			} else if(finalPhase[0] == Phase.BIOMES) {
 				if(!this.pokeBiomes())break;
+			} else if(finalPhase[0] == Phase.STRUCTURE_REDUCE) {
+				if(!this.pokeStructureReduce())break;
 			}
 
 			finalPhase[0] = finalPhase[0].nextPhase();
+		}
+		if (this.worldSeeds.size() == 1 && !this.shouldTerminate) {
+			long seed = worldSeeds.stream().findFirst().get();
+			SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.pushWorldSeed(seed));
 		}
 	}
 
@@ -76,10 +87,8 @@ public class TimeMachine {
 	}
 
 	protected boolean pokeStructures() {
-		if(this.pillarSeeds == null || this.structureSeeds != null ||
+		if(this.pillarSeeds == null || !this.structureSeeds.isEmpty() ||
 				this.dataStorage.getBaseBits() < this.dataStorage.getWantedBits())return false;
-
-		this.structureSeeds = new ArrayList<>();
 
 		Feature.Data<?>[] cache = new Feature.Data<?>[this.dataStorage.baseSeedData.size()];
 		int id = 0;
@@ -152,12 +161,12 @@ public class TimeMachine {
 	}
 
 	protected boolean pokeBiomes() {
-		if(this.structureSeeds == null || this.structureSeeds.isEmpty()|| this.worldSeeds != null)return false;
-		if((this.dataStorage.hashedSeedData == null || this.dataStorage.hashedSeedData.getHashedSeed() == 0) &&
-				(this.dataStorage.notEnoughBiomeData() || this.structureSeeds.size() > 20))return false;
+		if (this.structureSeeds.isEmpty() || this.worldSeeds.size() == 1) return false;
+		pokeStructureReduce();
 
-		this.worldSeeds = new ArrayList<>();
 		Log.debug("====================================");
+
+		worldSeeds.clear();
 
 		if(this.dataStorage.hashedSeedData != null && this.dataStorage.hashedSeedData.getHashedSeed() != 0) {
 			Log.warn("Looking for world seeds...");
@@ -175,16 +184,46 @@ public class TimeMachine {
 
 			if(!this.worldSeeds.isEmpty()) {
 				Log.warn("Finished searching for world seeds.");
-				SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.seedCollector(worldSeeds));
 				return true;
 			} else {
 				Log.error("Finished search with no results, reverting back to biomes.");
 			}
 		}
 
-		if(this.dataStorage.notEnoughBiomeData() || this.structureSeeds.size() > 20) return false;
+		this.dataStorage.biomeSeedData.dump();
+		if(this.dataStorage.notEnoughBiomeData()) {
+			Log.error("You need to collect more biome information");
+			return false;
+		}
 
 		Log.warn("Looking for world seeds with "+ this.dataStorage.biomeSeedData.size() + " biomes...");
+		Log.warn("trying fuzzy biome search");
+		for( long structureSeed : this.structureSeeds) {
+			for (long worldSeed : StructureSeed.toRandomWorldSeeds(structureSeed)) {
+				OverworldBiomeSource source = new OverworldBiomeSource(SeedCracker.MC_VERSION, worldSeed);
+
+				boolean matches = true;
+
+				for(DataStorage.Entry<BiomeData> e: this.dataStorage.biomeSeedData) {
+					if(!e.data.test(source)) {
+						matches = false;
+						break;
+					}
+				}
+
+				if(matches) {
+					this.worldSeeds.add(worldSeed);
+					Log.printSeed("Found world seed ${SEED}.", worldSeed);
+				}
+				if(this.shouldTerminate) {
+					return false;
+				}
+			}
+		}
+
+		if (!this.worldSeeds.isEmpty()) return true;
+		if (this.structureSeeds.size() > 10) return false;
+		Log.warn("trying deep biome search");
 		for(long structureSeed : this.structureSeeds) {
 			for(long upperBits = 0; upperBits < 1 << 16 && !this.shouldTerminate; upperBits++) {
 				long worldSeed = (upperBits << 48) | structureSeed;
@@ -219,22 +258,79 @@ public class TimeMachine {
 		}
 
 		dispSearchEnd();
-		if(this.worldSeeds.size() != 1) {
-			Log.warn("Looking for world seeds that are possible if the world uses a random seed");
-			for (long structureSeed : this.structureSeeds) {
-				StructureSeed.toRandomWorldSeeds(structureSeed).forEach(s -> {
-					if(this.worldSeeds.contains(s)) {
-						Log.printSeed("Found world seed that also matches biomes ${SEED}.", s);
-					} else {
-						this.worldSeeds.add(s);
-						Log.printSeed("Found world seed ${SEED}.", s);
-					}
-				});
-			}
-			dispSearchEnd();
+
+		if(!this.worldSeeds.isEmpty()) return true;
+
+		Log.error("Deleting biome information since no matching seed was found");
+		this.dataStorage.biomeSeedData.getBaseSet().clear();
+
+		Log.warn("Looking for world seeds that are possible if the world uses a random seed");
+		for (long structureSeed : this.structureSeeds) {
+			StructureSeed.toRandomWorldSeeds(structureSeed).forEach(s ->
+					Log.printSeed("Found world seed ${SEED}.", s));
+
 		}
 
 		return true;
+	}
+
+	protected boolean pokeStructureReduce() {
+		if (!this.worldSeeds.isEmpty() || this.structureSeeds.size() < 2) return false;
+		if (SeedCracker.MC_VERSION.isOlderThan(MCVersion.v1_13)) return false;
+
+		Set<Long> result = new HashSet<>();
+		Log.debug("====================================");
+		Log.warn("Reducing structure seeds.");
+
+		if (this.pillarSeeds != null) {
+			structureSeeds.forEach(seed -> {
+				if (this.pillarSeeds.contains((int) PillarSeed.fromStructureSeed(seed))) {
+					result.add(seed);
+				}
+			});
+		}
+		if (result.size() != 1) {
+			result.clear();
+			this.structureSeeds.stream().filter(WorldSeed::isString).findAny().ifPresent(result::add);
+		}
+
+		if (result.size() != 1) {
+			result.clear();
+			this.dataStorage.baseSeedData.dump();
+			Feature.Data<?>[] cache = new Feature.Data<?>[this.dataStorage.baseSeedData.size()];
+			int id = 0;
+
+			for(DataStorage.Entry<Feature.Data<?>> entry: this.dataStorage.baseSeedData) {
+				cache[id++] = entry.data;
+			}
+			ChunkRand rand = new ChunkRand();
+
+			for (Long seed : this.structureSeeds) {
+				boolean matches = true;
+
+				for(Feature.Data<?> baseSeedDatum: cache) {
+					if(!baseSeedDatum.testStart(seed, rand)) {
+						matches = false;
+						break;
+					}
+				}
+
+				if(matches) {
+					result.add(seed);
+				}
+			}
+		}
+
+		if (!result.isEmpty() && this.structureSeeds.size() > result.size()) {
+			if (result.size() < 10) {
+				result.forEach(seed -> Log.printSeed("Found structure seed ${SEED}.", seed));
+			}
+			this.structureSeeds = result;
+			return true;
+		} else {
+			Log.warn("Failed to reduce seeds");
+		}
+		return false;
 	}
 
 	private void dispSearchEnd() {
@@ -257,7 +353,7 @@ public class TimeMachine {
 	}
 
 	public enum Phase {
-		BIOMES(null), STRUCTURES(BIOMES), PILLARS(STRUCTURES);
+		BIOMES(null), STRUCTURES(BIOMES), PILLARS(STRUCTURES), STRUCTURE_REDUCE(null);
 
 		private final Phase nextPhase;
 

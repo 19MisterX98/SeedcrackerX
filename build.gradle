@@ -1,3 +1,5 @@
+import net.fabricmc.loom.task.RemapJarTask
+
 plugins {
 	id 'fabric-loom' version '0.9-SNAPSHOT'
 	id 'maven-publish'
@@ -10,40 +12,23 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
+sourceSets {
+	api
 }
 
-
-repositories {
-	maven { url "https://jitpack.io" }
-	maven { url "https://maven.terraformersmc.com/releases" }
-	maven { url "https://maven.shedaniel.me/" }
-}
-
-
-dependencies {
-	//to change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	include("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")
-	
-	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
-
-	implementation 'com.github.hube12:SEED:master-SNAPSHOT'
-	include 'com.github.hube12:SEED:master-SNAPSHOT'
-}
+compileApiJava.dependsOn processApiResources // wtf gradle
 
 processResources {
+	duplicatesStrategy = DuplicatesStrategy.WARN
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
 		expand "version": project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
 	}
 }
 
@@ -52,24 +37,129 @@ processResources {
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
+	options.release = 16
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier = "sources"
 	from sourceSets.main.allSource
 }
 
-jar {
+task apiJar(type: Jar, dependsOn: apiClasses) {
+	archiveClassifier = 'api-dev'
+	from (sourceSets.api.output) {
+		include "fabric.mod.json"
+		expand "version": project.version
+	}
+	from (sourceSets.api.output) {
+		exclude "fabric.mod.json"
+	}
 	from "LICENSE"
 }
 
-project.ext.credentials = new Properties()
-try {
-	project.ext.credentials.load(new FileReader(file('credentials.properties')))
-} catch (IOException ignore) {
+task apiSourcesJar(type: Jar, dependsOn: apiClasses) {
+	archiveClassifier = 'api-sources'
+	from sourceSets.api.allSource
 }
 
-apply from: 'setupRealMcAccount.gradle'
+task remapApiJar(type: RemapJarTask, dependsOn: project.apiJar) {
+	input = apiJar.archiveFile
+	classifier = 'api'
+	addNestedDependencies = false
+}
+
+remapJar.dependsOn remapApiJar
+
+repositories {
+	maven { url "https://jitpack.io" }
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven { url "https://maven.shedaniel.me/" }
+
+	flatDir {
+		dirs file(remapApiJar.archivePath).parentFile
+	}
+}
+
+dependencies {
+	//to change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	sourceSets.api.compileClasspath += files({sourceSets.main.compileClasspath.toList()})
+	implementation sourceSets.api.output
+	include name: file(remapApiJar.archivePath).name.with { it.endsWith('.jar') ? it.substring(0, it.length() - 4) : it }
+
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	include("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")
+
+	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
+
+	implementation 'com.github.hube12:SEED:master-SNAPSHOT'
+	include 'com.github.hube12:SEED:master-SNAPSHOT'
+}
+
+publishing {
+	publications {
+		def configurePom = {
+			packaging 'jar'
+			inceptionYear = '2021'
+			licenses {
+				license {
+					name = 'MIT'
+					url = 'https://github.com/19MisterX98/SeedcrackerX/blob/master/LICENSE.md'
+				}
+			}
+			url = 'https://github.com/19MisterX98/SeedcrackerX'
+			issueManagement {
+				url = 'https://github.com/19MisterX98/SeedcrackerX/issues'
+			}
+			scm {
+				url = 'https://github.com/19MisterX98/SeedcrackerX'
+			}
+			developers {
+				developer {
+					name = 'MisterX'
+					id = '19MisterX98'
+				}
+				developer {
+					name = 'Kap'
+					id = 'KaptainWutax'
+				}
+			}
+		}
+
+		mod(MavenPublication) {
+			artifactId 'seedcrackerx'
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy sourcesJar
+			}
+			pom configurePom
+			pom.name = 'seedcrackerx'
+			pom.description = 'The seedcrackerx mod JAR'
+		}
+		api(MavenPublication) {
+			artifactId 'seedcrackerx-api'
+			artifact(remapApiJar) {
+				builtBy remapApiJar
+				classifier = ''
+			}
+			artifact(apiSourcesJar) {
+				builtBy apiSourcesJar
+				classifier = 'sources'
+			}
+			pom configurePom
+			pom.name = 'seedcrackerx-api'
+			pom.description = 'The seedcrackerx API'
+		}
+	}
+}

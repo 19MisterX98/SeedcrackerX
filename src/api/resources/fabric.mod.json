@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "seedcrackerx-api",
+  "version": "${version}",
+
+  "name": "SeedCrackerX API",
+  "description": "API for SeedCrackerX",
+  "authors": [
+    "19MisterX98"
+  ],
+  "contact": {
+    "issues": "https://github.com/19MisterX98/SeedcrackerX/issues",
+    "sources": "https://github.com/19MisterX98/seedcrackerX/"
+  },
+
+  "license": "MIT",
+  "icon": "assets/seedcrackerx/icon.png",
+  "environment": "client",
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.4.0"
+  },
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
+  }
+}

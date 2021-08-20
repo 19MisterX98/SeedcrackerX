@@ -3,7 +3,7 @@
   "id": "seedcrackerx",
   "version": "${version}",
 
-  "name": "Seed Cracker X",
+  "name": "SeedCrackerX",
   "description": "Used for finding the seed of multiplayer or singleplayer worlds.",
   "authors": [
     "KaptainWutax",
@@ -14,7 +14,7 @@
     "sources": "https://github.com/19MisterX98/seedcrackerX/"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/seedcrackerx/icon.png",
 
   "environment": "client",

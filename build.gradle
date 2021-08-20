@@ -162,4 +162,11 @@ publishing {
 			pom.description = 'The seedcrackerx API'
 		}
 	}
+	repositories {
+		maven {
+			def releasesRepoUrl = "https://jitpack.io/com/github/19MisterX98/SeedcrackerX/latest"
+			def snapshotsRepoUrl = "https://jitpack.io/com/github/19MisterX98/SeedcrackerX/snapshots"
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
 }

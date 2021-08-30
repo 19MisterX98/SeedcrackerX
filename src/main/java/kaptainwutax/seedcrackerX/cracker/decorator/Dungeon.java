@@ -7,10 +7,8 @@ import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.mcutils.state.Dimension;
 import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.mcutils.version.VersionMap;
-import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
-import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.util.HeightContext;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
@@ -141,7 +139,8 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 
 			Log.warn("Short-cutting to dungeons...");
-			if(ConfigScreen.getConfig().isDEBUG()) {
+			boolean debug = kaptainwutax.seedcrackerX.config.Config.get().debug;
+			if(debug) {
 				StringBuilder floorString = new StringBuilder();
 				for(int floorCall:this.floorCalls){
 					floorString.append(floorCall);
@@ -183,7 +182,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 				Log.error("Finished dungeon search with no seeds.");
 				return;
 			}
-			if(ConfigScreen.getConfig().isDEBUG()) {
+			if(debug) {
 				for(long decoratorSeed : decoratorSeeds) {
 					Log.warn("Dungeonseed: " + decoratorSeed);
 				}
@@ -219,7 +218,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					for(int i = 0; i < 8; i++) {
 						ChunkRandomReverser.reversePopulationSeed((decoratorSeed ^ LCG.JAVA.multiplier)
 										- this.feature.getConfig().getSalt(this.biome),
-								this.chunkX << 4, this.chunkZ << 4, SeedCracker.MC_VERSION).forEach(structureSeed -> {
+								this.chunkX << 4, this.chunkZ << 4, this.feature.getVersion()).forEach(structureSeed -> {
 							Log.printSeed("Found structure seed ${SEED}.", structureSeed);
 							if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
 								result.add(structureSeed);

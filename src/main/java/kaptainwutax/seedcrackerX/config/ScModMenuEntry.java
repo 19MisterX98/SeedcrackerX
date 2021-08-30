@@ -1,4 +1,4 @@
-package kaptainwutax.seedcrackerX.profile.config;
+package kaptainwutax.seedcrackerX.config;
 
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;

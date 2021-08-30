@@ -1,6 +1,4 @@
-package kaptainwutax.seedcrackerX.profile;
-
-import kaptainwutax.seedcrackerX.finder.Finder;
+package kaptainwutax.seedcrackerX.finder;
 
 import java.util.List;
 import java.util.Map;
@@ -9,24 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-public class FinderConfig {
+public class FinderControl {
 
-    protected FinderProfile finderProfile = new ModmenuProfile();
     protected Map<Finder.Type, ConcurrentLinkedQueue<Finder>> activeFinders = new ConcurrentHashMap<>();
-
-    public FinderConfig() {
-
-    }
 
     public void deleteFinders() {
         this.activeFinders.clear();
-    }
-
-    public List<Finder.Type> getActiveFinderTypes() {
-        return this.finderProfile.typeStates.entrySet().stream()
-                .filter(Map.Entry::getValue)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
     }
 
     public List<Finder> getActiveFinders() {
@@ -47,13 +33,4 @@ public class FinderConfig {
 
         this.activeFinders.get(type).add(finder);
     }
-
-    public boolean getActive(Finder.Type type) {
-        return this.finderProfile.typeStates.get(type);
-    }
-
-    public boolean setActive(Finder.Type type, boolean flag) {
-        return this.finderProfile.setTypeState(type, flag);
-    }
-
 }

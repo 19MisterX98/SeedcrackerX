@@ -9,6 +9,7 @@ import kaptainwutax.mcutils.rand.seed.WorldSeed;
 import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
 
@@ -198,9 +199,10 @@ public class TimeMachine {
 
 		Log.warn("Looking for world seeds with "+ this.dataStorage.biomeSeedData.size() + " biomes...");
 		Log.warn("trying fuzzy biome search");
+		MCVersion version = Config.get().getVersion();
 		for( long structureSeed : this.structureSeeds) {
 			for (long worldSeed : StructureSeed.toRandomWorldSeeds(structureSeed)) {
-				OverworldBiomeSource source = new OverworldBiomeSource(SeedCracker.MC_VERSION, worldSeed);
+				OverworldBiomeSource source = new OverworldBiomeSource(version, worldSeed);
 
 				boolean matches = true;
 
@@ -228,7 +230,7 @@ public class TimeMachine {
 			for(long upperBits = 0; upperBits < 1 << 16 && !this.shouldTerminate; upperBits++) {
 				long worldSeed = (upperBits << 48) | structureSeed;
 
-				OverworldBiomeSource source = new OverworldBiomeSource(SeedCracker.MC_VERSION, worldSeed);
+				OverworldBiomeSource source = new OverworldBiomeSource(version, worldSeed);
 
 				boolean matches = true;
 
@@ -276,7 +278,7 @@ public class TimeMachine {
 
 	protected boolean pokeStructureReduce() {
 		if (!this.worldSeeds.isEmpty() || this.structureSeeds.size() < 2) return false;
-		if (SeedCracker.MC_VERSION.isOlderThan(MCVersion.v1_13)) return false;
+		if (Config.get().getVersion().isOlderThan(MCVersion.v1_13)) return false;
 
 		Set<Long> result = new HashSet<>();
 		Log.debug("====================================");

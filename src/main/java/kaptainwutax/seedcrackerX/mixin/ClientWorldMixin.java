@@ -1,7 +1,6 @@
 package kaptainwutax.seedcrackerX.mixin;
 
 import kaptainwutax.seedcrackerX.SeedCracker;
-import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
@@ -24,7 +23,6 @@ public abstract class ClientWorldMixin {
 
     @Inject(method = "disconnect", at = @At("HEAD"))
     private void disconnect(CallbackInfo ci) {
-        SeedCracker.get().setActive(ConfigScreen.getConfig().isActive());
         SeedCracker.get().reset();
     }
 

@@ -8,6 +8,7 @@ import kaptainwutax.featureutils.structure.BuriedTreasure;
 import kaptainwutax.featureutils.structure.Structure;
 import kaptainwutax.featureutils.structure.TriangularStructure;
 import kaptainwutax.featureutils.structure.UniformStructure;
+import kaptainwutax.seedcrackerX.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
@@ -16,6 +17,8 @@ import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.BlockUpdateQueue;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -46,8 +49,15 @@ public class DataStorage {
 	protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
 	public HashedSeedData hashedSeedData = null;
 	public BlockUpdateQueue blockUpdateQueue = new BlockUpdateQueue();
+	public boolean openGui = false;
 
 	public void tick() {
+		if (openGui) {
+			ConfigScreen configscreen = new ConfigScreen();
+			Screen screen = configscreen.getConfigScreenByCloth(MinecraftClient.getInstance().currentScreen);
+			MinecraftClient.getInstance().setScreen(screen);
+			openGui = false;
+		}
 		if(!this.timeMachine.isRunning) {
 			this.baseSeedData.dump();
 			this.biomeSeedData.dump();

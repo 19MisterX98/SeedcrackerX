@@ -22,7 +22,7 @@
     "main": [
       "kaptainwutax.seedcrackerX.SeedCracker"
     ], "modmenu": [
-      "kaptainwutax.seedcrackerX.profile.config.ScModMenuEntry"
+      "kaptainwutax.seedcrackerX.config.ScModMenuEntry"
     ]
 
   },

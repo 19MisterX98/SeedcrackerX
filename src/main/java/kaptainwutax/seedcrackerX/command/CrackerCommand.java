@@ -1,8 +1,7 @@
 package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import kaptainwutax.seedcrackerX.SeedCracker;
-import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
+import kaptainwutax.seedcrackerX.config.Config;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
@@ -18,35 +17,44 @@ public class CrackerCommand extends ClientCommand {
 	@Override
 	public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
 		builder.then(literal("ON").executes(context -> this.setActive(true)))
-				.then(literal("OFF").executes(context -> this.setActive(false)));
+				.then(literal("OFF").executes(context -> this.setActive(false)))
+			.executes(context -> this.toggleActive());
 
 		builder.then(literal("debug")
 					.then(literal("ON").executes(context -> this.setDebug(true)))
 					.then(literal("OFF").executes(context -> this.setDebug(false)))
 				.executes(context -> this.toggleDebug()));
-
-		builder.then(literal("reset").executes(context -> this.reset()));
 	}
 
+	private void feedback(boolean success, boolean flag) {
+		if (success) {
+			sendFeedback("successfully " + (flag ? "enabled" : "disabled"), Formatting.GREEN, false);
+		} else {
+			sendFeedback("already " + (flag ? "enabled" : "disabled"), Formatting.RED, false);
+		}
+	}
 
 	private int setActive(boolean flag) {
-		SeedCracker.get().setActive(flag);
+		feedback(Config.get().active != flag, flag);
+		Config.get().active = flag;
+		return 0;
+	}
+
+	private int toggleActive() {
+		Config.get().active = !Config.get().active;
+		feedback(true, Config.get().active);
+		return 0;
+	}
+
+	private int setDebug(boolean flag) {
+		feedback(Config.get().debug != flag, flag);
+		Config.get().debug = flag;
 		return 0;
 	}
 
 	private int toggleDebug() {
-		ConfigScreen.getConfig().setDEBUG(!ConfigScreen.getConfig().isDEBUG());
-		return 0;
-	}
-
-	private int setDebug(boolean debug) {
-		ConfigScreen.getConfig().setDEBUG(debug);
-		return 0;
-	}
-
-	private int reset() {
-		SeedCracker.get().reset();
-		sendFeedback("Reset", Formatting.GREEN, false);
+		Config.get().debug = !Config.get().debug;
+		feedback(true, Config.get().debug);
 		return 0;
 	}
 }

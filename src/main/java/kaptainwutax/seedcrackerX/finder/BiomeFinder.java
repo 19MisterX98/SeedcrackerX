@@ -4,7 +4,7 @@ import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
-import kaptainwutax.seedcrackerX.profile.config.ConfigScreen;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
@@ -34,7 +34,7 @@ public class BiomeFinder extends Finder {
             for(int z = 0; z < 16; z += 4) {
                 BlockPos blockPos = this.chunkPos.getStartPos().add(x, 0, z);
                 Biome biome;
-                if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_15)) {
+                if(Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_15)) {
                     biome = this.world.getBiomeForNoiseGen(blockPos.getX() >> 2, 0, blockPos.getZ() >> 2);
                 } else {
                     biome = this.world.getBiome(blockPos);
@@ -46,14 +46,14 @@ public class BiomeFinder extends Finder {
                 }
                 BiomeData data;
                 kaptainwutax.biomeutils.biome.Biome otherBiome = BiomeFixer.swap(biome);
-                if(SeedCracker.MC_VERSION.isNewerOrEqualTo(MCVersion.v1_15)) {
+                if(Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_15)) {
                     data = new BiomeData(otherBiome, blockPos.getX() >> 2, blockPos.getZ() >> 2);
                 } else {
                     data = new BiomeData(otherBiome, blockPos.getX(), blockPos.getZ());
                 }
                 if(SeedCracker.get().getDataStorage().addBiomeData(data, DataAddedEvent.POKE_BIOMES)) {
                     blockPos = this.world.getTopPosition(Heightmap.Type.WORLD_SURFACE, blockPos).down();
-                    if(ConfigScreen.getConfig().isDEBUG()) Log.warn(blockPos.toShortString()+ ", "+otherBiome.getName());
+                    if(Config.get().debug) Log.warn(blockPos.toShortString()+ ", "+otherBiome.getName());
                     result.add(blockPos);
                 }
             }

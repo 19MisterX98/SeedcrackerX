@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
@@ -23,8 +24,8 @@ public class FinderCommand extends ClientCommand {
             builder.then(literal("type")
                     .then(literal(finderType.toString())
                             .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true))))
-                    .executes(context -> this.printFinderType(finderType))
+                            .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
+                            .executes(context -> this.printFinderType(finderType)))
             );
         }
 
@@ -32,8 +33,8 @@ public class FinderCommand extends ClientCommand {
             builder.then(literal("category")
                     .then(literal(finderCategory.toString())
                             .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false))))
-                    .executes(context -> this.printFinderCategory(finderCategory))
+                            .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
+                            .executes(context -> this.printFinderCategory(finderCategory)))
             );
         }
         builder.then(literal("reload").executes(context -> this.reload()));
@@ -45,7 +46,7 @@ public class FinderCommand extends ClientCommand {
     }
 
     private int printFinderType(Finder.Type finderType) {
-        sendFeedback("Finder " + finderType + " is set to [" + String.valueOf(finderType.enabled).toUpperCase() + "].", Formatting.AQUA,false);
+        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", Formatting.AQUA,false);
         return 0;
     }
 
@@ -58,7 +59,7 @@ public class FinderCommand extends ClientCommand {
     private int setFinderType(Finder.Type finderType, boolean flag, boolean save) {
         finderType.enabled.set(flag);
         if (save) Config.save();
-        sendFeedback("Finder " + finderType + " has been set to [" + String.valueOf(flag).toUpperCase() + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("finder.setFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(flag).toUpperCase() + "].", Formatting.AQUA, false);
         return 0;
     }
 

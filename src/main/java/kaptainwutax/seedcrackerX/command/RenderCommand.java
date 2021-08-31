@@ -2,6 +2,7 @@ package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
@@ -28,14 +29,14 @@ public class RenderCommand extends ClientCommand {
     }
 
     private int printRenderMode() {
-        sendFeedback("Current render mode is set to [" + Config.get().render + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("render.getRenderMode") + " [" + Config.get().render + "].", Formatting.AQUA, false);
         return 0;
     }
 
     private int setRenderMode(Config.RenderType renderType) {
         Config.get().render = renderType;
         Config.save();
-        sendFeedback("Set render mode to [" + Config.get().render + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("render.setRenderMode") + " [" + Config.get().render + "].", Formatting.AQUA, false);
         return 0;
     }
 

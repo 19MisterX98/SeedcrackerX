@@ -17,7 +17,7 @@ public class ProgressListener {
 
 	public synchronized void addPercent(float percent, boolean debug) {
 		if((this.count & 3) == 0 && debug) {
-			Log.debug("Progress: " + this.progress +  "%");
+			Log.debug(Log.translate("tmachine.progress") + ": " + this.progress +  "%");
 		}
 
 		this.count++;

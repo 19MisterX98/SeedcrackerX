@@ -2,6 +2,7 @@ package kaptainwutax.seedcrackerX.finder.decorator;
 
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
@@ -92,7 +93,7 @@ public class DungeonFinder extends BlockFinder {
 
         int[] floorCalls = this.getFloorCalls(size, pos);
         Dungeon.Data data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), size, floorCalls, BiomeFixer.swap(biome), heightContext);
-        if(AntiXRay(pos)) {
+        if(AntiXRay(pos) && Config.get().antiXrayBypass) {
             if (SeedCracker.get().getDataStorage().baseSeedData.contains(new DataStorage.Entry<>(data, null))) {
                 return result;
             }

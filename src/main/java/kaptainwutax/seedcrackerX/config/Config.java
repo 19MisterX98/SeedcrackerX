@@ -30,6 +30,7 @@ public class Config {
     public RenderType render = RenderType.XRAY;
     public boolean active = true;
     public boolean debug = false;
+    public boolean antiXrayBypass = true;
 
     public MCVersion getVersion() {
         return version;

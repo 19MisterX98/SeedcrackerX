@@ -118,31 +118,33 @@ public abstract class Finder {
     }
 
     public enum Type {
-        BURIED_TREASURE(BuriedTreasureFinder::create, Category.STRUCTURES, Config.get().buriedTreasure),
-        DESERT_TEMPLE(DesertPyramidFinder::create, Category.STRUCTURES, Config.get().desertTemple),
-        END_CITY(EndCityFinder::create, Category.STRUCTURES, Config.get().endCity),
-        JUNGLE_TEMPLE(JunglePyramidFinder::create, Category.STRUCTURES, Config.get().jungleTemple),
-        MONUMENT(MonumentFinder::create, Category.STRUCTURES, Config.get().monument),
-        SWAMP_HUT(SwampHutFinder::create, Category.STRUCTURES, Config.get().swampHut),
-        SHIPWRECK(ShipwreckFinder::create, Category.STRUCTURES, Config.get().shipwreck),
+        BURIED_TREASURE(BuriedTreasureFinder::create, Category.STRUCTURES, Config.get().buriedTreasure, "finder.buriedTreasures"),
+        DESERT_TEMPLE(DesertPyramidFinder::create, Category.STRUCTURES, Config.get().desertTemple, "finder.desertTemples"),
+        END_CITY(EndCityFinder::create, Category.STRUCTURES, Config.get().endCity, "finder.endCities"),
+        JUNGLE_TEMPLE(JunglePyramidFinder::create, Category.STRUCTURES, Config.get().jungleTemple, "finder.jungleTemples"),
+        MONUMENT(MonumentFinder::create, Category.STRUCTURES, Config.get().monument, "finder.monuments"),
+        SWAMP_HUT(SwampHutFinder::create, Category.STRUCTURES, Config.get().swampHut, "finder.swampHuts"),
+        SHIPWRECK(ShipwreckFinder::create, Category.STRUCTURES, Config.get().shipwreck, "finder.shipwrecks"),
 
-        END_PILLARS(EndPillarsFinder::create, Category.DECORATORS, Config.get().endPillars),
-        END_GATEWAY(EndGatewayFinder::create, Category.DECORATORS, Config.get().endGateway),
-        DUNGEON(DungeonFinder::create, Category.DECORATORS, Config.get().dungeon),
-        EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS, Config.get().emeraldOre),
-        DESERT_WELL(DesertWellFinder::create, Category.DECORATORS, Config.get().desertWell),
-        WARPED_FUNGUS(WarpedFungusFinder::create,Category.DECORATORS, Config.get().warpedFungus),
+        END_PILLARS(EndPillarsFinder::create, Category.DECORATORS, Config.get().endPillars, "finder.endPillars"),
+        END_GATEWAY(EndGatewayFinder::create, Category.DECORATORS, Config.get().endGateway, "finder.endGateways"),
+        DUNGEON(DungeonFinder::create, Category.DECORATORS, Config.get().dungeon, "finder.dungeons"),
+        EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS, Config.get().emeraldOre, "finder.emeraldOres"),
+        DESERT_WELL(DesertWellFinder::create, Category.DECORATORS, Config.get().desertWell, "finder.desertWells"),
+        WARPED_FUNGUS(WarpedFungusFinder::create,Category.DECORATORS, Config.get().warpedFungus, "finder.warpedFungus"),
 
-        BIOME(BiomeFinder::create, Category.BIOMES, Config.get().biome);
+        BIOME(BiomeFinder::create, Category.BIOMES, Config.get().biome, "finder.biomes");
 
         public final FinderBuilder finderBuilder;
         private final Category category;
         public FeatureToggle enabled;
+        public final String nameKey;
 
-        Type(FinderBuilder finderBuilder, Category category, FeatureToggle enabled) {
+        Type(FinderBuilder finderBuilder, Category category, FeatureToggle enabled, String nameKey) {
             this.finderBuilder = finderBuilder;
             this.category = category;
             this.enabled = enabled;
+            this.nameKey = nameKey;
         }
 
         public static List<Type> getForCategory(Category category) {

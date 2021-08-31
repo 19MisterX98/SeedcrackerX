@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class FinderControl {
 
-    protected Map<Finder.Type, ConcurrentLinkedQueue<Finder>> activeFinders = new ConcurrentHashMap<>();
+    private final Map<Finder.Type, ConcurrentLinkedQueue<Finder>> activeFinders = new ConcurrentHashMap<>();
 
     public void deleteFinders() {
         this.activeFinders.clear();

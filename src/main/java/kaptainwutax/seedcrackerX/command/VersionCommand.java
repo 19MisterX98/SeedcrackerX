@@ -3,6 +3,7 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
@@ -26,7 +27,7 @@ public class VersionCommand extends ClientCommand {
 	private int setVersion(MCVersion version) {
 		Config.get().setVersion(version);
 		Config.save();
-		ClientCommand.sendFeedback("Changed version to " + version + ".", Formatting.AQUA, true);
+		ClientCommand.sendFeedback(Log.translate("version.setVersion") + " " + version + ".", Formatting.AQUA, true);
 		return 0;
 	}
 

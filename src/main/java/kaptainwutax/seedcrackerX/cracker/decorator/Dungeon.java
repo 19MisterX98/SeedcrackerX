@@ -138,7 +138,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			if (this.floorCalls == null || !this.usesFloor())return;
 
 
-			Log.warn("Short-cutting to dungeons...");
+			Log.warn("dungeon.start");
 			boolean debug = kaptainwutax.seedcrackerX.config.Config.get().debug;
 			if(debug) {
 				StringBuilder floorString = new StringBuilder();
@@ -179,7 +179,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 			}
 
 			if(decoratorSeeds.isEmpty()) {
-				Log.error("Finished dungeon search with no seeds.");
+				Log.error("dungeon.structureSeedSearchFailed");
 				return;
 			}
 			if(debug) {
@@ -203,9 +203,9 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					}
 				}
 				if(result.isEmpty()) {
-					Log.warn("finished structure seed search. You'll need another dungeon");
+					Log.warn("dungeon.finishedNeedAnotherOne");
 				} else if (result.size() == 1) {
-					result.forEach(seed -> Log.printSeed("Found structure seed ${SEED}.", seed));
+					result.forEach(seed -> Log.printSeed("foundStructureSeed", seed));
 					dataStorage.getTimeMachine().structureSeeds = result;
 					dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
 				} else {
@@ -219,7 +219,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 						ChunkRandomReverser.reversePopulationSeed((decoratorSeed ^ LCG.JAVA.multiplier)
 										- this.feature.getConfig().getSalt(this.biome),
 								this.chunkX << 4, this.chunkZ << 4, this.feature.getVersion()).forEach(structureSeed -> {
-							Log.printSeed("Found structure seed ${SEED}.", structureSeed);
+							Log.printSeed("foundStructureSeed", structureSeed);
 							if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
 								result.add(structureSeed);
 							}
@@ -229,7 +229,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					}
 				}
 				if (result.size() == 1) {
-					result.forEach(seed -> Log.printSeed("Cross-compared seeds and reduced to ${SEED}.", seed));
+					result.forEach(seed -> Log.printSeed("crossCompare", seed));
 					dataStorage.getTimeMachine().structureSeeds = result;
 				}
 				dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);

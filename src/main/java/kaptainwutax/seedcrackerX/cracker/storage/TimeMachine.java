@@ -69,19 +69,19 @@ public class TimeMachine {
 		this.pillarSeeds = new ArrayList<>();
 
 		Log.debug("====================================");
-		Log.warn("Looking for pillar seeds...");
+		Log.warn("tmachine.lookingForPillarSeed");
 
 		for(int pillarSeed = 0; pillarSeed < 1 << 16 && !this.shouldTerminate; pillarSeed++) {
 			if(this.dataStorage.pillarData.test(pillarSeed)) {
-				Log.printSeed("Found pillar seed ${SEED}.", pillarSeed);
+				Log.printSeed("tmachine.foundPillarSeed", pillarSeed);
 				this.pillarSeeds.add(pillarSeed);
 			}
 		}
 
 		if(!this.pillarSeeds.isEmpty()) {
-			Log.warn("Finished searching for pillar seeds.");
+			Log.warn("tmachine.pillarSeedSearchFinished");
 		} else {
-			Log.error("Finished search with no results.");
+			Log.error("finishedSearchNoResult");
 		}
 
 		return true;
@@ -100,7 +100,7 @@ public class TimeMachine {
 
 		for(int pillarSeed: this.pillarSeeds) {
 			Log.debug("====================================");
-			Log.warn("Looking for structure seeds with pillar seed [" + pillarSeed + "]...");
+			Log.warn("tmachine.lookingForStructureSeeds", pillarSeed);
 
 			AtomicInteger completion = new AtomicInteger();
 			ProgressListener progressListener = new ProgressListener();
@@ -132,8 +132,9 @@ public class TimeMachine {
 
 						if(matches) {
 							this.structureSeeds.add(seed);
-							Log.printSeed("Found structure seed ${SEED}.", seed);
+							Log.printSeed("foundStructureSeed", seed);
 						}
+
 					}
 
 					completion.getAndIncrement();
@@ -153,9 +154,9 @@ public class TimeMachine {
 		}
 
 		if(!this.structureSeeds.isEmpty()) {
-			Log.warn("Finished searching for structure seeds.");
+			Log.warn("tmachine.structureSeedSearchFinished");
 		} else {
-			Log.error("Finished search with no results.");
+			Log.error("finishedSearchNoResult");
 		}
 
 		return true;
@@ -170,12 +171,12 @@ public class TimeMachine {
 		worldSeeds.clear();
 
 		if(this.dataStorage.hashedSeedData != null && this.dataStorage.hashedSeedData.getHashedSeed() != 0) {
-			Log.warn("Looking for world seeds...");
+			Log.warn("tmachine.lookingForWorldSeeds");
 
 			for(long structureSeed: this.structureSeeds) {
 				WorldSeed.fromHash(structureSeed, this.dataStorage.hashedSeedData.getHashedSeed()).forEach(worldSeed -> {
 					this.worldSeeds.add(worldSeed);
-					Log.printSeed("Found world seed ${SEED}.", worldSeed);
+					Log.printSeed("tmachine.foundWorldSeed", worldSeed);
 				});
 
 				if(this.shouldTerminate) {
@@ -184,21 +185,21 @@ public class TimeMachine {
 			}
 
 			if(!this.worldSeeds.isEmpty()) {
-				Log.warn("Finished searching for world seeds.");
+				Log.warn("tmachine.worldSeedSearchFinished");
 				return true;
 			} else {
-				Log.error("Finished search with no results, reverting back to biomes.");
+				Log.error("tmachine.noResultsRevertingToBiomes");
 			}
 		}
 
 		this.dataStorage.biomeSeedData.dump();
 		if(this.dataStorage.notEnoughBiomeData()) {
-			Log.error("You need to collect more biome information");
+			Log.error("tmachine.moreBiomesNeeded");
 			return false;
 		}
 
-		Log.warn("Looking for world seeds with "+ this.dataStorage.biomeSeedData.size() + " biomes...");
-		Log.warn("trying fuzzy biome search");
+		Log.warn("tmachine.lookingForWorldSeedswithBiomes", this.dataStorage.biomeSeedData.size());
+		Log.warn("tmachine.fuzzyBiomeSearch");
 		MCVersion version = Config.get().getVersion();
 		for( long structureSeed : this.structureSeeds) {
 			for (long worldSeed : StructureSeed.toRandomWorldSeeds(structureSeed)) {
@@ -215,7 +216,7 @@ public class TimeMachine {
 
 				if(matches) {
 					this.worldSeeds.add(worldSeed);
-					Log.printSeed("Found world seed ${SEED}.", worldSeed);
+					Log.printSeed("tmachine.foundWorldSeed", worldSeed);
 				}
 				if(this.shouldTerminate) {
 					return false;
@@ -225,7 +226,7 @@ public class TimeMachine {
 
 		if (!this.worldSeeds.isEmpty()) return true;
 		if (this.structureSeeds.size() > 10) return false;
-		Log.warn("trying deep biome search");
+		Log.warn("tmachine.deepBiomeSearch");
 		for(long structureSeed : this.structureSeeds) {
 			for(long upperBits = 0; upperBits < 1 << 16 && !this.shouldTerminate; upperBits++) {
 				long worldSeed = (upperBits << 48) | structureSeed;
@@ -244,9 +245,9 @@ public class TimeMachine {
 				if(matches) {
 					this.worldSeeds.add(worldSeed);
 					if(this.worldSeeds.size() < 10) {
-						Log.printSeed("Found world seed ${SEED}.", worldSeed);
+						Log.printSeed("tmachine.foundWorldSeed", worldSeed);
 						if(this.worldSeeds.size() ==9) {
-							Log.warn("[Spam protection] printing all other seeds in console");
+							Log.warn("tmachine.printSeedsInConsole");
 						}
 					}else {
 						System.out.println("Found world seed " + worldSeed);
@@ -263,13 +264,13 @@ public class TimeMachine {
 
 		if(!this.worldSeeds.isEmpty()) return true;
 
-		Log.error("Deleting biome information since no matching seed was found");
+		Log.error("tmachine.deleteBiomeInformation");
 		this.dataStorage.biomeSeedData.getBaseSet().clear();
 
-		Log.warn("Looking for world seeds that are possible if the world uses a random seed");
+		Log.warn("tmachine.randomSeedSearch");
 		for (long structureSeed : this.structureSeeds) {
 			StructureSeed.toRandomWorldSeeds(structureSeed).forEach(s ->
-					Log.printSeed("Found world seed ${SEED}.", s));
+					Log.printSeed("tmachine.foundWorldSeed", s));
 
 		}
 
@@ -282,7 +283,7 @@ public class TimeMachine {
 
 		Set<Long> result = new HashSet<>();
 		Log.debug("====================================");
-		Log.warn("Reducing structure seeds.");
+		Log.warn("tmachine.reduceSeeds");
 
 		if (this.pillarSeeds != null) {
 			structureSeeds.forEach(seed -> {
@@ -325,21 +326,21 @@ public class TimeMachine {
 
 		if (!result.isEmpty() && this.structureSeeds.size() > result.size()) {
 			if (result.size() < 10) {
-				result.forEach(seed -> Log.printSeed("Found structure seed ${SEED}.", seed));
+				result.forEach(seed -> Log.printSeed("foundStructureSeed", seed));
 			}
 			this.structureSeeds = result;
 			return true;
 		} else {
-			Log.warn("Failed to reduce seeds");
+			Log.warn("tmachine.failedReducing");
 		}
 		return false;
 	}
 
 	private void dispSearchEnd() {
 		if(!this.worldSeeds.isEmpty()) {
-			Log.warn("Finished searching for world seeds.");
+			Log.warn("tmachine.worldSeedSearchFinished");
 		} else {
-			Log.error("Finished search with no results.");
+			Log.error("finishedSearchNoResult");
 		}
 	}
 

@@ -42,7 +42,5 @@ public class ReloadFinders {
         BuriedTreasureFinder.reloadSearchPositions();
         EndCityFinder.reloadSearchPositions();
         MonumentFinder.reloadSearchPositions();
-
-        System.out.println("minY "+minY + ",  " + "maxY " + maxY);
     }
 }

@@ -6,6 +6,7 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Language;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -29,13 +30,14 @@ public class DataCommand extends ClientCommand {
 
 	public int clear(CommandContext<ServerCommandSource> context) {
 		SeedCracker.get().reset();
-		sendFeedback("Cleared data storage", Formatting.GREEN, false);
+
+		sendFeedback(Language.getInstance().get("data.clearData"), Formatting.GREEN, false);
 		return 0;
 	}
 
 	private int printBits(CommandContext<ServerCommandSource> context) {
 		DataStorage s = SeedCracker.get().getDataStorage();
-		String message = "You currently have collected " + (int)s.getBaseBits() + " bits out of " + (int)s.getWantedBits() + ".";
+		String message = Language.getInstance().get("data.collectedBits").formatted((int)s.getBaseBits(), (int)s.getWantedBits());
 		sendFeedback(message, Formatting.GREEN, false);
 		return 0;
 	}

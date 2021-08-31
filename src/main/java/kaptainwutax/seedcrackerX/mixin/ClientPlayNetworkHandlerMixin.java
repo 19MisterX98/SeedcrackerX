@@ -3,9 +3,9 @@ package kaptainwutax.seedcrackerX.mixin;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
-import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
@@ -21,6 +21,7 @@ import net.minecraft.network.packet.s2c.play.CommandTreeS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.Language;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -67,8 +68,8 @@ public abstract class ClientPlayNetworkHandlerMixin {
     public void newDimension(DimensionType dimension, HashedSeedData hashedSeedData) {
         ReloadFinders.reloadHeight(dimension.getMinimumY(), dimension.getMinimumY() + dimension.getLogicalHeight());
 
-        if(SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES)) {
-            Log.warn("Fetched hashed world seed [" + hashedSeedData.getHashedSeed() + "].");
+        if(SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active) {
+            Log.warn(Log.translate("fetchedHashedSeed") + " [" + hashedSeedData.getHashedSeed() + "].");
         }
     }
 

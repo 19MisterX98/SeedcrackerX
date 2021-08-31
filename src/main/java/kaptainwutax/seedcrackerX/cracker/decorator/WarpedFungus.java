@@ -10,7 +10,6 @@ import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.Log;
 import kaptainwutax.seedutils.lcg.LCG;
-import kaptainwutax.seedutils.rand.JRand;
 import mjtb49.hashreversals.PopulationReverser;
 import net.minecraft.util.math.BlockPos;
 
@@ -73,15 +72,15 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             if(dataStorage.getTimeMachine().worldSeeds.size() == 1) return;
             if(dataStorage.getTimeMachine().structureSeeds.size() == 1) return;
 
-            Log.warn("running cracker at "+BlockX+" "+BlockZ);
+            Log.warn("fungus.start", BlockX, BlockZ);
 
             List<Long> fungusSeeds = fullFungi.crackSeed().boxed().toList();
 
             Log.debug("====================================");
-            fungusSeeds.forEach(s -> {Log.printSeed("fungus seed: ${SEED}.",s);});
+            fungusSeeds.forEach(s -> Log.printSeed("fungus.fungusSeed", s));
 
             if(fungusSeeds.isEmpty()) {
-                Log.warn("wrong fungus data.");
+                Log.warn("fungus.wrongData");
                 Log.debug("====================================");
                 return;
             }
@@ -90,15 +89,15 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             LinkedHashSet<Long> structureSeedList = new LinkedHashSet<>();
             fungusSeeds.forEach(s -> structureSeedList.addAll(reverseToDecoratorSeed(s)));
             if(structureSeedList.isEmpty()) {
-                Log.warn("no seeds found for this Fungus.");
+                Log.warn("fungus.noStructureSeedsFound");
                 return;
             }
 
             Set<Long> result = new HashSet<>();
 
-            Log.warn("got structure seeds: ");
+            Log.warn("fungus.gotStructureSeeds");
             for (Long structureSeed : structureSeedList) {
-                Log.printSeed("Found structure seed ${SEED}.", structureSeed);
+                Log.printSeed("foundStructureSeed", structureSeed);
                 if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
                     result.add(structureSeed);
                 }
@@ -106,8 +105,8 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
             if (result.size() == 1) {
                 Log.debug("====================================");
-                result.forEach(seed -> Log.printSeed("Cross-compared seeds and reduced to ${SEED}.", seed));
-                Log.warn("this structure seed is also usable as worldseed");
+                result.forEach(seed -> Log.printSeed("crossCompare", seed));
+                Log.warn("fungus.usableAsWorldSeed");
                 dataStorage.getTimeMachine().structureSeeds = result;
             }
             dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);

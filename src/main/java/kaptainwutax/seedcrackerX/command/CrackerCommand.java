@@ -2,6 +2,7 @@ package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 
@@ -27,11 +28,13 @@ public class CrackerCommand extends ClientCommand {
 	}
 
 	private void feedback(boolean success, boolean flag) {
+		String action = Log.translate(flag ? "cracker.enabled" : "cracker.disabled");
 		if (success) {
-			sendFeedback("successfully " + (flag ? "enabled" : "disabled"), Formatting.GREEN, false);
+			sendFeedback(Log.translate("cracker.successfully") + action, Formatting.GREEN, false);
 		} else {
-			sendFeedback("already " + (flag ? "enabled" : "disabled"), Formatting.RED, false);
+			sendFeedback(Log.translate("cracker.already") + action, Formatting.RED, false);
 		}
+		Config.save();
 	}
 
 	private int setActive(boolean flag) {

@@ -168,7 +168,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 					//Skip mossy, brute-force later.
 					device.addCall(FilteredSkip.filter(LCG.JAVA, r -> r.nextInt(4) != 0, 1));
 				} else if(call == 2){
-					device.addCall(NextInt.consume(4, 1));
+					//device.addCall(NextInt.consume(4, 1));
 				}
 			}
 

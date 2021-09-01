@@ -300,6 +300,7 @@ public class TimeMachine {
 		if (result.size() != 1) {
 			result.clear();
 			this.dataStorage.baseSeedData.dump();
+			this.dataStorage.baseSeedData.getBaseSet().removeIf(dataEntry -> !dataEntry.data.feature.getVersion().equals(Config.get().getVersion()));
 			Feature.Data<?>[] cache = new Feature.Data<?>[this.dataStorage.baseSeedData.size()];
 			int id = 0;
 

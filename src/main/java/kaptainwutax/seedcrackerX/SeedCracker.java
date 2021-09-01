@@ -1,5 +1,6 @@
 package kaptainwutax.seedcrackerX;
 
+import kaptainwutax.mcutils.rand.seed.WorldSeed;
 import kaptainwutax.seedcrackerX.api.SeedCrackerAPI;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;

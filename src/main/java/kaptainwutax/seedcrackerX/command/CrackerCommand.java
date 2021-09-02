@@ -7,10 +7,6 @@ import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.DungeonFeature;
 import randomreverser.call.java.NextLong;
 import randomreverser.device.JavaRandomDevice;
 import randomreverser.device.LCGReverserDevice;
@@ -35,30 +31,31 @@ public class CrackerCommand extends ClientCommand {
 					.then(literal("ON").executes(context -> this.setDebug(true)))
 					.then(literal("OFF").executes(context -> this.setDebug(false)))
 				.executes(context -> this.toggleDebug()));
+		builder.then(literal("paper")
+				.then(literal("dungeon")
+						.then(argument("seed", LongArgumentType.longArg())
+								.executes(ctx -> this.paperDungeonStart(LongArgumentType.getLong(ctx, "seed")))
+						)
+				)
+
+		);
 	}
 
-	private int paperFeatureStart(long featureSeed) {
-
-		System.out.println("runnin paper command");
-		int featureCount = 0;
-		for (Identifier identifier : BuiltinRegistries.CONFIGURED_FEATURE.getIds()) {
-			ConfiguredFeature feature = BuiltinRegistries.CONFIGURED_FEATURE.get(identifier);
-			System.out.println(feature);
-			if (feature.getFeature() instanceof DungeonFeature) {
-				System.out.println("dungeon feature id is " + featureCount);
-				JavaRandomDevice randomReverser = new JavaRandomDevice();
-				randomReverser.addCall(NextLong.withValue(featureSeed));
-				int finalFeatureCount = featureCount;
-				randomReverser.streamSeeds(LCGReverserDevice.Process.EVERYTHING).forEach(seed -> {
-					ChunkRand rand = new ChunkRand(seed, false);
-					rand.advance(-finalFeatureCount);
-					System.out.println(rand.nextLong());
-				});
-				return 0;
-			}
-			featureCount++;
-		}
-
+	private int paperDungeonStart(long featureSeed) {
+		//wtf did papermc developers smoke to use java random in an attempt to make seed cracking harder
+		//Point for them, it was primarily implemented to fix correlation between different features (diamond-clay)
+		//and definitely makes world seed cracking impossible with dungeons (when the Random object for world and feature seeds arent created at the same server start)
+		//but still...reversing all feature seeds from a single one, really!?
+		//I got seed xray working on a server with paper-randomized feature seeds nearly instantly
+		Log.debug("this command is useless for most gamers");
+		Log.debug("reversing the seed to the initial state of the papermc feature seed randomize random object");
+		JavaRandomDevice randomReverser = new JavaRandomDevice();
+		randomReverser.addCall(NextLong.withValue(featureSeed));
+		randomReverser.streamSeeds(LCGReverserDevice.Process.EVERYTHING).forEach(seed -> {
+			ChunkRand rand = new ChunkRand(seed, false);
+			rand.advance(-6);
+			Log.printSeed("foundStructureSeed", rand.getSeed());
+		});
 		return 0;
 	}
 

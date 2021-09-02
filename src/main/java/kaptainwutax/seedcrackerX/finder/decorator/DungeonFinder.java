@@ -164,8 +164,10 @@ public class DungeonFinder extends BlockFinder {
                     floorCalls[i++] = Dungeon.Data.MOSSY_COBBLESTONE_CALL;
                 } else if(block == Blocks.COBBLESTONE) {
                     floorCalls[i++] = Dungeon.Data.COBBLESTONE_CALL;
-                } else if(block == Blocks.AIR && block == Blocks.CAVE_AIR){
+                } else if(block != Blocks.AIR && block != Blocks.CAVE_AIR){
                     floorCalls[i++] = 2;
+                } else {
+                    floorCalls[i++] = 3;
                 }
             }
         }

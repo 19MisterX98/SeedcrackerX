@@ -1,3 +1,4 @@
+# [中文]https://github.com/buiawpkgew1/SeedcrackerX/blob/patch-1/READMEzh.md
 # SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]()
 
 ## Installation

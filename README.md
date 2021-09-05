@@ -1,4 +1,4 @@
-# SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]()
+# SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)] [中文](https://github.com/buiawpkgew1/SeedcrackerX/blob/patch-1/READMEzh.md)
 
 ## Installation
 

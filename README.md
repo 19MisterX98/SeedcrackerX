@@ -4,6 +4,11 @@
 
 [中文](https://github.com/19MisterX98/SeedcrackerX/blob/master/READMEzh.md)
 
+
+## Discord
+
+[Discord](https://discord.gg/JRmHzqQYfp)
+
 ## Installation
 
  ### Vanilla Launcher

@@ -1,6 +1,8 @@
 package kaptainwutax.seedcrackerX.finder.decorator;
 
+import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
@@ -31,8 +33,12 @@ public class EndPillarsFinder extends Finder {
         if(this.alreadyFound)return;
 
         for(int i = 0; i < this.bedrockMarkers.length; i++) {
-            int x = MathHelper.floor(42.0D * Math.cos(2.0D * (-Math.PI + (Math.PI / 10.0D) * (double)i)));
-            int z = MathHelper.floor(42.0D * Math.sin(2.0D * (-Math.PI + (Math.PI / 10.0D) * (double)i)));
+            double x = 42.0D * Math.cos(2.0D * (-Math.PI + (Math.PI / 10.0D) * (double)i));
+            double z = 42.0D * Math.sin(2.0D * (-Math.PI + (Math.PI / 10.0D) * (double)i));
+            if (Config.get().getVersion().isOlderThan(MCVersion.v1_14)) {
+                x = Math.round(x);
+                z = Math.round(z);
+            }
             this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, new ChunkPos(new BlockPos(x, 0, z)), new BlockPos(x, 0, z));
         }
     }

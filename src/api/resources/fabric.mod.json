@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "seedcrackerx-api",
-  "version": "${version}",
+  "version": "1.0",
 
   "name": "SeedCrackerX API",
   "description": "API for SeedCrackerX",

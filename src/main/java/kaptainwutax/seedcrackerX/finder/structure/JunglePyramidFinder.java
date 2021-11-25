@@ -6,6 +6,7 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.block.enums.WireConnection;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +47,8 @@ public class JunglePyramidFinder extends AbstractTempleFinder {
         return combinedResult;
     }
 
-    @Override
-    protected StructureFeature<?> getStructureFeature() {
-        return StructureFeature.JUNGLE_PYRAMID;
+    protected boolean isValidBiome(Biome biome) {
+        return Features.JUNGLE_PYRAMID.isValidBiome(BiomeFixer.swap(biome));
     }
 
     @Override

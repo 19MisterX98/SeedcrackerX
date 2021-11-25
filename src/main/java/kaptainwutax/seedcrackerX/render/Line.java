@@ -33,7 +33,7 @@ public class Line extends Renderer {
 
     protected void putVertex(VertexConsumer vertexConsumer, MatrixStack matrixStack, Vec3d pos, Vec3d cameraPos) {
         vertexConsumer.vertex(
-                matrixStack.peek().getModel(),
+                matrixStack.peek().getPositionMatrix(),
                 (float)(pos.x-cameraPos.x),
                 (float)(pos.y-cameraPos.y),
                 (float)(pos.z-cameraPos.z)

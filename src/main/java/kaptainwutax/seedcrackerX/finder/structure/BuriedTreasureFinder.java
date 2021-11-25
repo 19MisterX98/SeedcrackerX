@@ -8,6 +8,7 @@ import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cube;
+import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -16,7 +17,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class BuriedTreasureFinder extends BlockFinder {
     @Override
     public List<BlockPos> findInChunk() {
         Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
-        if(!biome.getGenerationSettings().hasStructureFeature(StructureFeature.BURIED_TREASURE))return new ArrayList<>();
+        if(!Features.BURIED_TREASURE.isValidBiome(BiomeFixer.swap(biome)))return new ArrayList<>();
 
         List<BlockPos> result = super.findInChunk();
 

@@ -9,6 +9,7 @@ import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
+import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -37,7 +38,7 @@ public class ShipwreckFinder extends BlockFinder {
     public List<BlockPos> findInChunk() {
         Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
 
-        if(!biome.getGenerationSettings().hasStructureFeature(StructureFeature.SHIPWRECK)) {
+        if(!Features.SHIPWRECK.isValidBiome(BiomeFixer.swap(biome))) {
             return new ArrayList<>();
         }
 

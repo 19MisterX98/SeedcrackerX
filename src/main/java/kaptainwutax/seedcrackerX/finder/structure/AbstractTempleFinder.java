@@ -11,7 +11,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,14 +50,14 @@ public abstract class AbstractTempleFinder extends Finder {
     public List<BlockPos> findInChunkPiece(PieceFinder pieceFinder) {
         Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
 
-        if(!biome.getGenerationSettings().hasStructureFeature(this.getStructureFeature())) {
+        if(!isValidBiome(biome)) {
             return new ArrayList<>();
         }
 
         return pieceFinder.findInChunk();
     }
 
-    protected abstract StructureFeature<?> getStructureFeature();
+    protected abstract boolean isValidBiome(Biome biome);
 
     public void addRenderers(PieceFinder pieceFinder, BlockPos origin, Color color) {
         this.renderers.add(new Cuboid(origin, pieceFinder.getLayout(), color));

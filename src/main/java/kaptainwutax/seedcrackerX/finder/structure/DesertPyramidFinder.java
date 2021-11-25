@@ -6,6 +6,7 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +48,8 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
     }
 
     @Override
-    protected StructureFeature<?> getStructureFeature() {
-        return StructureFeature.DESERT_PYRAMID;
+    protected boolean isValidBiome(Biome biome) {
+        return Features.DESERT_PYRAMID.isValidBiome(BiomeFixer.swap(biome));
     }
 
     @Override

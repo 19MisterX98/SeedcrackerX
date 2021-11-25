@@ -13,6 +13,7 @@ import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.util.telemetry.TelemetrySender;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.command.CommandSource;
 import net.minecraft.network.ClientConnection;
@@ -21,7 +22,6 @@ import net.minecraft.network.packet.s2c.play.CommandTreeS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Language;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +45,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void onInit(MinecraftClient mc, Screen screen, ClientConnection connection, GameProfile profile, CallbackInfo ci) {
+    public void onInit(MinecraftClient client, Screen screen, ClientConnection connection, GameProfile profile, TelemetrySender telemetrySender, CallbackInfo ci) {
         ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>)(Object)this.commandDispatcher);
     }
 
@@ -57,7 +57,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()));
+        newDimension(packet.dimensionType(), new HashedSeedData(packet.sha256Seed()));
     }
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))

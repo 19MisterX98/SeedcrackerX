@@ -7,7 +7,7 @@
   "settings.outline": "Render outlines",
   "settings.finderToggles": "Finder toggles",
   "settings.antiXrayMode": "Anti Xray Mode",
-  "settings.antiAntiXrayExplained": "Sends packets to the server if a dungeon floor isn't only out of cobble and mossy cobble. In response the server tells the client the real blocks. This may trigger hyper sensitive anti cheats but nobody complained about bans/kicks yet (verion 2.9.0 has this feature always on and has ~2000 downloads currently). It makes the process much smoother and therefore I highly recommend leaving it on",
+  "settings.antiAntiXrayExplained": "Sends packets to the server if a dungeon floor isn't only out of cobble and mossy cobble. In response the server tells the client the real blocks. This may trigger hyper sensitive anti cheats but nobody complained about bans/kicks yet (version 2.9.0 has this feature always on and has ~2000 downloads currently). It makes the process much smoother and therefore I highly recommend leaving it on",
   "finder.buriedTreasures": "Buried treasures",
   "finder.desertTemples": "Desert temples",
   "finder.endCities": "End cities",

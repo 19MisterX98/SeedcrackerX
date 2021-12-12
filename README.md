@@ -2,7 +2,12 @@
 
 ## Readme Language
 
-[中文](https://github.com/19MisterX98/SeedcrackerX/blob/master/READMEzh.md)
+[中文](./READMEzh.md)
+
+
+## Discord
+
+[Discord](https://discord.gg/JRmHzqQYfp)
 
 ## Installation
 

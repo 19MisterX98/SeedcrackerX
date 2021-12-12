@@ -1,6 +1,6 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
-import kaptainwutax.featureutils.structure.RegionStructure;
+import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
@@ -22,9 +22,18 @@ import java.util.List;
 import java.util.Map;
 
 public class DesertPyramidFinder extends AbstractTempleFinder {
-    
+
     public DesertPyramidFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos, new Vec3i(21, 15, 21));
+    }
+
+    public static List<Finder> create(World world, ChunkPos chunkPos) {
+        List<Finder> finders = new ArrayList<>();
+        finders.add(new DesertPyramidFinder(world, chunkPos));
+        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
+        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
+        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
+        return finders;
     }
 
     @Override
@@ -38,7 +47,7 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
             positions.forEach(pos -> {
                 RegionStructure.Data<?> data = Features.DESERT_PYRAMID.at(this.chunkPos.x, this.chunkPos.z);
 
-                if(SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
+                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
                     this.addRenderers(pieceFinder, pos, new Color(255, 0, 255));
                 }
             });
@@ -121,7 +130,7 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
         finder.fillWithOutline(finder.width - 6, 1, 5, finder.width - 5, 2, 16, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
 
         int int_7;
-        for(int_7 = 5; int_7 <= 17; int_7 += 2) {
+        for (int_7 = 5; int_7 <= 17; int_7 += 2) {
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), 4, 1, int_7);
             finder.addBlock(Blocks.CHISELED_SANDSTONE.getDefaultState(), 4, 2, int_7);
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), finder.width - 5, 1, int_7);
@@ -142,7 +151,7 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
         finder.addBlock(Blocks.ORANGE_TERRACOTTA.getDefaultState(), 10, 0, 13);
         finder.addBlock(Blocks.BLUE_TERRACOTTA.getDefaultState(), 10, 0, 10);
 
-        for(int_7 = 0; int_7 <= finder.width - 1; int_7 += finder.width - 1) {
+        for (int_7 = 0; int_7 <= finder.width - 1; int_7 += finder.width - 1) {
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), int_7, 2, 1);
             finder.addBlock(Blocks.ORANGE_TERRACOTTA.getDefaultState(), int_7, 2, 2);
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), int_7, 2, 3);
@@ -166,7 +175,7 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), int_7, 8, 3);
         }
 
-        for(int_7 = 2; int_7 <= finder.width - 3; int_7 += finder.width - 3 - 2) {
+        for (int_7 = 2; int_7 <= finder.width - 3; int_7 += finder.width - 3 - 2) {
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), int_7 - 1, 2, 0);
             finder.addBlock(Blocks.ORANGE_TERRACOTTA.getDefaultState(), int_7, 2, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), int_7 + 1, 2, 0);
@@ -221,13 +230,4 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
         finder.addBlock(Blocks.CUT_SANDSTONE.getDefaultState(), 10, -11, 13);
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
-        List<Finder> finders = new ArrayList<>();
-        finders.add(new DesertPyramidFinder(world, chunkPos));
-        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
-        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
-        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
-        return finders;
-    }
-    
 }

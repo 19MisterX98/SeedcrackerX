@@ -10,11 +10,13 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(DimensionType.class)
 public class DimensionTypeMixin implements Finder.DimensionTypeCaller {
 
-	@Shadow @Final private Identifier infiniburn;
+    @Shadow
+    @Final
+    private Identifier infiniburn;
 
-	@Override
-	public Identifier getInfiniburn() {
-		return this.infiniburn;
-	}
+    @Override
+    public Identifier getInfiniburn() {
+        return this.infiniburn;
+    }
 
 }

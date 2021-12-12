@@ -1,30 +1,31 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
-import kaptainwutax.biomeutils.biome.Biome;
-import kaptainwutax.biomeutils.biome.Biomes;
-import kaptainwutax.mcutils.rand.ChunkRand;
-import kaptainwutax.mcutils.state.Dimension;
-import kaptainwutax.mcutils.version.MCVersion;
-import kaptainwutax.mcutils.version.VersionMap;
+import com.seedfinding.mcbiome.biome.Biome;
+import com.seedfinding.mcbiome.biome.Biomes;
+import com.seedfinding.mccore.rand.ChunkRand;
+import com.seedfinding.mccore.state.Dimension;
+import com.seedfinding.mccore.version.MCVersion;
+import com.seedfinding.mccore.version.VersionMap;
+import com.seedfinding.mcreversal.PopulationReverser;
+import com.seedfinding.mcseed.lcg.LCG;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.Log;
-import kaptainwutax.seedutils.lcg.LCG;
-import mjtb49.hashreversals.PopulationReverser;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.random.ChunkRandom;
 
 import java.util.*;
 
 public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data> {
-    public static final VersionMap<Config> CONFIGS = new VersionMap<Decorator.Config>()
-            .add(MCVersion.v1_16, new Decorator.Config(8,3));
+    public static final VersionMap<Config> CONFIGS = new VersionMap<Config>()
+            .add(MCVersion.v1_16, new Decorator.Config(8, 3));
 
     public WarpedFungus(MCVersion version) {
         super(CONFIGS.getAsOf(version), version);
     }
 
     public WarpedFungus.Data at(int blockX, int blockZ, Biome biome, List<BlockPos> posList, FullFungusData fungusData) {
-        return new WarpedFungus.Data(this,blockX,blockZ,biome,posList,fungusData);
+        return new WarpedFungus.Data(this, blockX, blockZ, biome, posList, fungusData);
     }
 
     @Override
@@ -38,13 +39,18 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
     }
 
     @Override
+    public boolean canStart(WarpedFungus.Data data, long structureSeed, ChunkRandom rand) {
+        return true;
+    }
+
+    @Override
     public boolean isValidDimension(Dimension dimension) {
         return dimension == Dimension.NETHER;
     }
 
     @Override
     public Dimension getValidDimension() {
-        return  Dimension.NETHER;
+        return Dimension.NETHER;
     }
 
     @Override
@@ -58,6 +64,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
         public final List<BlockPos> posList = new ArrayList<>();
         private final int BlockX;
         private final int BlockZ;
+
         public Data(WarpedFungus feature, int blockX, int blockZ, Biome biome, List<BlockPos> posList, FullFungusData fungusData) {
             super(feature, blockX, blockZ, biome);
             fullFungi = fungusData;
@@ -69,8 +76,9 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
         }
 
         public void onDataAdded(DataStorage dataStorage) {
-            if(dataStorage.getTimeMachine().worldSeeds.size() == 1) return;
-            if(dataStorage.getTimeMachine().structureSeeds.size() == 1) return;
+            if (dataStorage.getTimeMachine().worldSeeds.size() == 1) return;
+            if (dataStorage.getTimeMachine().structureSeeds.size() == 1) return;
+            if (this.feature.getVersion().isNewerThan(MCVersion.v1_17_1)) return;
 
             Log.warn("fungus.start", BlockX, BlockZ);
 
@@ -79,7 +87,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             Log.debug("====================================");
             fungusSeeds.forEach(s -> Log.printSeed("fungus.fungusSeed", s));
 
-            if(fungusSeeds.isEmpty()) {
+            if (fungusSeeds.isEmpty()) {
                 Log.warn("fungus.wrongData");
                 Log.debug("====================================");
                 return;
@@ -88,7 +96,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
             LinkedHashSet<Long> structureSeedList = new LinkedHashSet<>();
             fungusSeeds.forEach(s -> structureSeedList.addAll(reverseToDecoratorSeed(s)));
-            if(structureSeedList.isEmpty()) {
+            if (structureSeedList.isEmpty()) {
                 Log.warn("fungus.noStructureSeedsFound");
                 return;
             }
@@ -115,21 +123,21 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
         private LinkedHashSet<Long> reverseToDecoratorSeed(long fungusSeed) {
             LinkedHashSet<Long> structureSeedList = new LinkedHashSet<>();
-            ChunkRand rand = new ChunkRand(fungusSeed,false);
+            ChunkRand rand = new ChunkRand(fungusSeed, false);
             ChunkRand rand2 = new ChunkRand(0);
             ChunkRand popReverseRand = new ChunkRand(0);
             rand.advance(-4000);
             int lastPos = -1;
-            for(int i = 0; i <4000;i++) {
+            for (int i = 0; i < 4000; i++) {
                 int pos = rand.nextInt(16);
-                for(BlockPos fungusPos:posList) {
-                    if(fungusPos.getX() ==lastPos && fungusPos.getZ() == pos) {
+                for (BlockPos fungusPos : posList) {
+                    if (fungusPos.getX() == lastPos && fungusPos.getZ() == pos) {
                         rand.advance(-2);
-                        if(checkPoses(rand.getSeed())) {
+                        if (checkPoses(rand.getSeed())) {
 
                             rand2.setSeed(rand.getSeed(), false);
-                            for(int j = 0; j < 8; j++) {
-                                long populationSeed = (rand2.getSeed() ^ LCG.JAVA.multiplier) -80003;
+                            for (int j = 0; j < 8; j++) {
+                                long populationSeed = (rand2.getSeed() ^ LCG.JAVA.multiplier) - 80003;
                                 structureSeedList.addAll(PopulationReverser.reverse(populationSeed, BlockX, BlockZ, popReverseRand, MCVersion.v1_16_2));
                                 rand2.advance(-2);
                             }

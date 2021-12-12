@@ -25,9 +25,9 @@ public class FinderControl {
     }
 
     public void addFinder(Finder.Type type, Finder finder) {
-        if(finder.isUseless())return;
+        if (finder.isUseless()) return;
 
-        if(!this.activeFinders.containsKey(type)) {
+        if (!this.activeFinders.containsKey(type)) {
             this.activeFinders.put(type, new ConcurrentLinkedQueue<>());
         }
 

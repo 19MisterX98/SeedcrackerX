@@ -13,7 +13,7 @@ public class Log {
     public static void debug(String message) {
         PlayerEntity player = getPlayer();
 
-        if(player != null) {
+        if (player != null) {
             schedule(() -> player.sendMessage(new LiteralText(message), false));
         }
     }
@@ -22,7 +22,7 @@ public class Log {
         String message = translate(translateKey).formatted(args);
         PlayerEntity player = getPlayer();
 
-        if(player != null) {
+        if (player != null) {
             schedule(() -> player.sendMessage(new LiteralText(message).formatted(Formatting.GREEN), false));
         }
     }
@@ -35,7 +35,7 @@ public class Log {
         String message = translate(translateKey);
         PlayerEntity player = getPlayer();
 
-        if(player != null) {
+        if (player != null) {
             schedule(() -> player.sendMessage(new LiteralText(message).formatted(Formatting.RED), false));
         }
     }
@@ -48,17 +48,18 @@ public class Log {
 
         PlayerEntity player = getPlayer();
 
-        if(player != null) {
+        if (player != null) {
             schedule(() -> player.sendMessage(new LiteralText(data[0]).append(text).append(new LiteralText(data[1])), false));
         }
     }
+
     public static void printDungeonInfo(String message) {
         Text text = Texts.bracketed((new LiteralText(message)).styled(style -> style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, message)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("chat.copy.click"))).withInsertion(message)));
 
         PlayerEntity player = getPlayer();
 
-        if(player != null) {
-            schedule(() -> player.sendMessage(text,false));
+        if (player != null) {
+            schedule(() -> player.sendMessage(text, false));
         }
     }
 

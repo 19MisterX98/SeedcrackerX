@@ -6,10 +6,13 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class BlockUpdateQueue {
-    private final Queue<Pair<Thread,ArrayList<BlockPos>>> blocksAndAction = new LinkedList<>();
+    private final Queue<Pair<Thread, ArrayList<BlockPos>>> blocksAndAction = new LinkedList<>();
     private final HashSet<BlockPos> alreadyChecked = new HashSet<>();
 
     public boolean add(ArrayList<BlockPos> blockPoses, BlockPos originPos, Thread operationAtEnd) {
@@ -21,15 +24,15 @@ public class BlockUpdateQueue {
     }
 
     public void tick() {
-        if(blocksAndAction.isEmpty()) return;
+        if (blocksAndAction.isEmpty()) return;
 
-        Pair<Thread,ArrayList<BlockPos>> current = blocksAndAction.peek();
+        Pair<Thread, ArrayList<BlockPos>> current = blocksAndAction.peek();
         ArrayList<BlockPos> currentBlocks = current.getRight();
         for (int i = 0; i < 5; i++) {
-            if(currentBlocks.isEmpty()) {
+            if (currentBlocks.isEmpty()) {
                 current.getLeft().start();
                 blocksAndAction.remove();
-                if(blocksAndAction.isEmpty()) {
+                if (blocksAndAction.isEmpty()) {
                     return;
                 } else {
                     current = blocksAndAction.peek();

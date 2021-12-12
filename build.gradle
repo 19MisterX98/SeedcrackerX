@@ -37,7 +37,7 @@ processResources {
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
 	it.options.encoding = "UTF-8"
-	it.options.release = 16
+	it.options.release = 17
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
@@ -74,9 +74,12 @@ task remapApiJar(type: RemapJarTask, dependsOn: project.apiJar) {
 remapJar.dependsOn remapApiJar
 
 repositories {
-	maven { url "https://jitpack.io" }
 	maven { url "https://maven.terraformersmc.com/releases" }
 	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.latticg.com/" }
+	maven { url "https://maven.seedfinding.com/" }
+	maven { url "https://maven-snapshots.seedfinding.com/" }
+	maven { url "https://jitpack.io" }
 
 	flatDir {
 		dirs file(remapApiJar.archivePath).parentFile
@@ -103,8 +106,35 @@ dependencies {
 
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
 
-	implementation 'com.github.hube12:SEED:master-SNAPSHOT'
-	include 'com.github.hube12:SEED:master-SNAPSHOT'
+
+	implementation('com.seedfinding:mc_math:0eb505174da8a92550f8ec6efe254e0fa936cc0d') { transitive = false }
+	implementation('com.seedfinding:mc_seed:5518e3ba3ee567fb0b51c15958967f70a6a19e02') { transitive = false }
+	implementation('com.seedfinding:mc_core:88b246597e0147e37b38d1b33e9526e6c3eb1469') { transitive = false }
+	implementation('com.seedfinding:mc_noise:a6ab8e6c688491829f8d2adf845392da22ef8e9c') { transitive = false }
+
+	implementation('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
+	implementation('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
+	implementation('com.seedfinding:mc_feature:ef939c0dd7d66ab1bd290d6aab1e42a12cb3dbf1') { transitive = false }
+
+
+
+	implementation('com.seedfinding:mc_reversal:2.0.0') { transitive = false }
+
+	implementation('com.seedfinding:latticg:1.06')
+
+	include('com.seedfinding:mc_math:0eb505174da8a92550f8ec6efe254e0fa936cc0d') { transitive = false }
+	include('com.seedfinding:mc_seed:5518e3ba3ee567fb0b51c15958967f70a6a19e02') { transitive = false }
+	include('com.seedfinding:mc_core:88b246597e0147e37b38d1b33e9526e6c3eb1469') { transitive = false }
+	include('com.seedfinding:mc_noise:a6ab8e6c688491829f8d2adf845392da22ef8e9c') { transitive = false }
+
+	include('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
+	include('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
+	include('com.seedfinding:mc_feature:ef939c0dd7d66ab1bd290d6aab1e42a12cb3dbf1') { transitive = false }
+
+
+	include('com.seedfinding:mc_reversal:2.0.0') { transitive = false }
+
+	include('com.seedfinding:latticg:1.06')
 }
 
 publishing {

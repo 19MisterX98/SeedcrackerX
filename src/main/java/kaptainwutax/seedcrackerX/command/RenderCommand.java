@@ -21,7 +21,7 @@ public class RenderCommand extends ClientCommand {
                 .executes(context -> this.printRenderMode())
         );
 
-        for(Config.RenderType renderType: Config.RenderType.values()) {
+        for (Config.RenderType renderType : Config.RenderType.values()) {
             builder.then(literal("outlines")
                     .then(literal(renderType.toString()).executes(context -> this.setRenderMode(renderType)))
             );

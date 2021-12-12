@@ -13,23 +13,12 @@ import net.minecraft.util.math.ChunkPos;
 
 public class ReloadFinders {
     public MinecraftClient client = MinecraftClient.getInstance();
-    public void reload() {
-        int renderdistance = client.options.viewDistance;
-
-        int playerChunkX = (int) (Math.round(client.player.getX()) >> 4);
-        int playerChunkZ = (int) (Math.round(client.player.getZ()) >> 4);
-        for(int i = playerChunkX - renderdistance;i < playerChunkX + renderdistance; i++) {
-            for(int j = playerChunkZ - renderdistance;j < playerChunkZ + renderdistance; j++) {
-                FinderQueue.get().onChunkData(client.world, new ChunkPos(i, j));
-            }
-        }
-    }
 
     public static void reloadHeight(int minY, int maxY) {
         Finder.CHUNK_POSITIONS.clear();
-        for(int x = 0; x < 16; x++) {
-            for(int z = 0; z < 16; z++) {
-                for(int y = minY; y < maxY; y++) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                for (int y = minY; y < maxY; y++) {
                     Finder.CHUNK_POSITIONS.add(new BlockPos(x, y, z));
                 }
             }
@@ -42,5 +31,17 @@ public class ReloadFinders {
         BuriedTreasureFinder.reloadSearchPositions();
         EndCityFinder.reloadSearchPositions();
         MonumentFinder.reloadSearchPositions();
+    }
+
+    public void reload() {
+        int renderdistance = client.options.viewDistance;
+
+        int playerChunkX = (int) (Math.round(client.player.getX()) >> 4);
+        int playerChunkZ = (int) (Math.round(client.player.getZ()) >> 4);
+        for (int i = playerChunkX - renderdistance; i < playerChunkX + renderdistance; i++) {
+            for (int j = playerChunkZ - renderdistance; j < playerChunkZ + renderdistance; j++) {
+                FinderQueue.get().onChunkData(client.world, new ChunkPos(i, j));
+            }
+        }
     }
 }

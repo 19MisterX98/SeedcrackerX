@@ -1,6 +1,6 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
-import kaptainwutax.featureutils.structure.RegionStructure;
+import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
@@ -27,6 +27,12 @@ public class JunglePyramidFinder extends AbstractTempleFinder {
         super(world, chunkPos, new Vec3i(12, 10, 15));
     }
 
+    public static List<Finder> create(World world, ChunkPos chunkPos) {
+        List<Finder> finders = new ArrayList<>();
+        finders.add(new JunglePyramidFinder(world, chunkPos));
+        return finders;
+    }
+
     @Override
     public List<BlockPos> findInChunk() {
         Map<PieceFinder, List<BlockPos>> result = super.findInChunkPieces();
@@ -38,7 +44,7 @@ public class JunglePyramidFinder extends AbstractTempleFinder {
             positions.forEach(pos -> {
                 RegionStructure.Data<?> data = Features.JUNGLE_PYRAMID.at(this.chunkPos.x, this.chunkPos.z);
 
-                if(SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
+                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
                     this.addRenderers(pieceFinder, pos, new Color(255, 0, 255));
                 }
             });
@@ -129,10 +135,4 @@ public class JunglePyramidFinder extends AbstractTempleFinder {
         finder.addBlock(Blocks.REPEATER.getDefaultState().with(RepeaterBlock.FACING, Direction.NORTH), 10, -2, 10);
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
-        List<Finder> finders = new ArrayList<>();
-        finders.add(new JunglePyramidFinder(world, chunkPos));
-        return finders;
-    }
-    
 }

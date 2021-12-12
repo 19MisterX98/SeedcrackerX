@@ -17,18 +17,16 @@ import java.util.Map;
 
 public class PieceFinder extends Finder {
 
-    protected Map<BlockPos, BlockState> structure = new LinkedHashMap<>();
     private final BlockBox boundingBox;
+    protected Map<BlockPos, BlockState> structure = new LinkedHashMap<>();
     protected List<BlockPos> searchPositions = new ArrayList<>();
 
     protected Direction facing;
-    private BlockMirror mirror;
-    private BlockRotation rotation;
-
     protected int width;
     protected int height;
     protected int depth;
-
+    private BlockMirror mirror;
+    private BlockRotation rotation;
     private boolean debug;
 
     public PieceFinder(World world, ChunkPos chunkPos, Direction facing, Vec3i size) {
@@ -39,7 +37,7 @@ public class PieceFinder extends Finder {
         this.height = size.getY();
         this.depth = size.getZ();
 
-        if(this.facing.getAxis() == Direction.Axis.Z) {
+        if (this.facing.getAxis() == Direction.Axis.Z) {
             this.boundingBox = new BlockBox(
                     0, 0, 0,
                     size.getX() - 1, size.getY() - 1, size.getZ() - 1
@@ -53,7 +51,7 @@ public class PieceFinder extends Finder {
     }
 
     public Vec3i getLayout() {
-        if(this.facing.getAxis() != Direction.Axis.Z) {
+        if (this.facing.getAxis() != Direction.Axis.Z) {
             return new Vec3i(this.depth, this.height, this.width);
         }
 
@@ -64,14 +62,14 @@ public class PieceFinder extends Finder {
     public List<BlockPos> findInChunk() {
         List<BlockPos> result = new ArrayList<>();
 
-        if(this.structure.isEmpty()) {
+        if (this.structure.isEmpty()) {
             return result;
         }
 
         //FOR DEBUGGING PIECES.
-        if(this.debug) {
+        if (this.debug) {
             MinecraftClient.getInstance().execute(() -> {
-                int y = this.rotation.ordinal() * 10 + this.mirror.ordinal() * 20 + 120;
+                int y = this.rotation.ordinal() * 15 + this.mirror.ordinal() * 30 + 120;
 
                 if (this.chunkPos.x % 2 == 0 && this.chunkPos.z % 2 == 0) {
                     this.structure.forEach((pos, state) -> {
@@ -81,21 +79,21 @@ public class PieceFinder extends Finder {
             });
         }
 
-        for(BlockPos center: this.searchPositions) {
+        for (BlockPos center : this.searchPositions) {
             boolean found = true;
 
-            for(Map.Entry<BlockPos, BlockState> entry: this.structure.entrySet()) {
+            for (Map.Entry<BlockPos, BlockState> entry : this.structure.entrySet()) {
                 BlockPos pos = this.chunkPos.getStartPos().add(center.add(entry.getKey()));
                 BlockState state = this.world.getBlockState(pos);
 
                 //Blockstate may change when it gets placed in the world, that's why it's using the block here.
-                if(entry.getValue() != null && !state.getBlock().equals(entry.getValue().getBlock())) {
+                if (entry.getValue() != null && !state.getBlock().equals(entry.getValue().getBlock())) {
                     found = false;
                     break;
                 }
             }
 
-            if(found) {
+            if (found) {
                 result.add(this.chunkPos.getStartPos().add(center));
             }
         }
@@ -106,11 +104,11 @@ public class PieceFinder extends Finder {
     public void setOrientation(Direction facing) {
         this.facing = facing;
 
-        if(facing == null) {
+        if (facing == null) {
             this.rotation = BlockRotation.NONE;
             this.mirror = BlockMirror.NONE;
         } else {
-            switch(facing) {
+            switch (facing) {
                 case SOUTH:
                     this.mirror = BlockMirror.LEFT_RIGHT;
                     this.rotation = BlockRotation.NONE;
@@ -135,12 +133,12 @@ public class PieceFinder extends Finder {
         if (this.facing == null) {
             return x;
         } else {
-            switch(this.facing) {
+            switch (this.facing) {
                 case NORTH:
                 case SOUTH:
                     return this.boundingBox.getMinX() + x;
                 case WEST:
-                    return this.boundingBox.getMaxY() - z;
+                    return this.boundingBox.getMaxX() - z;
                 case EAST:
                     return this.boundingBox.getMinX() + z;
                 default:
@@ -157,7 +155,7 @@ public class PieceFinder extends Finder {
         if (this.facing == null) {
             return z;
         } else {
-            switch(this.facing) {
+            switch (this.facing) {
                 case NORTH:
                     return this.boundingBox.getMaxZ() - z;
                 case SOUTH:
@@ -183,11 +181,11 @@ public class PieceFinder extends Finder {
     }
 
     protected void fillWithOutline(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState outline, BlockState inside, boolean onlyReplaceAir) {
-        for(int y = minY; y <= maxY; ++y) {
-            for(int x = minX; x <= maxX; ++x) {
-                for(int z = minZ; z <= maxZ; ++z) {
-                    if(!onlyReplaceAir || !this.getBlockAt(x, y, z).isAir()) {
-                        if(y != minY && y != maxY && x != minX && x != maxX && z != minZ && z != maxZ) {
+        for (int y = minY; y <= maxY; ++y) {
+            for (int x = minX; x <= maxX; ++x) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    if (!onlyReplaceAir || !this.getBlockAt(x, y, z).isAir()) {
+                        if (y != minY && y != maxY && x != minX && x != maxX && z != minZ && z != maxZ) {
                             this.addBlock(inside, x, y, z);
                         } else {
                             this.addBlock(outline, x, y, z);
@@ -206,8 +204,8 @@ public class PieceFinder extends Finder {
                 this.applyZTransform(x, z)
         );
 
-        if(this.boundingBox.contains(pos)) {
-            if(state == null) {
+        if (this.boundingBox.contains(pos)) {
+            if (state == null) {
                 this.structure.remove(pos);
                 return;
             }

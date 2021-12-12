@@ -1,6 +1,6 @@
 package kaptainwutax.seedcrackerX.config;
 
-import kaptainwutax.mcutils.version.MCVersion;
+import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.finder.Finder;
@@ -25,42 +25,42 @@ public class ConfigScreen {
 
     private ArrayList<MCVersion> getSupportedVersions() {
         ArrayList<MCVersion> newerVersions = new ArrayList<>();
-        for(MCVersion version:MCVersion.values()) {
-            if(version.isOlderThan(MCVersion.v1_8))continue;
+        for (MCVersion version : MCVersion.values()) {
+            if (version.isOlderThan(MCVersion.v1_8)) continue;
             newerVersions.add(version);
         }
         return newerVersions;
     }
 
     public Screen getConfigScreenByCloth(Screen parent) {
-        
+
         ConfigBuilder builder = ConfigBuilder.create()
-            .setParentScreen(parent)
-            .setTitle(new TranslatableText("title"))
-            .setDefaultBackgroundTexture(new Identifier("minecraft:textures/block/blackstone.png"))
-            .setTransparentBackground(true);
+                .setParentScreen(parent)
+                .setTitle(new TranslatableText("title"))
+                .setDefaultBackgroundTexture(new Identifier("minecraft:textures/block/blackstone.png"))
+                .setTransparentBackground(true);
         ConfigEntryBuilder eb = builder.entryBuilder();
 
         //=============================CONFIG========================
         ConfigCategory settings = builder.getOrCreateCategory(new TranslatableText("settings"));
-        
+
         settings.addEntry(eb.startBooleanToggle(new TranslatableText("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
         settings.addEntry(eb.startDropdownMenu(new TranslatableText("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), MCVersion::fromString))
-            .setSelections(getSupportedVersions())
-            .setSuggestionMode(false)
-            .setDefaultValue(config.getVersion())
-            .setSaveConsumer(config::setVersion)
-            .build());
+                .setSelections(getSupportedVersions())
+                .setSuggestionMode(false)
+                .setDefaultValue(config.getVersion())
+                .setSaveConsumer(config::setVersion)
+                .build());
 
         settings.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
-        
+
         settings.addEntry(eb.startTextDescription(new TranslatableText("settings.visuals")).build());
         settings.addEntry(eb.startEnumSelector(new TranslatableText("settings.outline"), Config.RenderType.class, config.render).setSaveConsumer(val -> config.render = val).build());
 
         settings.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
 
         settings.addEntry(eb.startTextDescription((new TranslatableText("settings.finderToggles"))).build());
-        for(Finder.Type finder : Finder.Type.values()) {
+        for (Finder.Type finder : Finder.Type.values()) {
             settings.addEntry(eb.startBooleanToggle(new TranslatableText(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());
         }
 
@@ -79,9 +79,9 @@ public class ConfigScreen {
         }).build());
         //List worldseeds
         Set<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
-        if(!worldSeeds.isEmpty()) {
+        if (!worldSeeds.isEmpty()) {
             SubCategoryBuilder world = eb.startSubCategory(new TranslatableText("info.worldSeeds"));
-            for(long worldSeed:worldSeeds) {
+            for (long worldSeed : worldSeeds) {
                 world.add(eb.startTextField(new LiteralText(""), String.valueOf(worldSeed)).build());
             }
             info.addEntry(world.setExpanded(true).build());
@@ -90,23 +90,23 @@ public class ConfigScreen {
         }
         //List structureseeds
         Set<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
-        if(!structureSeeds.isEmpty()) {
+        if (!structureSeeds.isEmpty()) {
             SubCategoryBuilder struc = eb.startSubCategory(new TranslatableText("info.structureSeeds"));
-            for(long structureSeed:structureSeeds) {
-                struc.add(eb.startTextField(new LiteralText(""),String.valueOf(structureSeed)).build());
+            for (long structureSeed : structureSeeds) {
+                struc.add(eb.startTextField(new LiteralText(""), String.valueOf(structureSeed)).build());
             }
             info.addEntry(struc.setExpanded(true).build());
         } else {
             info.addEntry(eb.startTextDescription(new TranslatableText("info.noStructureSeeds")).build());
         }
 
-        if(config.debug) {
+        if (config.debug) {
             //List pillarseeds
             List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
-            if(pillarSeeds != null) {
+            if (pillarSeeds != null) {
                 SubCategoryBuilder pillar = eb.startSubCategory(new TranslatableText("info.pillarSeeds"));
-                for(long structureSeed:pillarSeeds) {
-                    pillar.add(eb.startTextField(new LiteralText(""),String.valueOf(structureSeed)).build());
+                for (long structureSeed : pillarSeeds) {
+                    pillar.add(eb.startTextField(new LiteralText(""), String.valueOf(structureSeed)).build());
                 }
                 info.addEntry(pillar.setExpanded(true).build());
             } else {
@@ -114,8 +114,8 @@ public class ConfigScreen {
             }
             //Hashed seed
             HashedSeedData hashedSeed = SeedCracker.get().getDataStorage().hashedSeedData;
-            if(hashedSeed != null) {
-                info.addEntry(eb.startTextField(new TranslatableText("info.hashedSeed"),String.valueOf(hashedSeed.getHashedSeed())).build());
+            if (hashedSeed != null) {
+                info.addEntry(eb.startTextField(new TranslatableText("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
             } else {
                 info.addEntry(eb.startTextDescription(new TranslatableText("info.noHashedSeed")).build());
             }
@@ -124,6 +124,6 @@ public class ConfigScreen {
         builder.setSavingRunnable(Config::save);
 
         return builder.build();
-        
+
     }
 }

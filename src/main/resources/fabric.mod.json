@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "seedcrackerx",
   "version": "${version}",
-
   "name": "SeedCrackerX",
   "description": "Used for finding the seed of multiplayer or singleplayer worlds.",
   "authors": [
@@ -13,23 +12,20 @@
     "issues": "https://github.com/19MisterX98/SeedcrackerX/issues",
     "sources": "https://github.com/19MisterX98/seedcrackerX/"
   },
-
   "license": "MIT",
   "icon": "assets/seedcrackerx/icon.png",
-
   "environment": "client",
   "entrypoints": {
     "main": [
       "kaptainwutax.seedcrackerX.SeedCracker"
-    ], "modmenu": [
+    ],
+    "modmenu": [
       "kaptainwutax.seedcrackerX.config.ScModMenuEntry"
     ]
-
   },
   "mixins": [
     "seedcracker.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.4.0"
   },

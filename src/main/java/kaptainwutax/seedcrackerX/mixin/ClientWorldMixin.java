@@ -19,7 +19,8 @@ import java.util.Optional;
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
 
-    @Shadow public abstract DynamicRegistryManager getRegistryManager();
+    @Shadow
+    public abstract DynamicRegistryManager getRegistryManager();
 
     @Inject(method = "disconnect", at = @At("HEAD"))
     private void disconnect(CallbackInfo ci) {

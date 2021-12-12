@@ -8,7 +8,7 @@ import net.fabricmc.api.Environment;
 
 
 @Environment(EnvType.CLIENT)
-public class ScModMenuEntry implements ModMenuApi{
+public class ScModMenuEntry implements ModMenuApi {
     ConfigScreen configscreen = new ConfigScreen();
 
     @Override

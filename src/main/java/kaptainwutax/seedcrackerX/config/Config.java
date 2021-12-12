@@ -3,15 +3,15 @@ package kaptainwutax.seedcrackerX.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import kaptainwutax.mcutils.version.MCVersion;
+import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 
 import java.io.*;
 
 public class Config {
+    private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "seedcracker.json");
     private static Config INSTANCE = new Config();
-    private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(),"seedcracker.json");
     public FeatureToggle buriedTreasure = new FeatureToggle(true);
     public FeatureToggle desertTemple = new FeatureToggle(true);
     public FeatureToggle endCity = new FeatureToggle(true);
@@ -26,21 +26,11 @@ public class Config {
     public FeatureToggle desertWell = new FeatureToggle(true);
     public FeatureToggle warpedFungus = new FeatureToggle(true);
     public FeatureToggle biome = new FeatureToggle(true);
-    private MCVersion version = MCVersion.v1_17_1;
     public RenderType render = RenderType.XRAY;
     public boolean active = true;
     public boolean debug = false;
     public boolean antiXrayBypass = true;
-
-    public MCVersion getVersion() {
-        return version;
-    }
-
-    public void setVersion(MCVersion version) {
-        if (this.version == version) return;
-        this.version = version;
-        Features.init(version);
-    }
+    private MCVersion version = MCVersion.v1_17_1;
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -59,7 +49,7 @@ public class Config {
 
         try (Reader reader = new FileReader(file)) {
             INSTANCE = gson.fromJson(reader, Config.class);
-        } catch (Exception e){
+        } catch (Exception e) {
             if (file.exists()) {
                 System.out.println("seedcracker couldn't load config, deleting it...");
                 file.delete();
@@ -71,6 +61,16 @@ public class Config {
 
     public static Config get() {
         return INSTANCE;
+    }
+
+    public MCVersion getVersion() {
+        return version;
+    }
+
+    public void setVersion(MCVersion version) {
+        if (this.version == version) return;
+        this.version = version;
+        Features.init(version);
     }
 
     public enum RenderType {

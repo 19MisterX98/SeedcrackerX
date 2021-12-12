@@ -1,6 +1,6 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
-import kaptainwutax.featureutils.structure.RegionStructure;
+import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
@@ -28,6 +28,12 @@ public class SwampHutFinder extends AbstractTempleFinder {
         super(world, chunkPos, new Vec3i(7, 7, 9));
     }
 
+    public static List<Finder> create(World world, ChunkPos chunkPos) {
+        List<Finder> finders = new ArrayList<>();
+        finders.add(new SwampHutFinder(world, chunkPos));
+        return finders;
+    }
+
     @Override
     public List<BlockPos> findInChunk() {
         Map<PieceFinder, List<BlockPos>> result = super.findInChunkPieces();
@@ -39,7 +45,7 @@ public class SwampHutFinder extends AbstractTempleFinder {
             positions.forEach(pos -> {
                 RegionStructure.Data<?> data = Features.SWAMP_HUT.at(this.chunkPos.x, this.chunkPos.z);
 
-                if(SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
+                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
                     this.addRenderers(pieceFinder, pos, new Color(255, 0, 255));
                 }
             });
@@ -88,12 +94,6 @@ public class SwampHutFinder extends AbstractTempleFinder {
         finder.addBlock(northStairs.with(StairsBlock.SHAPE, StairShape.OUTER_LEFT), 6, 4, 1);
         finder.addBlock(southStairs.with(StairsBlock.SHAPE, StairShape.OUTER_LEFT), 0, 4, 8);
         finder.addBlock(southStairs.with(StairsBlock.SHAPE, StairShape.OUTER_RIGHT), 6, 4, 8);
-    }
-
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
-        List<Finder> finders = new ArrayList<>();
-        finders.add(new SwampHutFinder(world, chunkPos));
-        return finders;
     }
 
 }

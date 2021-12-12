@@ -31,28 +31,28 @@ public class FinderQueue {
     }
 
     public void onChunkData(World world, ChunkPos chunkPos) {
-        if(!Config.get().active)return;
+        if (!Config.get().active) return;
 
         getActiveFinderTypes().forEach(type -> {
             SERVICE.submit(() -> {
-               try {
-                   List<Finder> finders = type.finderBuilder.build(world, chunkPos);
+                try {
+                    List<Finder> finders = type.finderBuilder.build(world, chunkPos);
 
-                   finders.forEach(finder -> {
-                       if(finder.isValidDimension(world.getDimension())) {
-                           finder.findInChunk();
-                           this.finderControl.addFinder(type, finder);
-                       }
-                   });
-               } catch(Exception e) {
-                   e.printStackTrace();
-               }
+                    finders.forEach(finder -> {
+                        if (finder.isValidDimension(world.getDimension())) {
+                            finder.findInChunk();
+                            this.finderControl.addFinder(type, finder);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
         });
     }
 
     public void renderFinders(MatrixStack matrixStack, Camera camera) {
-        if(Config.get().render == Config.RenderType.OFF) return;
+        if (Config.get().render == Config.RenderType.OFF) return;
 
         matrixStack.push();
 
@@ -61,7 +61,7 @@ public class FinderQueue {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
-        if(Config.get().render == Config.RenderType.XRAY) {
+        if (Config.get().render == Config.RenderType.XRAY) {
             RenderSystem.disableDepthTest();
         }
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -72,12 +72,12 @@ public class FinderQueue {
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
         this.finderControl.getActiveFinders().forEach(finder -> {
-            if(finder.shouldRender()) {
+            if (finder.shouldRender()) {
                 finder.render(matrixStack, buffer, camPos);
             }
         });
 
-        if(buffer.isBuilding()) {
+        if (buffer.isBuilding()) {
             tessellator.draw();
         }
         RenderSystem.enableDepthTest();

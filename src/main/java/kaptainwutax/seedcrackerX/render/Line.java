@@ -34,9 +34,9 @@ public class Line extends Renderer {
     protected void putVertex(VertexConsumer vertexConsumer, MatrixStack matrixStack, Vec3d pos, Vec3d cameraPos) {
         vertexConsumer.vertex(
                 matrixStack.peek().getPositionMatrix(),
-                (float)(pos.x-cameraPos.x),
-                (float)(pos.y-cameraPos.y),
-                (float)(pos.z-cameraPos.z)
+                (float) (pos.x - cameraPos.x),
+                (float) (pos.y - cameraPos.y),
+                (float) (pos.z - cameraPos.z)
         ).color(
                 this.color.getFRed(),
                 this.color.getFGreen(),

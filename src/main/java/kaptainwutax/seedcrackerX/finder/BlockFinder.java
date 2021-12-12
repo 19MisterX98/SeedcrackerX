@@ -30,10 +30,10 @@ public abstract class BlockFinder extends Finder {
         List<BlockPos> result = new ArrayList<>();
         Chunk chunk = this.world.getChunk(this.chunkPos.getStartPos());
 
-        for(BlockPos blockPos: this.searchPositions) {
+        for (BlockPos blockPos : this.searchPositions) {
             BlockState currentState = chunk.getBlockState(blockPos);
 
-            if(this.targetBlockStates.contains(currentState)) {
+            if (this.targetBlockStates.contains(currentState)) {
                 result.add(this.chunkPos.getStartPos().add(blockPos));
             }
         }

@@ -33,8 +33,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayNetworkHandlerMixin {
 
-    @Shadow private ClientWorld world;
-    @Shadow private CommandDispatcher<CommandSource> commandDispatcher;
+    @Shadow
+    private ClientWorld world;
+    @Shadow
+    private CommandDispatcher<CommandSource> commandDispatcher;
 
     @Inject(method = "onChunkData", at = @At(value = "TAIL"))
     private void onChunkData(ChunkDataS2CPacket packet, CallbackInfo ci) {
@@ -46,13 +48,13 @@ public abstract class ClientPlayNetworkHandlerMixin {
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"))
     public void onInit(MinecraftClient client, Screen screen, ClientConnection connection, GameProfile profile, TelemetrySender telemetrySender, CallbackInfo ci) {
-        ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>)(Object)this.commandDispatcher);
+        ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) this.commandDispatcher);
     }
 
     @SuppressWarnings("unchecked")
     @Inject(method = "onCommandTree", at = @At("TAIL"))
     public void onOnCommandTree(CommandTreeS2CPacket packet, CallbackInfo ci) {
-        ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>)(Object)this.commandDispatcher);
+        ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) this.commandDispatcher);
     }
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
@@ -68,7 +70,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
     public void newDimension(DimensionType dimension, HashedSeedData hashedSeedData) {
         ReloadFinders.reloadHeight(dimension.getMinimumY(), dimension.getMinimumY() + dimension.getLogicalHeight());
 
-        if(SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active) {
+        if (SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active) {
             Log.warn(Log.translate("fetchedHashedSeed") + " [" + hashedSeedData.getHashedSeed() + "].");
         }
     }

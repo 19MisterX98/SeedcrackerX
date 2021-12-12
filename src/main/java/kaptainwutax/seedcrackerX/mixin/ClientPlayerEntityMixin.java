@@ -21,14 +21,14 @@ public abstract class ClientPlayerEntityMixin {
 
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     private void onSendChatMessage(String message, CallbackInfo ci) {
-        if(message.startsWith("/")) {
+        if (message.startsWith("/")) {
             StringReader reader = new StringReader(message);
             reader.skip();
 
             int cursor = reader.getCursor();
             reader.setCursor(cursor);
 
-            if(ClientCommands.isClientSideCommand(message.substring(1).split(Pattern.quote(" ")))) {
+            if (ClientCommands.isClientSideCommand(message.substring(1).split(Pattern.quote(" ")))) {
                 ClientCommands.executeCommand(reader);
                 ci.cancel();
             }

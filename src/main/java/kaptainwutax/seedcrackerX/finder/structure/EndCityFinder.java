@@ -1,6 +1,6 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
-import kaptainwutax.featureutils.structure.RegionStructure;
+import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
@@ -8,6 +8,7 @@ import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
+import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -26,15 +27,8 @@ import java.util.Map;
 public class EndCityFinder extends Finder {
 
     protected static List<BlockPos> SEARCH_POSITIONS;
-
-    public static void reloadSearchPositions() {
-        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-            return pos.getY() > 90;
-        });
-    }
-
-    protected List<PieceFinder> finders = new ArrayList<>();
     protected final Vec3i size = new Vec3i(8, 4, 8);
+    protected List<PieceFinder> finders = new ArrayList<>();
 
     public EndCityFinder(World world, ChunkPos chunkPos) {
         super(world, chunkPos);
@@ -47,6 +41,19 @@ public class EndCityFinder extends Finder {
             buildStructure(finder);
             this.finders.add(finder);
         });
+    }
+
+    public static void reloadSearchPositions() {
+        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> pos.getY() > 90 && pos.getY() < 40);
+    }
+
+    public static List<Finder> create(World world, ChunkPos chunkPos) {
+        List<Finder> finders = new ArrayList<>();
+        finders.add(new EndCityFinder(world, chunkPos));
+        finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
+        finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
+        finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
+        return finders;
     }
 
     private void buildStructure(PieceFinder finder) {
@@ -80,7 +87,8 @@ public class EndCityFinder extends Finder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
+        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2);
+        if (!Features.END_CITY.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();
 
         Map<PieceFinder, List<BlockPos>> result = this.findInChunkPieces();
         List<BlockPos> combinedResult = new ArrayList<>();
@@ -96,7 +104,7 @@ public class EndCityFinder extends Finder {
             positions.forEach(pos -> {
                 RegionStructure.Data<?> data = Features.END_CITY.at(this.chunkPos.x, this.chunkPos.z);
 
-                if(SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
+                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
                     this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(153, 0, 153)));
                     this.renderers.add(new Cube(pos, new Color(153, 0, 153)));
                 }
@@ -119,15 +127,6 @@ public class EndCityFinder extends Finder {
     @Override
     public boolean isValidDimension(DimensionType dimension) {
         return this.isEnd(dimension);
-    }
-
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
-        List<Finder> finders = new ArrayList<>();
-        finders.add(new EndCityFinder(world, chunkPos));
-        finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
-        finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
-        finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
-        return finders;
     }
 
 }

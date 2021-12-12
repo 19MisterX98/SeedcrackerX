@@ -1,9 +1,9 @@
 package kaptainwutax.seedcrackerX.finder;
 
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.finder.decorator.*;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
 import kaptainwutax.seedcrackerX.finder.structure.*;
-import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.render.Renderer;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 import kaptainwutax.seedcrackerX.util.HeightContext;
@@ -29,24 +29,36 @@ public abstract class Finder {
     protected static final List<BlockPos> SUB_CHUNK_POSITIONS = new ArrayList<>();
     protected static HeightContext heightContext;
 
-    protected MinecraftClient mc = MinecraftClient.getInstance();
-    protected List<Renderer> renderers = new ArrayList<>();
-    protected World world;
-    protected ChunkPos chunkPos;
-
     static {
-        for(int x = 0; x < 16; x++) {
-            for(int z = 0; z < 16; z++) {
-                for(int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                for (int y = 0; y < 16; y++) {
                     SUB_CHUNK_POSITIONS.add(new BlockPos(x, y, z));
                 }
             }
         }
     }
 
+    protected MinecraftClient mc = MinecraftClient.getInstance();
+    protected List<Renderer> renderers = new ArrayList<>();
+    protected World world;
+    protected ChunkPos chunkPos;
+
     public Finder(World world, ChunkPos chunkPos) {
         this.world = world;
         this.chunkPos = chunkPos;
+    }
+
+    public static List<BlockPos> buildSearchPositions(List<BlockPos> base, Predicate<BlockPos> removeIf) {
+        List<BlockPos> newList = new ArrayList<>();
+
+        for (BlockPos pos : base) {
+            if (!removeIf.test(pos)) {
+                newList.add(pos);
+            }
+        }
+
+        return newList;
     }
 
     public World getWorld() {
@@ -63,15 +75,15 @@ public abstract class Finder {
         DimensionType finderDim = this.world.getDimension();
         DimensionType playerDim = mc.player.world.getDimension();
 
-        if(finderDim != playerDim)return false;
+        if (finderDim != playerDim) return false;
 
         int renderDistance = mc.options.viewDistance * 16 + 16;
         Vec3d playerPos = mc.player.getPos();
 
-        for(Renderer renderer: this.renderers) {
+        for (Renderer renderer : this.renderers) {
             BlockPos pos = renderer.getPos();
             double distance = playerPos.squaredDistanceTo(pos.getX(), playerPos.y, pos.getZ());
-            if(distance <= renderDistance * renderDistance + 32)return true;
+            if (distance <= renderDistance * renderDistance + 32) return true;
         }
 
         return false;
@@ -88,27 +100,15 @@ public abstract class Finder {
     public abstract boolean isValidDimension(DimensionType dimension);
 
     public boolean isOverworld(DimensionType dimension) {
-        return ((DimensionTypeCaller)dimension).getInfiniburn().getPath().endsWith("overworld");
+        return ((DimensionTypeCaller) dimension).getInfiniburn().getPath().endsWith("overworld");
     }
 
     public boolean isNether(DimensionType dimension) {
-        return ((DimensionTypeCaller)dimension).getInfiniburn().getPath().endsWith("nether");
+        return ((DimensionTypeCaller) dimension).getInfiniburn().getPath().endsWith("nether");
     }
 
     public boolean isEnd(DimensionType dimension) {
-        return ((DimensionTypeCaller)dimension).getInfiniburn().getPath().endsWith("end");
-    }
-
-    public static List<BlockPos> buildSearchPositions(List<BlockPos> base, Predicate<BlockPos> removeIf) {
-        List<BlockPos> newList = new ArrayList<>();
-        
-        for(BlockPos pos: base) {
-            if(!removeIf.test(pos)) {
-                newList.add(pos);
-            }
-        }
-        
-        return newList;
+        return ((DimensionTypeCaller) dimension).getInfiniburn().getPath().endsWith("end");
     }
 
     public enum Category {
@@ -131,14 +131,14 @@ public abstract class Finder {
         DUNGEON(DungeonFinder::create, Category.DECORATORS, Config.get().dungeon, "finder.dungeons"),
         EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS, Config.get().emeraldOre, "finder.emeraldOres"),
         DESERT_WELL(DesertWellFinder::create, Category.DECORATORS, Config.get().desertWell, "finder.desertWells"),
-        WARPED_FUNGUS(WarpedFungusFinder::create,Category.DECORATORS, Config.get().warpedFungus, "finder.warpedFungus"),
+        WARPED_FUNGUS(WarpedFungusFinder::create, Category.DECORATORS, Config.get().warpedFungus, "finder.warpedFungus"),
 
         BIOME(BiomeFinder::create, Category.BIOMES, Config.get().biome, "finder.biomes");
 
         public final FinderBuilder finderBuilder;
+        public final String nameKey;
         private final Category category;
         public FeatureToggle enabled;
-        public final String nameKey;
 
         Type(FinderBuilder finderBuilder, Category category, FeatureToggle enabled, String nameKey) {
             this.finderBuilder = finderBuilder;

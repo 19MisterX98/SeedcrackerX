@@ -1,9 +1,8 @@
 package kaptainwutax.seedcrackerX.cracker.decorator;
 
-import randomreverser.call.java.NextFloat;
-import randomreverser.call.java.NextInt;
-import randomreverser.device.JavaRandomDevice;
-import randomreverser.device.LCGReverserDevice;
+import com.seedfinding.latticg.reversal.DynamicProgram;
+import com.seedfinding.latticg.reversal.calltype.java.JavaCalls;
+import com.seedfinding.latticg.util.LCG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +14,11 @@ public class FullFungusData {
     public final ArrayList<Integer> layerSizes = new ArrayList<>();
     public final int[][][] layers;
     public final ArrayList<Integer> vines = new ArrayList<>();
+    public final ArrayList<Integer> bigtrunkData = new ArrayList<>();
+    public final int estimatedData;
     public boolean big;
     public int height;
     public int vineLayerSize;
-    public final ArrayList<Integer> bigtrunkData = new ArrayList<>();
-    public final int estimatedData;
 
     public FullFungusData(List<Integer> layerSizes, int[][][] layers, ArrayList<Integer> vines, boolean big, int height, int vineLayerSize, ArrayList<Integer> bigTrunkData, int estimatedData) {
         this.layerSizes.addAll(layerSizes);
@@ -37,9 +36,9 @@ public class FullFungusData {
         int data = 0;
         FullFungusData out = null;
 
-        for(FullFungusData fungus:fungusList) {
+        for (FullFungusData fungus : fungusList) {
             int fungusData = fungus.estimatedData;
-            if(fungusData>data) {
+            if (fungusData > data) {
                 data = fungusData;
                 out = fungus;
             }
@@ -50,32 +49,32 @@ public class FullFungusData {
 
     public LongStream crackSeed() {
         int doppelt = 0;
-        if(height > 7 && height % 2 == 0) {
+        if (height > 7 && height % 2 == 0) {
             doppelt = 1;
-            if(height > 13){
+            if (height > 13) {
                 doppelt = 2;
             }
         }
 
-        JavaRandomDevice device = new JavaRandomDevice();
-        if(doppelt < 2) {
+        DynamicProgram device = DynamicProgram.create(LCG.JAVA);
+        if (doppelt < 2) {
             device.skip(2);
         } else {
             device.skip(1);
-            device.addCall(NextInt.withValue(12, 0));
+            device.add(JavaCalls.nextInt(12).equalTo(0));
         }
-        if(big){
-            device.addCall(NextFloat.inRange(0, 0.06F));
+        if (big) {
+            device.add(JavaCalls.nextFloat().betweenII(0F, 0.06F));
         } else {
             device.skip(1);
         }
 
-        if(big) {
-            for (int blockdata:bigtrunkData) {
-                if(blockdata == 0) {
+        if (big) {
+            for (int blockdata : bigtrunkData) {
+                if (blockdata == 0) {
                     device.skip(1);
                 } else if (blockdata == 1) {
-                    device.addCall(NextFloat.inRange(0, 0.1F));
+                    device.add(JavaCalls.nextFloat().betweenII(0F, 0.1F));
                 }
             }
         }
@@ -83,17 +82,17 @@ public class FullFungusData {
         device.skip(2);
 
         ArrayList<Integer> done = new ArrayList<>();
-        for (int j= 3;j > 0;j--) {
+        for (int j = 3; j > 0; j--) {
 
-            for (int i = 0; i < vineLayerSize*8; i++) {
-                if(vines.get(i) == 0 && !done.contains(i)) {
+            for (int i = 0; i < vineLayerSize * 8; i++) {
+                if (vines.get(i) == 0 && !done.contains(i)) {
                     device.skip(1);
 
                 } else if (vines.get(i) == j) {
                     done.add(i);
-                    device.addCall(NextFloat.inRange(0, 0.15F));
+                    device.add(JavaCalls.nextFloat().betweenII(0F, 0.15F));
 
-                }else if(!done.contains(i)) {
+                } else if (!done.contains(i)) {
                     device.skip(1);
 
                 }
@@ -105,33 +104,33 @@ public class FullFungusData {
         int blockType;
         int layer = 0;
 
-        for(int size:layerSizes) {
-            size *=2;
+        for (int size : layerSizes) {
+            size *= 2;
 
-            for(int x = 0; x <= size; x++) {
+            for (int x = 0; x <= size; x++) {
 
                 boolean siteX = x == 0 || x == size;
                 for (int z = 0; z <= size; z++) {
 
                     boolean siteZ = z == 0 || z == size;
 
-                    relativePos = (siteX ? 1:0) + (siteZ ? 1:0);
+                    relativePos = (siteX ? 1 : 0) + (siteZ ? 1 : 0);
 
                     blockType = layers[layer][x][z];
 
-                    generateBlock(relativePos,blockType,device);
+                    generateBlock(relativePos, blockType, device);
                 }
             }
 
             device.skip(1);
             layer++;
         }
-        return device.streamSeeds(LCGReverserDevice.Process.EVERYTHING);
+        return device.reverse();
     }
 
-    private void generateBlock(int relativePos, int blockType, JavaRandomDevice device) {
+    private void generateBlock(int relativePos, int blockType, DynamicProgram device) {
 
-        if(blockType == 3) return;
+        if (blockType == 3) return;
         switch (relativePos) {
             case 0:
                 //Inside
@@ -143,7 +142,7 @@ public class FullFungusData {
                         device.skip(3);
                         break;
                     case 2:
-                        device.addCall(NextFloat.inRange(0, 0.1F));
+                        device.add(JavaCalls.nextFloat().betweenII(0F, 0.1F));
                 }
                 break;
             case 1:
@@ -151,13 +150,13 @@ public class FullFungusData {
                 switch (blockType) {
                     case 0:
                         device.skip(1);
-                        device.addCall(NextFloat.inRange(0.98F, 1F));
+                        device.add(JavaCalls.nextFloat().betweenII(0.98F, 1F));
                         break;
                     case 1:
                         device.skip(3);
                         break;
                     case 2:
-                        device.addCall(NextFloat.inRange(0, 5.0E-4F));
+                        device.add(JavaCalls.nextFloat().betweenII(0F, 5.0E-4F));
                 }
                 break;
             case 2:
@@ -170,7 +169,7 @@ public class FullFungusData {
                         device.skip(3);
                         break;
                     case 2:
-                        device.addCall(NextFloat.inRange(0, 0.01F));
+                        device.add(JavaCalls.nextFloat().betweenII(0F, 0.01F));
                 }
                 break;
         }

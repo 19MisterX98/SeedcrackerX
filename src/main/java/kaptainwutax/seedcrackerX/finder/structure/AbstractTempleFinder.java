@@ -20,17 +20,8 @@ import java.util.Map;
 public abstract class AbstractTempleFinder extends Finder {
 
     protected static List<BlockPos> SEARCH_POSITIONS;
-
-    public static void reloadSearchPositions() {
-        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
-            if(pos.getX() != 0)return true;
-            if(pos.getY() < 63)return true;
-            return pos.getZ() != 0;
-        });
-    }
-
-    protected List<PieceFinder> finders = new ArrayList<>();
     protected final Vec3i size;
+    protected List<PieceFinder> finders = new ArrayList<>();
 
     public AbstractTempleFinder(World world, ChunkPos chunkPos, Vec3i size) {
         super(world, chunkPos);
@@ -47,10 +38,19 @@ public abstract class AbstractTempleFinder extends Finder {
         this.size = size;
     }
 
-    public List<BlockPos> findInChunkPiece(PieceFinder pieceFinder) {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
+    public static void reloadSearchPositions() {
+        SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> {
+            if (pos.getX() != 0) return true;
+            if (pos.getY() < 0) return true;
+            if (pos.getY() > 200) return true;
+            return pos.getZ() != 0;
+        });
+    }
 
-        if(!isValidBiome(biome)) {
+    public List<BlockPos> findInChunkPiece(PieceFinder pieceFinder) {
+        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2);
+
+        if (!isValidBiome(biome)) {
             return new ArrayList<>();
         }
 

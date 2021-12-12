@@ -12,35 +12,37 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class DataCommand extends ClientCommand {
 
-	@Override
-	public String getName() {
-		return "data";
-	}
+    @Override
+    public String getName() {
+        return "data";
+    }
 
-	@Override
-	public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
-		builder.then(literal("clear")
-				.executes(this::clear)
-		);
+    @Override
+    public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
+        builder.then(literal("clear")
+                .executes(this::clear)
+        );
 
-		builder.then(literal("bits")
-				.executes(this::printBits)
-		);
-	}
+        builder.then(literal("bits")
+                .executes(this::printBits)
+        );
+    }
 
-	public int clear(CommandContext<ServerCommandSource> context) {
-		SeedCracker.get().reset();
+    public int clear(CommandContext<ServerCommandSource> context) {
+        SeedCracker.get().reset();
 
-		sendFeedback(Language.getInstance().get("data.clearData"), Formatting.GREEN, false);
-		return 0;
-	}
+        sendFeedback(Language.getInstance().get("data.clearData"), Formatting.GREEN, false);
+        return 0;
+    }
 
-	private int printBits(CommandContext<ServerCommandSource> context) {
-		DataStorage s = SeedCracker.get().getDataStorage();
-		String message = Language.getInstance().get("data.collectedBits").formatted((int)s.getBaseBits(), (int)s.getWantedBits());
-		sendFeedback(message, Formatting.GREEN, false);
-		return 0;
-	}
+    private int printBits(CommandContext<ServerCommandSource> context) {
+        DataStorage s = SeedCracker.get().getDataStorage();
+        String message = Language.getInstance().get("data.collectedBits").formatted((int) s.getBaseBits(), (int) s.getWantedBits());
+        String message2 = Language.getInstance().get("data.collectedLiftingBits").formatted((int) s.getLiftingBits(), 40);
+        sendFeedback(message, Formatting.GREEN, false);
+        sendFeedback(message2, Formatting.GREEN, false);
+        return 0;
+    }
 
 }
 

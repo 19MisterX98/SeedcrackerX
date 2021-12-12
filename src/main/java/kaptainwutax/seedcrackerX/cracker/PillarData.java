@@ -7,33 +7,33 @@ import java.util.Random;
 
 public class PillarData {
 
-	private final List<Integer> heights;
+    private final List<Integer> heights;
 
-	public PillarData(List<Integer> heights) {
-		this.heights = heights;
-	}
+    public PillarData(List<Integer> heights) {
+        this.heights = heights;
+    }
 
-	public boolean test(long seed) {
-		List<Integer> h = this.getPillarHeights((int)seed);
-		return h.equals(this.heights);
-	}
+    public boolean test(long seed) {
+        List<Integer> h = this.getPillarHeights((int) seed);
+        return h.equals(this.heights);
+    }
 
-	public List<Integer> getPillarHeights(int pillarSeed) {
-		List<Integer> indices = new ArrayList<>();
+    public List<Integer> getPillarHeights(int pillarSeed) {
+        List<Integer> indices = new ArrayList<>();
 
-		for(int i = 0; i < 10; i++) {
-			indices.add(i);
-		}
+        for (int i = 0; i < 10; i++) {
+            indices.add(i);
+        }
 
-		Collections.shuffle(indices, new Random(pillarSeed));
+        Collections.shuffle(indices, new Random(pillarSeed));
 
-		List<Integer> heights = new ArrayList<>();
+        List<Integer> heights = new ArrayList<>();
 
-		for(Integer index : indices) {
-			heights.add(76 + index * 3);
-		}
+        for (Integer index : indices) {
+            heights.add(76 + index * 3);
+        }
 
-		return heights;
-	}
+        return heights;
+    }
 
 }

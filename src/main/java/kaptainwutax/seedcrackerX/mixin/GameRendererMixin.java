@@ -14,7 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Shadow @Final private Camera camera;
+    @Shadow
+    @Final
+    private Camera camera;
 
     @Inject(method = "renderWorld", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = {"ldc=hand"}))
     private void renderWorldHand(float delta, long time, MatrixStack matrixStack, CallbackInfo ci) {

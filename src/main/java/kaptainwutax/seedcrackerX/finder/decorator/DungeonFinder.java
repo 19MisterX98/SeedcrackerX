@@ -1,8 +1,11 @@
 package kaptainwutax.seedcrackerX.finder.decorator;
 
+import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
+import kaptainwutax.seedcrackerX.cracker.decorator.Decorator;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
@@ -23,7 +26,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class DungeonFinder extends BlockFinder {
 
@@ -33,18 +39,46 @@ public class DungeonFinder extends BlockFinder {
     );
 
 
+    public DungeonFinder(World world, ChunkPos chunkPos) {
+        super(world, chunkPos, Blocks.SPAWNER);
+        this.searchPositions = CHUNK_POSITIONS;
+    }
+
+    public static List<Finder> create(World world, ChunkPos chunkPos) {
+        List<Finder> finders = new ArrayList<>();
+
+        for (int chunkX = chunkPos.x - 1; chunkX <= chunkPos.x + 1; chunkX++) {
+            for (int chunkZ = chunkPos.z - 1; chunkZ <= chunkPos.z + 1; chunkZ++) {
+                if (surroundingChunksLoaded(chunkX, chunkZ, world)) {
+                    finders.add(new DungeonFinder(world, new ChunkPos(chunkX, chunkZ)));
+                }
+            }
+        }
+
+        return finders;
+    }
+
+    private static boolean surroundingChunksLoaded(int chunkX, int chunkZ, World world) {
+        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                if (world.getChunkManager().getChunk(x, z) == null) return false;
+            }
+        }
+        return true;
+    }
+
     private boolean AntiXRay(BlockPos pos) {
         Set<BlockPos> XRAY_TEST_POS = new HashSet<>();
-        XRAY_TEST_POS.add(new BlockPos(4,0,0));
-        XRAY_TEST_POS.add(new BlockPos(3,0,0));
-        XRAY_TEST_POS.add(new BlockPos(-4,0,0));
-        XRAY_TEST_POS.add(new BlockPos(-3,0,0));
-        XRAY_TEST_POS.add(new BlockPos(0,0,4));
-        XRAY_TEST_POS.add(new BlockPos(0,0,3));
-        XRAY_TEST_POS.add(new BlockPos(0,0,-4));
-        XRAY_TEST_POS.add(new BlockPos(0,0,-3));
-        for(BlockPos blockpos:XRAY_TEST_POS) {
-            BlockPos.Mutable currentPos = new BlockPos.Mutable(pos.getX(),pos.getY(),pos.getZ());
+        XRAY_TEST_POS.add(new BlockPos(4, 0, 0));
+        XRAY_TEST_POS.add(new BlockPos(3, 0, 0));
+        XRAY_TEST_POS.add(new BlockPos(-4, 0, 0));
+        XRAY_TEST_POS.add(new BlockPos(-3, 0, 0));
+        XRAY_TEST_POS.add(new BlockPos(0, 0, 4));
+        XRAY_TEST_POS.add(new BlockPos(0, 0, 3));
+        XRAY_TEST_POS.add(new BlockPos(0, 0, -4));
+        XRAY_TEST_POS.add(new BlockPos(0, 0, -3));
+        for (BlockPos blockpos : XRAY_TEST_POS) {
+            BlockPos.Mutable currentPos = new BlockPos.Mutable(pos.getX(), pos.getY(), pos.getZ());
             currentPos.move(blockpos);
             Block posCheck = this.world.getBlockState(currentPos).getBlock();
             if (posCheck == Blocks.COBBLESTONE) {
@@ -58,24 +92,19 @@ public class DungeonFinder extends BlockFinder {
         return false;
     }
 
-    public DungeonFinder(World world, ChunkPos chunkPos) {
-        super(world, chunkPos, Blocks.SPAWNER);
-        this.searchPositions = CHUNK_POSITIONS;
-    }
-
     @Override
     public List<BlockPos> findInChunk() {
         //Gets all the positions with a mob spawner in the chunk.
         List<BlockPos> result = super.findInChunk();
 
-        if(result.size() != 1)return new ArrayList<>();
+        if (result.size() != 1) return new ArrayList<>();
 
         result.removeIf(pos -> {
 
             BlockEntity blockEntity = this.world.getBlockEntity(pos);
-            if(!(blockEntity instanceof MobSpawnerBlockEntity))return true;
+            if (!(blockEntity instanceof MobSpawnerBlockEntity)) return true;
             int count = 0;
-            for(BlockPos blockPos: POSSIBLE_FLOOR_POSITIONS) {
+            for (BlockPos blockPos : POSSIBLE_FLOOR_POSITIONS) {
                 BlockPos currentPos = pos.add(blockPos);
                 Block currentBlock = this.world.getBlockState(currentPos).getBlock();
                 if (currentBlock == Blocks.COBBLESTONE || currentBlock == Blocks.MOSSY_COBBLESTONE) {
@@ -85,15 +114,27 @@ public class DungeonFinder extends BlockFinder {
             return count < 20;
         });
 
-        if(result.size() != 1)return new ArrayList<>();
+        if (result.size() != 1) return new ArrayList<>();
         Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
 
         BlockPos pos = result.get(0);
+        if (Config.get().getVersion().isNewerThan(MCVersion.v1_17_1)) {
+            Decorator.Data<?> data;
+            if (pos.getY() < 0) {
+                data = Features.DEEP_DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), BiomeFixer.swap(biome));
+            } else {
+                data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), null, null, BiomeFixer.swap(biome), null);
+            }
+            this.renderers.add(new Cube(pos, new Color(255, 0, 0)));
+            SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_BIOMES);
+            return result;
+        }
+
         Vec3i size = this.getDungeonSize(pos);
 
         int[] floorCalls = this.getFloorCalls(size, pos);
         Dungeon.Data data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), size, floorCalls, BiomeFixer.swap(biome), heightContext);
-        if(AntiXRay(pos) && Config.get().antiXrayBypass) {
+        if (AntiXRay(pos) && Config.get().antiXrayBypass) {
             if (SeedCracker.get().getDataStorage().baseSeedData.contains(new DataStorage.Entry<>(data, null))) {
                 return result;
             }
@@ -134,7 +175,7 @@ public class DungeonFinder extends BlockFinder {
 
     public void blockUpdateExploit(BlockPos pos, Vec3i size, Thread startCracker) {
         ArrayList<BlockPos> floorBlocks = new ArrayList<>();
-        for(int xo = -size.getX(); xo <= size.getX(); xo++) {
+        for (int xo = -size.getX(); xo <= size.getX(); xo++) {
             for (int zo = -size.getZ(); zo <= size.getZ(); zo++) {
                 floorBlocks.add(pos.add(xo, -1, zo));
             }
@@ -145,62 +186,39 @@ public class DungeonFinder extends BlockFinder {
     public Vec3i getDungeonSize(BlockPos spawnerPos) {
 
         int x = PosIterator.create(spawnerPos.add(4, 3, -4), spawnerPos.add(4, 3, 4)).stream().filter(pos ->
-                        world.getBlockState(pos).getBlock()==Blocks.COBBLESTONE).count() > 2 ? 4 : 3;
+                world.getBlockState(pos).getBlock() == Blocks.COBBLESTONE).count() > 2 ? 4 : 3;
 
         int z = PosIterator.create(spawnerPos.add(-4, 3, 4), spawnerPos.add(4, 3, 4)).stream().filter(pos ->
-                        world.getBlockState(pos).getBlock()==Blocks.COBBLESTONE).count() > 2 ? 4 : 3;
+                world.getBlockState(pos).getBlock() == Blocks.COBBLESTONE).count() > 2 ? 4 : 3;
 
-        return new Vec3i(x,0,z);
+        return new Vec3i(x, 0, z);
     }
 
     public int[] getFloorCalls(Vec3i dungeonSize, BlockPos spawnerPos) {
         int[] floorCalls = new int[(dungeonSize.getX() * 2 + 1) * (dungeonSize.getZ() * 2 + 1)];
         int i = 0;
 
-        for(int xo = -dungeonSize.getX(); xo <= dungeonSize.getX(); xo++) {
-            for(int zo = -dungeonSize.getZ(); zo <= dungeonSize.getZ(); zo++) {
+        for (int xo = -dungeonSize.getX(); xo <= dungeonSize.getX(); xo++) {
+            for (int zo = -dungeonSize.getZ(); zo <= dungeonSize.getZ(); zo++) {
                 Block block = this.world.getBlockState(spawnerPos.add(xo, -1, zo)).getBlock();
-                if(block == Blocks.MOSSY_COBBLESTONE) {
+                if (block == Blocks.MOSSY_COBBLESTONE) {
                     floorCalls[i++] = Dungeon.Data.MOSSY_COBBLESTONE_CALL;
-                } else if(block == Blocks.COBBLESTONE) {
+                } else if (block == Blocks.COBBLESTONE) {
                     floorCalls[i++] = Dungeon.Data.COBBLESTONE_CALL;
-                } else if(block != Blocks.AIR && block != Blocks.CAVE_AIR){
+                } else if (block != Blocks.AIR && block != Blocks.CAVE_AIR) {
                     floorCalls[i++] = 2;
                 } else {
                     floorCalls[i++] = 3;
                 }
             }
         }
-        
+
         return floorCalls;
     }
 
     @Override
     public boolean isValidDimension(DimensionType dimension) {
         return this.isOverworld(dimension);
-    }
-
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
-        List<Finder> finders = new ArrayList<>();
-
-        for (int chunkX = chunkPos.x - 1; chunkX <= chunkPos.x + 1; chunkX++) {
-            for (int chunkZ = chunkPos.z - 1; chunkZ <= chunkPos.z + 1; chunkZ++) {
-                if (surroundingChunksLoaded(chunkX, chunkZ, world)) {
-                    finders.add(new DungeonFinder(world, new ChunkPos(chunkX, chunkZ)));
-                }
-            }
-        }
-
-        return finders;
-    }
-
-    private static boolean surroundingChunksLoaded(int chunkX, int chunkZ, World world) {
-        for (int x = chunkX - 1; x <= chunkX + 1; x++) {
-            for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                if (world.getChunkManager().getChunk(x, z) == null) return false;
-            }
-        }
-        return true;
     }
 
 }

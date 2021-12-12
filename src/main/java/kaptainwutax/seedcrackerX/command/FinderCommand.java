@@ -1,9 +1,9 @@
 package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
-import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
@@ -20,7 +20,7 @@ public class FinderCommand extends ClientCommand {
 
     @Override
     public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
-        for(Finder.Type finderType: Finder.Type.values()) {
+        for (Finder.Type finderType : Finder.Type.values()) {
             builder.then(literal("type")
                     .then(literal(finderType.toString())
                             .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
@@ -29,7 +29,7 @@ public class FinderCommand extends ClientCommand {
             );
         }
 
-        for(Finder.Category finderCategory: Finder.Category.values()) {
+        for (Finder.Category finderCategory : Finder.Category.values()) {
             builder.then(literal("category")
                     .then(literal(finderCategory.toString())
                             .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
@@ -46,7 +46,7 @@ public class FinderCommand extends ClientCommand {
     }
 
     private int printFinderType(Finder.Type finderType) {
-        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", Formatting.AQUA,false);
+        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", Formatting.AQUA, false);
         return 0;
     }
 

@@ -9,11 +9,10 @@ import net.minecraft.util.math.Vec3i;
 
 public class Cuboid extends Renderer {
 
+    private final Line[] edges = new Line[12];
     public BlockPos start;
     public Vec3i size;
     public BlockPos pos;
-
-    private final Line[] edges = new Line[12];
 
     public Cuboid() {
         this(BlockPos.ORIGIN, BlockPos.ORIGIN, Color.WHITE);
@@ -51,10 +50,10 @@ public class Cuboid extends Renderer {
 
     @Override
     public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, Vec3d cameraPos) {
-        if(this.start == null || this.size == null || this.edges == null)return;
+        if (this.start == null || this.size == null || this.edges == null) return;
 
-        for(Line edge: this.edges) {
-            if(edge == null)continue;
+        for (Line edge : this.edges) {
+            if (edge == null) continue;
             edge.render(matrixStack, vertexConsumer, cameraPos);
         }
     }

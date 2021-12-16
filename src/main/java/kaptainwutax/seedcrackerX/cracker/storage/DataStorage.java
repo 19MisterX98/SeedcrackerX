@@ -163,6 +163,8 @@ public class DataStorage {
         for (Entry<Feature.Data<?>> e : this.baseSeedData) {
             if (e.data.feature instanceof OldStructure structure) {
                 bits += Math.log(structure.getOffset() * structure.getOffset()) / Math.log(2);
+            } else if (e.data.feature instanceof Shipwreck shipwreck) {
+                bits += Math.log(shipwreck.getOffset() * shipwreck.getOffset()) / Math.log(2);
             }
         }
         return bits;

@@ -11,8 +11,7 @@ import net.minecraft.world.gen.random.ChunkRandom;
 public class DeepDungeon extends Decorator<Decorator.Config, DeepDungeon.Data> {
 
     public static final VersionMap<Config> CONFIGS = new VersionMap<Decorator.Config>()
-            .add(MCVersion.v1_18, new Decorator.Config(3, 3)
-                    .add(3, 5, Biomes.DESERT, Biomes.SWAMP, Biomes.SWAMP_HILLS));
+            .add(MCVersion.v1_18, new Decorator.Config(3, 3));
 
     public DeepDungeon(MCVersion version) {
         super(CONFIGS.getAsOf(version), version);

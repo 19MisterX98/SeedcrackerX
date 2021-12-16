@@ -8,7 +8,8 @@ import com.seedfinding.mccore.rand.seed.WorldSeed;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.structure.OldStructure;
-import com.seedfinding.mcfeature.structure.RegionStructure;
+import com.seedfinding.mcfeature.structure.Shipwreck;
+import com.seedfinding.mcfeature.structure.UniformStructure;
 import com.seedfinding.mcseed.lcg.LCG;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
@@ -100,38 +101,42 @@ public class TimeMachine {
 
     protected boolean pokeLifting() {
         if (!this.structureSeeds.isEmpty() || this.dataStorage.getLiftingBits() < 40F) return false;
-        List<OldStructure.Data<?>> dataList = new ArrayList<>();
+        List<UniformStructure.Data<?>> dataList = new ArrayList<>();
 
         for (DataStorage.Entry<Feature.Data<?>> e : this.dataStorage.baseSeedData) {
-            if (e.data.feature instanceof OldStructure) {
-                dataList.add((OldStructure.Data<?>) e.data);
+            if (e.data.feature instanceof OldStructure || e.data.feature instanceof Shipwreck) {
+                dataList.add((UniformStructure.Data<?>) e.data);
             }
         }
         Log.warn("tmachine.startLifting", dataList.size());
 
+        // You could first lift on 1L<<18 with %2 since that would be a smaller range
+        // Then lift on 1<<19 with those 1<<18 fixed with % 4 and for nextInt(24)
+        // You can even do %8 on 1<<20 (however we included shipwreck so only nextInt(20) so 1<<19 is the max here
         Stream<Long> lowerBitsStream = LongStream.range(0, 1L << 19).boxed().filter(lowerBits -> {
             ChunkRand rand = new ChunkRand();
-            for (OldStructure.Data<?> data : dataList) {
+            for (UniformStructure.Data<?> data : dataList) {
                 rand.setRegionSeed(lowerBits, data.regionX, data.regionZ, data.feature.getSalt(), Config.get().getVersion());
-                if (rand.nextInt(24) % 4 != data.offsetX % 4 || rand.nextInt(24) % 4 != data.offsetZ % 4) {
+                if (rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) % 4 != data.offsetX % 4 ||
+                        rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) % 4 != data.offsetZ % 4) {
                     return false;
                 }
             }
             return true;
         });
 
-        Stream<Long> seedStream = lowerBitsStream
-                .flatMap(lowerBits ->
-                        LongStream.range(0, 1L << (48 - 19))
-                                .boxed()
-                                .map(upperBits -> (upperBits << 19) | lowerBits)
-                );
+        Stream<Long> seedStream = lowerBitsStream.flatMap(lowerBits ->
+                LongStream.range(0, 1L << (48 - 19))
+                        .boxed()
+                        .map(upperBits -> (upperBits << 19) | lowerBits)
+        );
 
         Stream<Long> strutureSeedStream = seedStream.filter(seed -> {
             ChunkRand rand = new ChunkRand();
-            for (RegionStructure.Data<?> data : dataList) {
+            for (UniformStructure.Data<?> data : dataList) {
                 rand.setRegionSeed(seed, data.regionX, data.regionZ, data.feature.getSalt(), Config.get().getVersion());
-                if (rand.nextInt(24) != data.offsetX || rand.nextInt(24) != data.offsetZ) {
+                if (rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) != data.offsetX ||
+                        rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) != data.offsetZ) {
                     return false;
                 }
             }
@@ -404,10 +409,6 @@ public class TimeMachine {
                     result.add(seed);
                 }
             });
-        }
-        if (result.size() != 1) {
-            result.clear();
-            this.structureSeeds.stream().filter(WorldSeed::isString).findAny().ifPresent(result::add);
         }
 
         if (result.size() != 1) {

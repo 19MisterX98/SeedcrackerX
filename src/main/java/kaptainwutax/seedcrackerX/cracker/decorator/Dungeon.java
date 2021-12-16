@@ -28,8 +28,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
             .add(MCVersion.v1_13, new Decorator.Config(2, 3))
             .add(MCVersion.v1_16, new Decorator.Config(3, 2)
                     .add(3, 3, Biomes.DESERT, Biomes.SWAMP, Biomes.SWAMP_HILLS))
-            .add(MCVersion.v1_18, new Decorator.Config(3, 2)
-                    .add(3, 4, Biomes.DESERT, Biomes.SWAMP, Biomes.SWAMP_HILLS));
+            .add(MCVersion.v1_18, new Decorator.Config(3, 2));
 
     public Dungeon(MCVersion version) {
         super(CONFIGS.getAsOf(version), version);

@@ -25,8 +25,8 @@ public class PieceFinder extends Finder {
     protected int width;
     protected int height;
     protected int depth;
-    private BlockMirror mirror;
-    private BlockRotation rotation;
+    protected BlockMirror mirror;
+    protected BlockRotation rotation;
     private boolean debug;
 
     public PieceFinder(World world, ChunkPos chunkPos, Direction facing, Vec3i size) {
@@ -133,17 +133,12 @@ public class PieceFinder extends Finder {
         if (this.facing == null) {
             return x;
         } else {
-            switch (this.facing) {
-                case NORTH:
-                case SOUTH:
-                    return this.boundingBox.getMinX() + x;
-                case WEST:
-                    return this.boundingBox.getMaxX() - z;
-                case EAST:
-                    return this.boundingBox.getMinX() + z;
-                default:
-                    return x;
-            }
+            return switch (this.facing) {
+                case NORTH, SOUTH -> this.boundingBox.getMinX() + x;
+                case WEST -> this.boundingBox.getMaxX() - z;
+                case EAST -> this.boundingBox.getMinX() + z;
+                default -> x;
+            };
         }
     }
 
@@ -155,17 +150,12 @@ public class PieceFinder extends Finder {
         if (this.facing == null) {
             return z;
         } else {
-            switch (this.facing) {
-                case NORTH:
-                    return this.boundingBox.getMaxZ() - z;
-                case SOUTH:
-                    return this.boundingBox.getMinZ() + z;
-                case WEST:
-                case EAST:
-                    return this.boundingBox.getMinZ() + x;
-                default:
-                    return z;
-            }
+            return switch (this.facing) {
+                case NORTH -> this.boundingBox.getMaxZ() - z;
+                case SOUTH -> this.boundingBox.getMinZ() + z;
+                case WEST, EAST -> this.boundingBox.getMinZ() + x;
+                default -> z;
+            };
         }
     }
 

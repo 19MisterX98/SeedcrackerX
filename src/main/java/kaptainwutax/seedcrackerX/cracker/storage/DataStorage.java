@@ -152,7 +152,9 @@ public class DataStorage {
         double bits = 0.0D;
 
         for (Entry<Feature.Data<?>> e : this.baseSeedData) {
-            bits += getBits(e.data.feature, false);
+            if (!(e.data.feature instanceof PillagerOutpost)) {
+                bits += getBits(e.data.feature, false);
+            }
         }
         return bits;
     }

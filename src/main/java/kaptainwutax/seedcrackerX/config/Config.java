@@ -19,6 +19,8 @@ public class Config {
     public FeatureToggle monument = new FeatureToggle(true);
     public FeatureToggle swampHut = new FeatureToggle(true);
     public FeatureToggle shipwreck = new FeatureToggle(true);
+    public FeatureToggle outpost = new FeatureToggle(true);
+    public FeatureToggle igloo = new FeatureToggle(true);
     public FeatureToggle endPillars = new FeatureToggle(true);
     public FeatureToggle endGateway = new FeatureToggle(true);
     public FeatureToggle dungeon = new FeatureToggle(true);
@@ -30,7 +32,7 @@ public class Config {
     public boolean active = true;
     public boolean debug = false;
     public boolean antiXrayBypass = true;
-    private MCVersion version = MCVersion.v1_17_1;
+    private MCVersion version = MCVersion.v1_18_1;
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

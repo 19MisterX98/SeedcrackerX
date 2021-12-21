@@ -18,6 +18,8 @@ public class Features {
     public static Monument MONUMENT;
     public static Shipwreck SHIPWRECK;
     public static SwampHut SWAMP_HUT;
+    public static PillagerOutpost PILLAGER_OUTPOST;
+    public static Igloo IGLOO;
 
     public static EndGateway END_GATEWAY;
     public static DesertWell DESERT_WELL;
@@ -34,6 +36,8 @@ public class Features {
         safe(() -> MONUMENT = new Monument(version));
         safe(() -> SHIPWRECK = new Shipwreck(version));
         safe(() -> SWAMP_HUT = new SwampHut(version));
+        safe(() -> PILLAGER_OUTPOST = new PillagerOutpost(version));
+        safe(() -> IGLOO = new Igloo(version));
 
         safe(() -> END_GATEWAY = new EndGateway(version));
         safe(() -> DESERT_WELL = new DesertWell(version));

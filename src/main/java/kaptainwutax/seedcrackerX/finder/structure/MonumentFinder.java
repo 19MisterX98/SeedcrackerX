@@ -57,7 +57,7 @@ public class MonumentFinder extends Finder {
     @Override
     public List<BlockPos> findInChunk() {
         Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2);
-        if (!Features.MONUMENT.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();
+        if (BiomeFixer.swap(biome).getCategory() != com.seedfinding.mcbiome.biome.Biome.Category.OCEAN) return new ArrayList<>();
         Map<PieceFinder, List<BlockPos>> result = this.findInChunkPieces();
         List<BlockPos> combinedResult = new ArrayList<>();
 

@@ -8,6 +8,7 @@ import com.seedfinding.mccore.rand.seed.WorldSeed;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.structure.OldStructure;
+import com.seedfinding.mcfeature.structure.PillagerOutpost;
 import com.seedfinding.mcfeature.structure.Shipwreck;
 import com.seedfinding.mcfeature.structure.UniformStructure;
 import com.seedfinding.mcseed.lcg.LCG;
@@ -164,7 +165,9 @@ public class TimeMachine {
 
         for (DataStorage.Entry<Feature.Data<?>> entry : this.dataStorage.baseSeedData) {
             if (!(entry.data.feature instanceof Decorator) || entry.data.feature.getVersion().isOlderThan(MCVersion.v1_18)) {
-                cache.add(entry.data);
+                if (!(entry.data.feature instanceof PillagerOutpost)) {
+                    cache.add(entry.data);
+                }
             }
         }
 
@@ -418,7 +421,10 @@ public class TimeMachine {
 
             for (DataStorage.Entry<Feature.Data<?>> entry : this.dataStorage.baseSeedData) {
                 if (!(entry.data.feature instanceof Decorator) || entry.data.feature.getVersion().isOlderThan(MCVersion.v1_18)) {
-                    cache.add(entry.data);
+                    //todo remove this when libs are updated
+                    if (!(entry.data.feature instanceof PillagerOutpost)) {
+                        cache.add(entry.data);
+                    }
                 }
             }
             ChunkRand rand = new ChunkRand();

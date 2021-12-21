@@ -2,10 +2,7 @@ package kaptainwutax.seedcrackerX.finder;
 
 import kaptainwutax.seedcrackerX.finder.decorator.EndPillarsFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
-import kaptainwutax.seedcrackerX.finder.structure.AbstractTempleFinder;
-import kaptainwutax.seedcrackerX.finder.structure.BuriedTreasureFinder;
-import kaptainwutax.seedcrackerX.finder.structure.EndCityFinder;
-import kaptainwutax.seedcrackerX.finder.structure.MonumentFinder;
+import kaptainwutax.seedcrackerX.finder.structure.*;
 import kaptainwutax.seedcrackerX.util.HeightContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
@@ -31,6 +28,8 @@ public class ReloadFinders {
         BuriedTreasureFinder.reloadSearchPositions();
         EndCityFinder.reloadSearchPositions();
         MonumentFinder.reloadSearchPositions();
+        OutpostFinder.reloadSearchPositions();
+        IglooFinder.reloadSearchPositions();
     }
 
     public void reload() {

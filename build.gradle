@@ -92,8 +92,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	//todo get da right version
-	//include("net.fabricmc.fabric-api:fabric-resource-loader-v0:0.4.7+b7ab6121d5")
+
+	include("net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.resource_loader_version}")
 
 	sourceSets.api.compileClasspath += files({sourceSets.main.compileClasspath.toList()})
 	implementation sourceSets.api.output

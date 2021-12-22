@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.config.StructureSave;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
@@ -60,6 +61,10 @@ public abstract class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
         newDimension(packet.dimensionType(), new HashedSeedData(packet.sha256Seed()));
+        var preloaded = StructureSave.loadStructures();
+        if (!preloaded.isEmpty()) {
+            Log.warn("foundRestorableStructures", preloaded.size());
+        }
     }
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))

@@ -6,8 +6,6 @@ import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.world.gen.random.ChunkRandom;
-import net.minecraft.world.gen.random.Xoroshiro128PlusPlusRandom;
 
 import java.util.ArrayList;
 

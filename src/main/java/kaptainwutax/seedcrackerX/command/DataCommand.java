@@ -2,8 +2,12 @@ package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.config.StructureSave;
+import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
+import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Language;
@@ -26,6 +30,10 @@ public class DataCommand extends ClientCommand {
         builder.then(literal("bits")
                 .executes(this::printBits)
         );
+
+        builder.then(literal("restore")
+                .executes(this::restoreData)
+        );
     }
 
     public int clear(CommandContext<ServerCommandSource> context) {
@@ -41,6 +49,19 @@ public class DataCommand extends ClientCommand {
         String message2 = Language.getInstance().get("data.collectedLiftingBits").formatted((int) s.getLiftingBits(), 40);
         sendFeedback(message, Formatting.GREEN, false);
         sendFeedback(message2, Formatting.GREEN, false);
+        return 0;
+    }
+
+    private int restoreData(CommandContext<ServerCommandSource> context) {
+        var preloaded = StructureSave.loadStructures();
+        if (!preloaded.isEmpty()) {
+            for (RegionStructure.Data<?> data : preloaded) {
+                SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING);
+            }
+            Log.warn("data.restoreStructures",preloaded.size());
+        } else {
+            Log.warn("data.restoreFailed");
+        }
         return 0;
     }
 

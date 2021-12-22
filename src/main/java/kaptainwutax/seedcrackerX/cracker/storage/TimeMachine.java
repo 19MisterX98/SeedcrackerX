@@ -157,7 +157,6 @@ public class TimeMachine {
 
 
     protected boolean pokeStructures() {
-        if (!this.structureSeeds.isEmpty()) pokeStructureReduce();
         if (this.pillarSeeds == null || !this.structureSeeds.isEmpty() ||
                 this.dataStorage.getBaseBits() < this.dataStorage.getWantedBits()) return false;
 

@@ -1,6 +1,7 @@
 package kaptainwutax.seedcrackerX.mixin;
 
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.config.StructureSave;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
@@ -24,6 +25,7 @@ public abstract class ClientWorldMixin {
 
     @Inject(method = "disconnect", at = @At("HEAD"))
     private void disconnect(CallbackInfo ci) {
+        StructureSave.saveStructures(SeedCracker.get().getDataStorage().baseSeedData);
         SeedCracker.get().reset();
     }
 

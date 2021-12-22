@@ -74,9 +74,10 @@ public class StructureSave {
         if (MinecraftClient.getInstance().getNetworkHandler() != null) {
             ClientConnection connection = MinecraftClient.getInstance().getNetworkHandler().getConnection();
             if (connection.isLocal()) {
-                return MinecraftClient.getInstance().getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString()+".txt";
+                String address = MinecraftClient.getInstance().getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();
+                return address.replace("/","_")+".txt";
             } else {
-                return connection.getAddress().toString()+".txt";
+                return connection.getAddress().toString().replace("/","_")+".txt";
             }
         }
         return "Invalid.txt";

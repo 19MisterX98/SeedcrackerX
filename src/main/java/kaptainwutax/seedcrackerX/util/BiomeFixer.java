@@ -76,6 +76,9 @@ public class BiomeFixer {
     }
 
     public static Biome swap(net.minecraft.world.biome.Biome biome) {
+        if (MinecraftClient.getInstance().getNetworkHandler() == null) {
+            return Biomes.VOID;
+        }
         int mcId = MinecraftClient.getInstance().getNetworkHandler()
                 .getRegistryManager().get(Registry.BIOME_KEY).getRawId(biome);
         return Biomes.REGISTRY.get(mcIdToLibId(mcId));

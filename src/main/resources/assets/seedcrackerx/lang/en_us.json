@@ -36,7 +36,7 @@
   "info.noPillarSeeds": "No pillar seeds found",
   "info.hashedSeed": "Hashed seed",
   "info.noHashedSeed": "No hashed seed found",
-  "fetchedHashedSeed": "Fetched hashed world seed",
+  "fetchedHashedSeed": "The world seed in this dimension is different",
   "foundRestorableStructures": "Found %s structure/s from the previous session. Restore them with /seed data restore",
   "foundStructureSeed": "Found structure seed ${SEED}.",
   "finishedSearchNoResult": "Finished search with no results.",

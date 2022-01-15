@@ -109,6 +109,15 @@ public class TimeMachine {
                 dataList.add((UniformStructure.Data<?>) e.data);
             }
         }
+        List<Feature.Data<?>> cache = new ArrayList<>();
+
+        for (DataStorage.Entry<Feature.Data<?>> entry : this.dataStorage.baseSeedData) {
+            if (!(entry.data.feature instanceof Decorator) || entry.data.feature.getVersion().isOlderThan(MCVersion.v1_18)) {
+                if (!(entry.data.feature instanceof PillagerOutpost)) {
+                    cache.add(entry.data);
+                }
+            }
+        }
         Log.warn("tmachine.startLifting", dataList.size());
 
         // You could first lift on 1L<<18 with %2 since that would be a smaller range
@@ -134,10 +143,8 @@ public class TimeMachine {
 
         Stream<Long> strutureSeedStream = seedStream.filter(seed -> {
             ChunkRand rand = new ChunkRand();
-            for (UniformStructure.Data<?> data : dataList) {
-                rand.setRegionSeed(seed, data.regionX, data.regionZ, data.feature.getSalt(), Config.get().getVersion());
-                if (rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) != data.offsetX ||
-                        rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) != data.offsetZ) {
+            for (Feature.Data<?> data : cache) {
+                if (!data.testStart(seed, rand)) {
                     return false;
                 }
             }

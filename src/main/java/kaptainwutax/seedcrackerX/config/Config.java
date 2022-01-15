@@ -22,12 +22,12 @@ public class Config {
     public FeatureToggle outpost = new FeatureToggle(true);
     public FeatureToggle igloo = new FeatureToggle(true);
     public FeatureToggle endPillars = new FeatureToggle(true);
-    public FeatureToggle endGateway = new FeatureToggle(true);
+    public FeatureToggle endGateway = new FeatureToggle(false);
     public FeatureToggle dungeon = new FeatureToggle(true);
-    public FeatureToggle emeraldOre = new FeatureToggle(true);
-    public FeatureToggle desertWell = new FeatureToggle(true);
-    public FeatureToggle warpedFungus = new FeatureToggle(true);
-    public FeatureToggle biome = new FeatureToggle(true);
+    public FeatureToggle emeraldOre = new FeatureToggle(false);
+    public FeatureToggle desertWell = new FeatureToggle(false);
+    public FeatureToggle warpedFungus = new FeatureToggle(false);
+    public FeatureToggle biome = new FeatureToggle(false);
     public RenderType render = RenderType.XRAY;
     public boolean active = true;
     public boolean debug = false;

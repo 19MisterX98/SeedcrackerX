@@ -103,7 +103,6 @@ public class ShipwreckFinder extends BlockFinder {
                 }
             }
         }
-        //System.out.printf("%s: chest facing %s\n", pos, chestFacing);
         int chestX = 4;
         int chestY = 2;
         int chestZ = 0;
@@ -120,10 +119,11 @@ public class ShipwreckFinder extends BlockFinder {
                 chestX = 2;
                 chestZ = 12;
                 direction = chestFacing.getOpposite();
-            } else { // redundant
+            } else { // upsidedown front
                 chestX = 3;
                 chestY = 5;
-                chestZ = 5;
+                chestZ = 17;
+                length = 22;
                 direction = chestFacing.rotateYClockwise();
             }
         } else if (totalTrapdoors == 0) { // rightsideup that have backhalf
@@ -144,6 +144,12 @@ public class ShipwreckFinder extends BlockFinder {
                 chestX = 5;
                 chestZ = 6;
                 direction = chestFacing.rotateYCounterclockwise();
+            } else if (totalStairs == 3 && stairs[0] == 1 && stairs[2] == 1 && stairs[3] == 1) { // upsidedown full
+                chestX = 3;
+                chestY = 5;
+                chestZ = 17;
+                length = 28;
+                direction = chestFacing.rotateYClockwise();
             }
 
             mutablePos.set(pos);
@@ -161,13 +167,16 @@ public class ShipwreckFinder extends BlockFinder {
                 }
                 mutablePos.move(0, 10, 0);
 
-                BlockState b = this.world.getBlockState(mutablePos);
-
                 if (this.world.getBlockState(mutablePos).isIn(BlockTags.LOGS)) {
                     height = 21;
                 }
             }
         } else if (totalTrapdoors == 2 && trapdoors[3] == 2 && stairs[3] == 3) { // rightsideup_fronthalf[_degraded]
+            chestZ = 8;
+            length = 24;
+        } else if (totalTrapdoors == 2 && totalStairs == 4 && stairs[0] == 2) {//sideways-fronthalf
+            chestX = 5;
+            chestY = 3;
             chestZ = 8;
             length = 24;
         }

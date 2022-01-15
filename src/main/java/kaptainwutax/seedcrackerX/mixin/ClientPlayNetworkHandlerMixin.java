@@ -60,7 +60,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        newDimension(packet.dimensionType(), new HashedSeedData(packet.sha256Seed()));
+        newDimension(packet.dimensionType(), new HashedSeedData(packet.sha256Seed()), false);
         var preloaded = StructureSave.loadStructures();
         if (!preloaded.isEmpty()) {
             Log.warn("foundRestorableStructures", preloaded.size());
@@ -69,14 +69,17 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))
     public void onPlayerRespawn(PlayerRespawnS2CPacket packet, CallbackInfo ci) {
-        newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()));
+        newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()), true);
     }
 
-    public void newDimension(DimensionType dimension, HashedSeedData hashedSeedData) {
+    public void newDimension(DimensionType dimension, HashedSeedData hashedSeedData, boolean dimensionChange) {
         ReloadFinders.reloadHeight(dimension.getMinimumY(), dimension.getMinimumY() + dimension.getLogicalHeight());
 
-        if (SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active) {
-            Log.warn(Log.translate("fetchedHashedSeed") + " [" + hashedSeedData.getHashedSeed() + "].");
+        if (SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active && dimensionChange) {
+            Log.error(Log.translate("fetchedHashedSeed"));
+            if (Config.get().debug) {
+                Log.error("Hashed seed [" + hashedSeedData.getHashedSeed() + "]");
+            }
         }
     }
 

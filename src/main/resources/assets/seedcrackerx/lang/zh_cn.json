@@ -75,4 +75,9 @@
   "fungus.noStructureSeedsFound": "没有找到这个菌类的种子。",
   "fungus.gotStructureSeeds": "得到了结构种子：",
   "fungus.usableAsWorldSeed": "这个结构种子也可以作为世界种子使用"
+  "finder.outposts": "掠夺者前哨站",
+  "finder.igloo": "冰屋",
+  "foundRestorableStructures": "找到了前一个会话中的 %s 结构/s。用/seed data restore来恢复它们",
+  "data.restoreStructures": "恢复了 %s 结构/s",
+  "data.restoreFailed": "没有发现前一个会话的结构"
 }

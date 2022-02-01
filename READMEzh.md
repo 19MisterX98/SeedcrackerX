@@ -1,5 +1,5 @@
 # SeedCrackerX [![Github 所有版本](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
-
+PS:请以后更新翻译的同学参照en_us.json改的地方并在同样的位置添加，让后人修改时更方便。
 ## Discord
 
 [Discord](https://discord.gg/JRmHzqQYfp)

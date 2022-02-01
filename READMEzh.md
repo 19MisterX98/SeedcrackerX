@@ -1,5 +1,5 @@
 # SeedCrackerX [![Github 所有版本](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
-
+PS:请以后更新翻译的同学参照en_us.json改的地方并在同样的位置添加，让后人修改时更方便。
 ## Discord
 
 [Discord](https://discord.gg/JRmHzqQYfp)
@@ -12,7 +12,7 @@
 
  ### MultiMC
  
-  添加一个新的Minecraft实例, 在实例选项中按 "安装Fabric".
+  添加一个新的Minecraft实例, 在实例选项中点击 "安装Fabric".
 
  ### 模组安装
  
@@ -42,7 +42,7 @@
     - Swamp Hut(沼泽小屋)
     - Shipwreck(沉船)
   
-  ### 支持的装饰公司
+  ### 支持的装饰
     - Dungeon(地牢)
     - End Gateway(地牢)
     - Desert Well(沙漠水井)
@@ -63,7 +63,7 @@
   
   -`/seed finder category (BIOMES/ORES/OTHERS/STRUCTURES) (ON/OFF)`
   
-  这个命令用于禁用查找器, 以防你意识到数据是错误的. 例如, 在1.14中生成的地图有不同的装饰器, 需要你在经过这些区块的时候禁用它们.
+  这个命令用于禁用查找器, 以防你意识到数据是错误的. 例如, 在1.14中生成的地图有不同的装饰, 需要你在经过这些区块的时候禁用它们.
   
   -`/seed finder reload`
   
@@ -72,16 +72,16 @@
   ### 数据指令
   - `/seed data clear`
   
-  清除所有收集的数据而不是重新记录. 这对多世界的服务器很有用.
+  清除所有收集的数据而不是重新记录. 这对多世界的服务器很有用。
   
   - `/seed data bits`
   
-  显示已经收集了多少比特的信息. 尽管这是一个近似值, 但它可以作为一个很好的基础来猜测什么时候应该开始进行暴力破解.
+  显示已经收集了多少比特的信息. 尽管这是一个近似值, 但它可以作为一个很好的参考来猜测什么时候应该开始进行暴力破解。
   
   ### 破解器指令
   - `/seed cracker <ON/OFF>`
  
-  完全启用或禁用MOD. 与其他命令不同的是, 这个命令在重新加载时是持久的.
+  完全启用或禁用MOD. 与其他命令不同的是, 这个效果在重载时仍然保持。
   
   - `/seed cracker debug`
 
@@ -114,10 +114,10 @@ https://youtu.be/8ytfZ2MXosY
  
 ## 贡献者
 
-[KaptainWutax](https://github.com/KaptainWutax) - 作者
+[KaptainWutax](https://github.com/KaptainWutax) - 原作者
 
 [neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) - 视频教程
 
 [Nekzuris](https://github.com/Nekzuris) - README
 
-[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - 这个fork的作者
+[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - 作者

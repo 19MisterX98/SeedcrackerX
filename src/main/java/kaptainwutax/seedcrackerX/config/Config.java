@@ -33,6 +33,8 @@ public class Config {
     public boolean debug = false;
     public boolean antiXrayBypass = true;
     private MCVersion version = MCVersion.v1_18_1;
+    public boolean databaseSubmits = false;
+    public boolean anonymusSubmits = false;
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

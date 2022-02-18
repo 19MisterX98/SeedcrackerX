@@ -240,21 +240,11 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
             } else {
                 LCG failedDungeon = LCG.JAVA.combine(-5);
 
-                int spawnAttempts = 8;
-                int addSalt = 0;
-                if (this.feature.getVersion().isEqualTo(MCVersion.v1_17_1)) {
-                    if (this.blockY >= 0) {
-                        spawnAttempts = 10;
-                    } else {
-                        spawnAttempts = 4;
-                        addSalt = 1;
-                    }
-                }
 
                 for (long decoratorSeed : decoratorSeeds) {
-                    for (int i = 0; i < spawnAttempts; i++) {
+                    for (int i = 0; i < 8; i++) {
                         ChunkRandomReverser.reversePopulationSeed((decoratorSeed ^ LCG.JAVA.multiplier)
-                                        - this.feature.getConfig().getSalt(this.biome) + addSalt,
+                                        - this.feature.getConfig().getSalt(this.biome),
                                 this.chunkX << 4, this.chunkZ << 4, this.feature.getVersion()).forEach(structureSeed -> {
                             Log.printSeed("foundStructureSeed", structureSeed);
                             if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {

@@ -16,7 +16,10 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.decorator.Decorator;
+import kaptainwutax.seedcrackerX.util.Database;
 import kaptainwutax.seedcrackerX.util.Log;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import net.minecraft.world.gen.random.ChunkRandom;
 import net.minecraft.world.gen.random.Xoroshiro128PlusPlusRandom;
 
@@ -74,6 +77,15 @@ public class TimeMachine {
         if (this.worldSeeds.size() == 1 && !this.shouldTerminate) {
             long seed = worldSeeds.stream().findFirst().get();
             SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.pushWorldSeed(seed));
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client.getNetworkHandler().getPlayerList().size() >10 && !client.getNetworkHandler().getConnection().isLocal()) {
+                Text text = Database.joinFakeServerForAuth();
+                if (text == null) {
+                    Database.handleDatabaseCall(seed);
+                } else {
+                    Log.error(text.getString());
+                }
+            }
         }
     }
 

@@ -45,6 +45,8 @@ public class ConfigScreen {
         ConfigCategory settings = builder.getOrCreateCategory(new TranslatableText("settings"));
 
         settings.addEntry(eb.startBooleanToggle(new TranslatableText("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
+        settings.addEntry(eb.startBooleanToggle(new LiteralText("Send 10+ player server seeds to the database"), config.databaseSubmits).setSaveConsumer(val -> config.databaseSubmits = val).build());
+        settings.addEntry(eb.startBooleanToggle(new LiteralText("Scramble username in seed database"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
         settings.addEntry(eb.startDropdownMenu(new TranslatableText("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), MCVersion::fromString))
                 .setSelections(getSupportedVersions())
                 .setSuggestionMode(false)

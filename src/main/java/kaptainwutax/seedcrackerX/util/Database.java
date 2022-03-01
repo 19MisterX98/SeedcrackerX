@@ -64,12 +64,12 @@ public class Database {
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 302) { //the page says "document moved" but the post gets processed
-                Log.warn("sent seed to database successfully");
+                Log.warn("database.success");
             } else {
-                Log.warn("failed to send the seed to database");
+                Log.warn("database.fail");
             }
         } catch (IOException | InterruptedException e) {
-            Log.warn("failed request");
+            Log.warn("database.fail");
         }
     }
 }

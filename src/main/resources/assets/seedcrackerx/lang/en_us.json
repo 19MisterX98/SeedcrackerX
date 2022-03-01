@@ -2,6 +2,9 @@
   "title": "Seed Cracker X",
   "settings": "Settings",
   "settings.active": "Active",
+  "settings.database": "Send 10+ player server seeds to the database",
+  "settings.database.tooltip": "Use \"/seed database\" to open it in your browser",
+  "settings.hideNameDatabase": "Scramble username in seed database",
   "settings.version": "Version",
   "settings.visuals": "Visuals",
   "settings.outline": "Render outlines",
@@ -83,5 +86,8 @@
   "fungus.wrongData": "No Fungus seed, fungus was modified (also includes changes during generation)",
   "fungus.noStructureSeedsFound": "no seeds found for this Fungus.",
   "fungus.gotStructureSeeds": "got structure seeds:",
-  "fungus.usableAsWorldSeed": "this structure seed is also usable as worldseed"
+  "fungus.usableAsWorldSeed": "this structure seed is also usable as worldseed",
+  "database.success": "sent seed to database successfully",
+  "database.fail": "failed to send the seed to database"
+
 }

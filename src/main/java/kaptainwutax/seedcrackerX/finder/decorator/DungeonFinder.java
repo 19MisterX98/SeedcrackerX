@@ -115,7 +115,7 @@ public class DungeonFinder extends BlockFinder {
         });
 
         if (result.size() != 1) return new ArrayList<>();
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
+        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2).value();
 
         BlockPos pos = result.get(0);
         if (Config.get().getVersion().isNewerThan(MCVersion.v1_17_1)) {

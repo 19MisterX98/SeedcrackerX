@@ -54,7 +54,7 @@ public class WarpedFungusFinder extends BlockFinder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2);
+        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
         List<BlockPos> newResult = new ArrayList<>();
 
         if (!Features.WARPED_FUNGUS.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();

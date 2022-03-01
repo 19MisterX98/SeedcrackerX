@@ -5,6 +5,7 @@ import kaptainwutax.seedcrackerX.config.StructureSave;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.registry.DynamicRegistryManager;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.BuiltinBiomes;
@@ -30,9 +31,8 @@ public abstract class ClientWorldMixin {
     }
 
     @Inject(method = "getGeneratorStoredBiome", at = @At("HEAD"), cancellable = true)
-    private void getGeneratorStoredBiome(int x, int y, int z, CallbackInfoReturnable<Biome> ci) {
-        Optional<Biome> biome = getRegistryManager().get(Registry.BIOME_KEY).getOrEmpty(BiomeKeys.THE_VOID);
-        ci.setReturnValue(biome.orElse(BuiltinBiomes.THE_VOID));
+    private void getGeneratorStoredBiome(int x, int y, int z, CallbackInfoReturnable<RegistryEntry<Biome>> ci) {
+        ci.setReturnValue(this.getRegistryManager().get(Registry.BIOME_KEY).entryOf(BiomeKeys.THE_VOID));
     }
 
 }

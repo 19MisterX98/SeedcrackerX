@@ -52,7 +52,7 @@ public class DesertWellFinder extends PieceFinder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2);
+        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2).value();
 
         if (!Features.DESERT_WELL.isValidBiome(BiomeFixer.swap(biome))) {
             return new ArrayList<>();

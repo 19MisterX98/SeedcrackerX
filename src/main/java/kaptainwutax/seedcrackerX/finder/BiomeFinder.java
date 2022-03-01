@@ -41,9 +41,9 @@ public class BiomeFinder extends Finder {
                 BlockPos blockPos = this.chunkPos.getStartPos().add(x, 0, z);
                 Biome biome;
                 if (Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_15)) {
-                    biome = this.world.getBiomeForNoiseGen(blockPos.getX() >> 2, 0, blockPos.getZ() >> 2);
+                    biome = this.world.getBiomeForNoiseGen(blockPos.getX() >> 2, 0, blockPos.getZ() >> 2).value();
                 } else {
-                    biome = this.world.getBiome(blockPos);
+                    biome = this.world.getBiome(blockPos).value();
 
                 }
                 com.seedfinding.mcbiome.biome.Biome otherBiome = BiomeFixer.swap(biome);

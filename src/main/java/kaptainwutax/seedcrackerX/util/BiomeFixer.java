@@ -2,6 +2,8 @@ package kaptainwutax.seedcrackerX.util;
 
 import com.seedfinding.mcbiome.biome.Biome;
 import com.seedfinding.mcbiome.biome.Biomes;
+import com.seedfinding.mccore.version.MCVersion;
+import kaptainwutax.seedcrackerX.config.Config;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -79,9 +81,13 @@ public class BiomeFixer {
         if (MinecraftClient.getInstance().getNetworkHandler() == null) {
             return Biomes.VOID;
         }
-        int mcId = MinecraftClient.getInstance().getNetworkHandler()
+        int biomeID = MinecraftClient.getInstance().getNetworkHandler()
                 .getRegistryManager().get(Registry.BIOME_KEY).getRawId(biome);
-        return Biomes.REGISTRY.get(mcIdToLibId(mcId));
+
+        if (biomeID < 61 && Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_18)) {
+            biomeID = mcIdToLibId(biomeID);
+        }
+        return Biomes.REGISTRY.get(biomeID);
     }
 
     public static net.minecraft.world.biome.Biome swap(Biome biome) {
@@ -89,10 +95,6 @@ public class BiomeFixer {
     }
 
     private static int mcIdToLibId(int mcId) {
-        short id = idTransform[mcId];
-        if (id > 173) return 127;
-        return id;
+        return idTransform[mcId];
     }
-
-
 }

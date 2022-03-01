@@ -24,6 +24,7 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -72,7 +73,8 @@ public abstract class ClientPlayNetworkHandlerMixin {
         newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()), true);
     }
 
-    public void newDimension(DimensionType dimension, HashedSeedData hashedSeedData, boolean dimensionChange) {
+    public void newDimension(RegistryEntry<DimensionType> dimensionEntry, HashedSeedData hashedSeedData, boolean dimensionChange) {
+        DimensionType dimension = dimensionEntry.value();
         ReloadFinders.reloadHeight(dimension.getMinimumY(), dimension.getMinimumY() + dimension.getLogicalHeight());
 
         if (SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active && dimensionChange) {

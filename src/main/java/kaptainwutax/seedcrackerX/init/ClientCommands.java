@@ -26,6 +26,7 @@ public class ClientCommands {
     public static CrackerCommand CRACKER;
     public static VersionCommand VERSION;
     public static GuiCommand GUI;
+    public static DatabaseCommand DATABASE;
 
     static {
         COMMANDS.add(RENDER = new RenderCommand());
@@ -34,6 +35,7 @@ public class ClientCommands {
         COMMANDS.add(CRACKER = new CrackerCommand());
         COMMANDS.add(VERSION = new VersionCommand());
         COMMANDS.add(GUI = new GuiCommand());
+        COMMANDS.add(DATABASE = new DatabaseCommand());
     }
 
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {

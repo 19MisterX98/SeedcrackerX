@@ -56,7 +56,7 @@ public class Database {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(HttpAuthenticationService.buildQuery(data)))
-                .uri(URI.create("https://script.google.com/macros/s/AKfycbyGX5MYJk30nbmKqbr86V886rSxrPe-HO9M_9Y44aBLJNEOZzSJVg6kw0yReFaLFUPgvg/exec"))
+                .uri(URI.create("https://script.google.com/macros/s/AKfycbzU-o8IUaKMQ-MOJEqD8hFGTAC7E15l4uiVqkQsOWxGXgh_HVny6x_TSDVKR8V2wmm9Aw/exec"))
                 .setHeader("User-Agent", "SeedcrackerX mod")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .build();

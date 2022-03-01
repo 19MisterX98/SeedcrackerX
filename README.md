@@ -36,7 +36,7 @@
   
 ## Usage
 
-  Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automaticly. If it doesnt get you a world seed you may want to find another dungeon. This mod also supports cracking the seed via [structures and endpillars](https://youtu.be/aUuPSZVPH8E?t=462) and [warped fungus](https://www.youtube.com/watch?v=HKjwgofhKs4)
+  Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically. If it doesn't give you a world seed you may want to find another dungeon. This mod also supports cracking the seed via [structures and endpillars](https://youtu.be/aUuPSZVPH8E?t=462) and [warped fungus](https://www.youtube.com/watch?v=HKjwgofhKs4)
   
   ### Supported Structures
     - Ocean Monument

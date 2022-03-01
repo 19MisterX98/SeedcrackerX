@@ -48,7 +48,7 @@ public class Database {
         Map<String,Object> data = new HashMap<>();
         data.put("serverIp", client.getNetworkHandler().getConnection().getAddress().toString());
         data.put("dimension", client.world.getDimension().getEffects().getPath());
-        data.put("seed", seed+"L"); //javascript backend likes floating point so we need to convert it to a string
+        data.put("seed", seed+"L"); //javascript backend likes floating point. so we need to convert it to a string
         data.put("version", Config.get().getVersion().name);
         data.put("username", client.player.getName().getString());
         data.put("hash", Config.get().anonymusSubmits? 1 : 0);

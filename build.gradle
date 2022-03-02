@@ -1,7 +1,7 @@
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
+	id 'fabric-loom' version '0.10-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -13,65 +13,19 @@ version = project.mod_version
 group = project.maven_group
 
 sourceSets {
-	api
-}
-
-compileApiJava.dependsOn processApiResources // wtf gradle
-
-processResources {
-	duplicatesStrategy = DuplicatesStrategy.WARN
-	inputs.property "version", project.version
-
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
-		expand "version": project.version
+	api {
+		java {
+			compileClasspath += main.compileClasspath
+		}
 	}
 
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
+	main {
+		java {
+			compileClasspath += api.output
+			runtimeClasspath += api.output
+		}
 	}
 }
-
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-	it.options.encoding = "UTF-8"
-	it.options.release = 17
-}
-
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier = "sources"
-	from sourceSets.main.allSource
-}
-
-task apiJar(type: Jar, dependsOn: apiClasses) {
-	archiveClassifier = 'api-dev'
-	from (sourceSets.api.output) {
-		include "fabric.mod.json"
-		expand "version": project.version
-	}
-	from (sourceSets.api.output) {
-		exclude "fabric.mod.json"
-	}
-	from "LICENSE"
-}
-
-task apiSourcesJar(type: Jar, dependsOn: apiClasses) {
-	archiveClassifier = 'api-sources'
-	from sourceSets.api.allSource
-}
-
-task remapApiJar(type: RemapJarTask, dependsOn: project.apiJar) {
-	input = apiJar.archiveFile
-	classifier = 'api'
-	addNestedDependencies = false
-}
-
-remapJar.dependsOn remapApiJar
 
 repositories {
 	maven { url "https://maven.terraformersmc.com/releases" }
@@ -80,10 +34,6 @@ repositories {
 	maven { url "https://maven.seedfinding.com/" }
 	maven { url "https://maven-snapshots.seedfinding.com/" }
 	maven { url "https://jitpack.io" }
-
-	flatDir {
-		dirs file(remapApiJar.archivePath).parentFile
-	}
 }
 
 dependencies {
@@ -95,10 +45,6 @@ dependencies {
 
 	include("net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.resource_loader_version}")
 
-	sourceSets.api.compileClasspath += files({sourceSets.main.compileClasspath.toList()})
-	implementation sourceSets.api.output
-	include name: file(remapApiJar.archivePath).name.with { it.endsWith('.jar') ? it.substring(0, it.length() - 4) : it }
-
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
@@ -106,18 +52,13 @@ dependencies {
 
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
 
-
 	implementation('com.seedfinding:mc_math:0eb505174da8a92550f8ec6efe254e0fa936cc0d') { transitive = false }
 	implementation('com.seedfinding:mc_seed:5518e3ba3ee567fb0b51c15958967f70a6a19e02') { transitive = false }
 	implementation('com.seedfinding:mc_core:88b246597e0147e37b38d1b33e9526e6c3eb1469') { transitive = false }
 	implementation('com.seedfinding:mc_noise:a6ab8e6c688491829f8d2adf845392da22ef8e9c') { transitive = false }
-
 	implementation('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
 	implementation('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
 	implementation('com.seedfinding:mc_feature:ef939c0dd7d66ab1bd290d6aab1e42a12cb3dbf1') { transitive = false }
-
-
-
 	implementation('com.seedfinding:mc_reversal:2.0.0') { transitive = false }
 
 	implementation('com.seedfinding:latticg:1.06')
@@ -126,15 +67,47 @@ dependencies {
 	include('com.seedfinding:mc_seed:5518e3ba3ee567fb0b51c15958967f70a6a19e02') { transitive = false }
 	include('com.seedfinding:mc_core:88b246597e0147e37b38d1b33e9526e6c3eb1469') { transitive = false }
 	include('com.seedfinding:mc_noise:a6ab8e6c688491829f8d2adf845392da22ef8e9c') { transitive = false }
-
 	include('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
 	include('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
 	include('com.seedfinding:mc_feature:ef939c0dd7d66ab1bd290d6aab1e42a12cb3dbf1') { transitive = false }
-
-
 	include('com.seedfinding:mc_reversal:2.0.0') { transitive = false }
 
 	include('com.seedfinding:latticg:1.06')
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(AbstractArchiveTask) {
+	reproducibleFileOrder = true
+	preserveFileTimestamps = false
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+tasks.withType(Jar) {
+	from "LICENSE.txt"
+	from sourceSets.api.output
+}
+
+task apiJar(type: Jar) {
+	classifier "api-dev"
+
+	from sourceSets.api.output
+}
+
+task remapApiJar(type: RemapJarTask, dependsOn: apiJar) {
+	classifier "api"
+
+	input = apiJar.archiveFile.get().asFile
+	addNestedDependencies = false
 }
 
 publishing {
@@ -172,9 +145,6 @@ publishing {
 			artifact(remapJar) {
 				builtBy remapJar
 			}
-			artifact(sourcesJar) {
-				builtBy sourcesJar
-			}
 			pom configurePom
 			pom.name = 'seedcrackerx'
 			pom.description = 'The seedcrackerx mod JAR'
@@ -184,10 +154,6 @@ publishing {
 			artifact(remapApiJar) {
 				builtBy remapApiJar
 				classifier = ''
-			}
-			artifact(apiSourcesJar) {
-				builtBy apiSourcesJar
-				classifier = 'sources'
 			}
 			pom configurePom
 			pom.name = 'seedcrackerx-api'
@@ -202,3 +168,5 @@ publishing {
 		}
 	}
 }
+
+build.dependsOn remapApiJar

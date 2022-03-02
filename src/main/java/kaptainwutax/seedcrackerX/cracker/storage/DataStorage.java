@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screen.Screen;
 
 import java.util.Comparator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class DataStorage {
@@ -43,7 +44,7 @@ public class DataStorage {
     public BlockUpdateQueue blockUpdateQueue = new BlockUpdateQueue();
     public boolean openGui = false;
     protected TimeMachine timeMachine = new TimeMachine(this);
-    protected Set<Consumer<DataStorage>> scheduledData = new ConcurrentSet<>();
+    protected Set<Consumer<DataStorage>> scheduledData = ConcurrentHashMap.newKeySet();
     protected PillarData pillarData = null;
     protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
 
@@ -192,7 +193,7 @@ public class DataStorage {
     }
 
     public void clear() {
-        this.scheduledData = new ConcurrentSet<>();
+        this.scheduledData = ConcurrentHashMap.newKeySet();
         this.pillarData = null;
         this.baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
         this.biomeSeedData = new ScheduledSet<>(null);

@@ -42,12 +42,12 @@ public class BiomeFixer {
         idTransform[25] = 37;
         idTransform[26] = 165;
         idTransform[27] = 38;
-        idTransform[28] = 177;
-        idTransform[29] = 178;
-        idTransform[30] = 179;
-        idTransform[31] = 180;
-        idTransform[32] = 181;
-        idTransform[33] = 182;
+        idTransform[28] = 1; //meadow replaced by plains
+        idTransform[29] = 19; //grove replaced by taiga
+        idTransform[30] = 140; //snowy slopes replaced by snowy tundra
+        idTransform[31] = 19; //frozen peaks replaced by taiga
+        idTransform[32] = 19; //jagged peaks replaced by taiga
+        idTransform[33] = 19; //jagged peaks replaced by taiga
         idTransform[34] = 7;
         idTransform[35] = 11;
         idTransform[36] = 16;
@@ -85,16 +85,12 @@ public class BiomeFixer {
                 .getRegistryManager().get(Registry.BIOME_KEY).getRawId(biome);
 
         if (biomeID < 61 && Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_18)) {
-            biomeID = mcIdToLibId(biomeID);
+            biomeID = idTransform[biomeID];
         }
         return Biomes.REGISTRY.get(biomeID);
     }
 
     public static net.minecraft.world.biome.Biome swap(Biome biome) {
         return BuiltinRegistries.BIOME.get(biome.getId());
-    }
-
-    private static int mcIdToLibId(int mcId) {
-        return idTransform[mcId];
     }
 }

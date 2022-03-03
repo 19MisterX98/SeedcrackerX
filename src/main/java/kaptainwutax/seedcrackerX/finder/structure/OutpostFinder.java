@@ -8,6 +8,7 @@ import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
+import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
@@ -70,8 +72,8 @@ public class OutpostFinder extends Finder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        //Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2);
-        //if (!Features.PILLAGER_OUTPOST.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();
+        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
+        if (!Features.PILLAGER_OUTPOST.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();
 
         Map<JigsawFinder, List<BlockPos>> result = this.findInChunkPieces();
         List<BlockPos> combinedResult = new ArrayList<>();

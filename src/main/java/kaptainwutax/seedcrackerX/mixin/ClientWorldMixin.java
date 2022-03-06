@@ -32,7 +32,8 @@ public abstract class ClientWorldMixin {
 
     @Inject(method = "getGeneratorStoredBiome", at = @At("HEAD"), cancellable = true)
     private void getGeneratorStoredBiome(int x, int y, int z, CallbackInfoReturnable<RegistryEntry<Biome>> ci) {
-        ci.setReturnValue(this.getRegistryManager().get(Registry.BIOME_KEY).entryOf(BiomeKeys.THE_VOID));
+        Optional<RegistryEntry<Biome>> biome = getRegistryManager().get(Registry.BIOME_KEY).getEntry(BiomeKeys.THE_VOID);
+        biome.ifPresent(ci::setReturnValue);
     }
 
 }

@@ -78,7 +78,8 @@ public class TimeMachine {
             long seed = worldSeeds.stream().findFirst().get();
             SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.pushWorldSeed(seed));
             MinecraftClient client = MinecraftClient.getInstance();
-            if (client.getNetworkHandler().getPlayerList().size() >10 && !client.getNetworkHandler().getConnection().isLocal()) {
+            if (Config.get().databaseSubmits && client.getNetworkHandler().getPlayerList().size() > 10 &&
+                    !client.getNetworkHandler().getConnection().isLocal()) {
                 Text text = Database.joinFakeServerForAuth();
                 if (text == null) {
                     Database.handleDatabaseCall(seed);

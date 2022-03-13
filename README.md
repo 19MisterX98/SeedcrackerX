@@ -4,40 +4,58 @@
 
 [中文](./READMEzh.md)
 
+## I'm active on:
 
-## Discord
-
-[Discord](https://discord.gg/JRmHzqQYfp)
+- [My Discord](https://discord.gg/JRmHzqQYfp)
+- [Youtube](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA)
 
 ## Installation
 
- ### Vanilla Launcher
-
-  Download and install the [fabric mod loader](https://fabricmc.net/use/).
-
- ### MultiMC
+Download and install the [fabric mod loader](https://fabricmc.net/use/)
  
-  Add a new minecraft instance and press "Install Fabric" in the instance options.
+Download the lastest [release or pre-release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
+  
+put the .jar files in your mod directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own MultiMC instance folder.
+  
+#### Optional
+  
+Download the lastest [release](https://github.com/Earthcomputer/multiconnect/releases) of Multiconnect to connect to servers on lower MC versions
+  
+## Database
 
- ### Mod Installation
- 
-  Download the lastest [release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
-  
-  Download the lastest [release](https://www.curseforge.com/minecraft/mc-mods/modmenu/files) of ModMenu
-  
-  Download the lastest [release](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files) of Fabric API
-  
-  
-  put the .jar files in your mods directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own MultiMC instance folder.
-  
- #### Optional
-  
-  Download the lastest [release](https://github.com/Earthcomputer/multiconnect/releases) of Multiconnect to connect to servers on lower MC versions
-  
+Since the mod is used by many people I decided to create a google spreet for server seeds.
+If you enable the database option in the config gui the mod will send cracked seeds from 10+ player servers directly to the google sheet.
+
+[The Sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
+
 ## Usage
 
-  Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically. If it doesn't give you a world seed you may want to find another dungeon. This mod also supports cracking the seed via [structures and endpillars](https://youtu.be/aUuPSZVPH8E?t=462) and [warped fungus](https://www.youtube.com/watch?v=HKjwgofhKs4)
-  
+### 1.17.X and below
+
+Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically.
+If it doesn't give you a world seed you may want to find another dungeon.
+
+This mod also supports cracking the seed via:
+- [structures and endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
+- [warped fungus](https://www.youtu.be/HKjwgofhKs4)
+
+### 1.18.X and potentially future versions
+
+Dungeon cracking, fungus cracking don't work anymore.
+
+Go to the config menu via "/seed gui" and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they arent updated and can give wrong data.
+
+For cracking you now need to find 5 structures from the listed ones:\
+Desert pyramids, Jungle temples, Witch huts, Shipwrecks, Igloos, Pillager Outposts
+
+Any combination is valid. For example: 3 shipwrecks, 1 pyramid and 1 igloo.
+You can track you process with "/seed data bits" (look at the bits count for liftable structures)
+A structure is found when there is an outline around it.
+After you got enough the cracking process starts automatically. It takes 1-5 mins
+The mod may ask you to find additional structures after this.
+Its more likely to happen with less bits and structures of the same type.
+After reducing your structure seeds the mod will brute force your world seed via dungeon positions or hashed seed.
+ 
   ### Supported Structures
     - Ocean Monument
     - End City
@@ -46,6 +64,8 @@
     - Jungle Temple
     - Swamp Hut
     - Shipwreck
+    - Igloo
+    - Pillager Outpost
   
   ### Supported Decorators
     - Dungeon
@@ -54,25 +74,18 @@
     - Emerald Ore
     - Warped Fungus
 
-## Commands(Deprecated, use the GUI instead)
-
-  The command prefix for this mod is /seed.
+## Commands
   
-  ### Render Command  
-  -`/seed render outlines <ON/OFF/XRAY>`
-    
-  This command only affects the renderer feedback. The default value is 'XRAY' and highlights data through blocks. You can set    the render mod to 'ON' for more standard rendering. 
+  ### GUI Command
+  - `/seed gui`
   
-  ### Finder Command
-  -`/seed finder type <FEATURE_TYPE> (ON/OFF)`
+  Opens the config gui where you can modify settings like the server mc-version, all finders, database and rendermode.
+  There are command alternatives for most of this but they shouldnt be used anymore.
   
-  -`/seed finder category (BIOMES/ORES/OTHERS/STRUCTURES) (ON/OFF)`
+  ### Finder Reload Command
+  - `/seed finder reload`
   
-  This command is used to disable finders in case you are aware the data is wrong. For example, a map generated in 1.14 has different decorators and would require you to disable them while going through those chunks.
-  
-  -`/seed finder reload`
-  
-  Searches the loaded area again
+  Rescans the loaded Chunks to find structures that werent found before.
 
   ### Data Command
   - `/seed data clear`
@@ -81,29 +94,37 @@
   
   - `/seed data bits`
   
-  Display how many bits of information have been collected. Even though this is an approximate, it serves as a good basis to guess when the brute-forcing should start.
+  Display how many bits of information have been collected.
+  Normal bits are used for end pillar + structure cracking. Cracking starts at 32 bits.
+  Lifting bits are used for liftable structure cracking. Cracking starts at 40 bits.
   
-  ### Cracker Command
-  - `/seed cracker <ON/OFF>`
- 
-  Enables or disables the mod completely. Unlike the other commands, this one is persistent across reloads.
+  - `/seed data restore`
   
+  When you leave a world the mod will save currently collected structure information in a file of the .minecraft/config directory.
+  After rejoining you can restore it with this command.
+  
+  
+  ### Debug Command
   - `/seed cracker debug`
 
   Additional info is shown
   
+  ### Database Command
+  - `/seed database`
+  
+  Opens a [google sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing) that is maintained by the mod
+  
 ## Video Tutorials
 
-https://youtu.be/1ChmLi9og8Q
+Neil's:
+- [1.15](https://youtu.be/1ChmLi9og8Q)
+- [1.16](https://youtu.be/aUuPSZVPH8E)
 
-https://youtu.be/8ytfZ2MXosY
+Mine:
+- [Dungeon cracking & end pillar cracking](https://youtu.be/8ytfZ2MXosY)
+- [Nether cracking](https://youtu.be/HKjwgofhKs4)
+- [Structure cracking](https://www.youtu.be/UXVrBaOR8H0)
 
-## Upcoming Features
-
-A list of features I have on my mind... they won't necessarily be implemented in this order if at all.
-
-    - Stronghold portal room cracker. (alternative to dungeon floor?)
-    - Tree data collection (probably only oak and birch. Puts info into a file that can be compiled to run on GPU)
 
 ## Setting up the Workspace
 
@@ -116,7 +137,38 @@ A list of features I have on my mind... they won't necessarily be implemented in
 -Update the version in `build.gradle` and `fabric.mod.json`.
 
 -Run `gradlew build`.
- 
+
+## API for other mods
+
+- Include seedcracker-api in your build.gradle
+
+      implementation (include('com.github.19MisterX98.SeedcrackerX:seedcrackerx-api:SNAPSHOT')) {transitive = false}
+
+- Add a class that implements the api interface
+
+      package misterx.myMod.seedManagemnet.SeedCrackerEP
+      
+      import kaptainwutax.seedcrackerX.api.SeedCrackerAPI;
+    
+      public class SeedCrackerEP implements SeedCrackerAPI {
+          @Override
+          public void pushWorldSeed(long seed) {
+              //do something
+              Foo.bar(seed)
+          }
+      }
+
+- Tell fabric.mod.json where your entrypoint is
+
+      "entrypoints": {
+        "main": [...],
+        "client": [...],
+        "server": [...],
+        "seedcrackerx": [
+          "misterx.myMod.seedManagemnet.SeedCrackerEP"
+        ]
+      },
+
 ## Contributors
 
 [KaptainWutax](https://github.com/KaptainWutax) - Author

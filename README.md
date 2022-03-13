@@ -142,7 +142,7 @@ Mine:
 
 - Include seedcracker-api in your build.gradle
 
-      implementation (include('com.github.19MisterX98.SeedcrackerX:seedcrackerx-api:SNAPSHOT')) {transitive = false}
+      implementation (include('com.github.19MisterX98.SeedcrackerX:seedcrackerx-api:master-SNAPSHOT')) {transitive = false}
 
 - Add a class that implements the api interface
 

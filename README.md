@@ -140,9 +140,16 @@ Mine:
 
 ## API for other mods
 
-- Include seedcracker-api in your build.gradle
+- Include seedcracker-api and jitpack in your build.gradle
 
-      implementation (include('com.github.19MisterX98.SeedcrackerX:seedcrackerx-api:master-SNAPSHOT')) {transitive = false}
+      repositories {
+          mavenCentral()
+          maven { url "https://jitpack.io" }
+      }
+      
+      dependencies {
+          implementation (include('com.github.19MisterX98.SeedcrackerX:seedcrackerx-api:master-SNAPSHOT')) {transitive = false}
+      }
 
 - Add a class that implements the api interface
 

@@ -84,6 +84,7 @@ public class FinderQueue {
         RenderSystem.disableBlend();
 
         matrixStack.pop();
+        RenderSystem.applyModelViewMatrix();
     }
 
     public List<Finder.Type> getActiveFinderTypes() {

@@ -4,6 +4,7 @@ import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.finder.decorator.*;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
 import kaptainwutax.seedcrackerX.finder.structure.*;
+import kaptainwutax.seedcrackerX.finder.surface.NetherRoofFinder;
 import kaptainwutax.seedcrackerX.render.Renderer;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 import kaptainwutax.seedcrackerX.util.HeightContext;
@@ -114,6 +115,7 @@ public abstract class Finder {
     public enum Category {
         STRUCTURES,
         DECORATORS,
+        SURFACE,
         BIOMES,
     }
 
@@ -134,6 +136,8 @@ public abstract class Finder {
         EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS, Config.get().emeraldOre, "finder.emeraldOres"),
         DESERT_WELL(DesertWellFinder::create, Category.DECORATORS, Config.get().desertWell, "finder.desertWells"),
         WARPED_FUNGUS(WarpedFungusFinder::create, Category.DECORATORS, Config.get().warpedFungus, "finder.warpedFungus"),
+
+        BEDROCK_ROOF(NetherRoofFinder::create, Category.SURFACE, Config.get().bedrockRoof, "bedrock roof"),
 
         BIOME(BiomeFinder::create, Category.BIOMES, Config.get().biome, "finder.biomes");
 

@@ -57,7 +57,7 @@ public class StructureSave {
                 if (info.length != 3) continue;
                 String structureName = info[0];
                 for (RegionStructure<?,?> idk : structureTypes) {
-                    if (structureName.equals(idk.getName())) {
+                    if (idk != null && structureName.equals(idk.getName())) {
                         result.add(idk.at(Integer.parseInt(info[1]), Integer.parseInt(info[2])));
                         break;
                     }

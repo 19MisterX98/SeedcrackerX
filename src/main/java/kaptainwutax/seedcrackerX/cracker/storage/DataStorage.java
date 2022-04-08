@@ -5,7 +5,6 @@ import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.decorator.DesertWell;
 import com.seedfinding.mcfeature.decorator.EndGateway;
 import com.seedfinding.mcfeature.structure.*;
-import io.netty.util.internal.ConcurrentSet;
 import kaptainwutax.seedcrackerX.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
@@ -13,11 +12,12 @@ import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.cracker.decorator.*;
 import kaptainwutax.seedcrackerX.finder.BlockUpdateQueue;
+import kaptainwutax.seedcrackerX.finder.surface.NetherRoofFinder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.math.BlockPos;
 
-import java.util.Comparator;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -43,6 +43,7 @@ public class DataStorage {
     public HashedSeedData hashedSeedData = null;
     public BlockUpdateQueue blockUpdateQueue = new BlockUpdateQueue();
     public boolean openGui = false;
+    public Set<BlockPos> netherRoofData = new HashSet<>();
     protected TimeMachine timeMachine = new TimeMachine(this);
     protected Set<Consumer<DataStorage>> scheduledData = ConcurrentHashMap.newKeySet();
     protected PillarData pillarData = null;
@@ -94,6 +95,14 @@ public class DataStorage {
                 this.timeMachine.isRunning = false;
             });
         }
+    }
+
+    public synchronized boolean addNetherRoofData(List<BlockPos> data, DataAddedEvent event) {
+        if (netherRoofData.size() > 20 || !netherRoofData.addAll(data)) {
+            return false;
+        }
+        this.schedule(event::onDataAdded);
+        return true;
     }
 
     public synchronized boolean addPillarData(PillarData data, DataAddedEvent event) {
@@ -195,12 +204,16 @@ public class DataStorage {
     public void clear() {
         this.scheduledData = ConcurrentHashMap.newKeySet();
         this.pillarData = null;
+        netherRoofData = new HashSet<>();
         this.baseSeedData = new ScheduledSet<>(SEED_DATA_COMPARATOR);
         this.biomeSeedData = new ScheduledSet<>(null);
         //this.hashedSeedData = null;
         this.timeMachine.shouldTerminate = true;
         this.timeMachine = new TimeMachine(this);
         this.blockUpdateQueue = new BlockUpdateQueue();
+        if (NetherRoofFinder.crackerProcess != null) {
+            NetherRoofFinder.crackerProcess.destroy();
+        }
     }
 
     public static class Entry<T> {

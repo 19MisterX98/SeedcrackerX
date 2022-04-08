@@ -27,12 +27,13 @@ public class Config {
     public FeatureToggle emeraldOre = new FeatureToggle(false);
     public FeatureToggle desertWell = new FeatureToggle(false);
     public FeatureToggle warpedFungus = new FeatureToggle(false);
+    public FeatureToggle bedrockRoof = new FeatureToggle(false);
     public FeatureToggle biome = new FeatureToggle(false);
     public RenderType render = RenderType.XRAY;
     public boolean active = true;
     public boolean debug = false;
     public boolean antiXrayBypass = true;
-    private MCVersion version = MCVersion.v1_18_1;
+    private MCVersion version = MCVersion.v1_18_2;
     public boolean databaseSubmits = false;
     public boolean anonymusSubmits = false;
 

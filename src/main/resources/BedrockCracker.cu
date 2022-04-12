@@ -27,7 +27,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line) {
 	GPU_ASSERT(cudaDeviceSynchronize());\
 	GPU_ASSERT(cudaPeekAtLastError());
 
-#define SKIP 8
+#define SKIP 256
 #define THREAD_SIZE 256LLU
 #define BLOCK_SIZE (1LLU<<29)
 #define BATCH_SIZE (THREAD_SIZE * BLOCK_SIZE * SKIP)
@@ -41,7 +41,7 @@ __managed__ uint64_t seedBuff[60000];
 __global__ __launch_bounds__(THREAD_SIZE) void InitalFilter(const uint64_t offset) {
 	uint64_t seed = (uint64_t)blockIdx.x * (uint64_t)blockDim.x * SKIP + (uint64_t)threadIdx.x  * SKIP + offset;
 
-    if (((seed * 25214903917LLU)&((1LLU<<48)-1LLU)) < 225179967946752LLU) return;
+    if (((seed * 25214903917LLU)&((1LLU<<48)-1LLU)) < 215504279044096LLU) return;
 
 THIS_STATEMENT_WILL_BE_REPLACED
 

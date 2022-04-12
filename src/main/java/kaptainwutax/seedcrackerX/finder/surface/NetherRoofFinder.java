@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.LongStream;
 
 public class NetherRoofFinder extends BlockFinder {
 
@@ -135,17 +134,17 @@ public class NetherRoofFinder extends BlockFinder {
                 e.printStackTrace();
             }
             Set<Long> potentialSeeds = new HashSet<>();
-            for (long seed : outputSeeds) {
-                LongStream.range(seed - 50 , seed + 50).forEach(potentialSeeds::add);
-            }
 
-            potentialSeeds.removeIf(seed -> {
-                for (Predicate<Long> filter : cpuFilter) {
-                    if (filter.test(seed)) {
-                        return true;
+            outputSeeds.forEach(seed -> {
+                lowerBits:
+                for (int lowerBits = -(1<<8); lowerBits < (1<<8); lowerBits++) {
+                    for (Predicate<Long> filter : cpuFilter) {
+                        if (filter.test(seed+lowerBits)) {
+                            continue lowerBits;
+                        }
                     }
+                    potentialSeeds.add(seed+lowerBits);
                 }
-                return false;
             });
             for (long seed : potentialSeeds) {
                 seed = seed ^ LCG.JAVA.multiplier;
@@ -156,15 +155,15 @@ public class NetherRoofFinder extends BlockFinder {
         }
     }
 
-    public static void generateCheck(long xor, StringBuilder builder) {
+    private static void generateCheck(long xor, StringBuilder builder) {
         builder.append("if ((((seed ^ ")
                 .append(xor)
                 .append("LLU) * ")
                 .append(LCG.JAVA.multiplier)
-                .append("LLU)&((1LLU<<48)-1LLU)) < 225179967946752LLU) return;\n");
+                .append("LLU)&((1LLU<<48)-1LLU)) < 215504279044096LLU) return;\n");
     }
 
-    public void run(List<String> commandList, boolean addToStatic) {
+    private void run(List<String> commandList, boolean addToStatic) {
         ProcessBuilder pBuilder = new ProcessBuilder(commandList);
         pBuilder.directory(FabricLoader.getInstance().getConfigDir().toFile());
         pBuilder.redirectErrorStream(true);
@@ -187,7 +186,7 @@ public class NetherRoofFinder extends BlockFinder {
         }
     }
 
-    public List<Long> reverseToStructureSeeds(long seed) {
+    private List<Long> reverseToStructureSeeds(long seed) {
         List<Long> outputs = new ArrayList<>();
         seed = seed & mask;
 

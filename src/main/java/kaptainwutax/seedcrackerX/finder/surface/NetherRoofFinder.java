@@ -92,7 +92,7 @@ public class NetherRoofFinder extends BlockFinder {
                 generateCheck(combinedHash, builder);
             }
             builder.append("seedBuff[atomicAdd(&count, 1)] = seed ^ ")
-                    .append(firstHash ^ LCG.JAVA.multiplier)
+                    .append(firstHash)
                     .append("LLU;");
 
             URL crackerFile = Thread.currentThread().getContextClassLoader().getResource("BedrockCracker.cu");
@@ -148,6 +148,7 @@ public class NetherRoofFinder extends BlockFinder {
                 return false;
             });
             for (long seed : potentialSeeds) {
+                seed = seed ^ LCG.JAVA.multiplier;
                 reverseToStructureSeeds(seed).forEach(dataStorage.getTimeMachine().structureSeeds::add);
             }
             dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);

@@ -2,6 +2,9 @@
   "title": "Seed Cracker X",
   "settings": "设置",
   "settings.active": "活跃",
+  "settings.database": "把有10+玩家的服务器的种子发送到数据库",
+  "settings.database.tooltip": "用\"/seed database\"来在浏览器中打开它",
+  "settings.hideNameDatabase": "在种子数据库中隐藏用户名",
   "settings.version": "版本",
   "settings.visuals": "视觉效果",
   "settings.outline": "渲染轮廓",
@@ -83,5 +86,7 @@
   "fungus.wrongData": "没有菌类种子，菌类被修改了（也包括生成过程中的变化）",
   "fungus.noStructureSeedsFound": "没有找到这个菌类的种子。",
   "fungus.gotStructureSeeds": "找到了结构种子：",
-  "fungus.usableAsWorldSeed": "这个结构种子也可用作世界种子"
+  "fungus.usableAsWorldSeed": "这个结构种子也可用作世界种子",
+  "database.success": "发送成功",
+  "database.fail": "发送失败"
 }

@@ -32,7 +32,7 @@ public class Config {
     public boolean active = true;
     public boolean debug = false;
     public boolean antiXrayBypass = true;
-    private MCVersion version = MCVersion.v1_18_1;
+    private MCVersion version = MCVersion.latest();
     public boolean databaseSubmits = false;
     public boolean anonymusSubmits = false;
 

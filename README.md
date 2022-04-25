@@ -1,5 +1,19 @@
 # SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
+## CHANGES
+- Ported to Forge 1.18.2-40.0.52+
+- Depends on cloth config externally
+- Changed API from entrypoint system to Forge EventBus system
+  - Usage is like so:
+    ```java
+      public class ExampleHandler {
+        @SubscribeEvent
+        public void onSeed(SeedPushEvent event) {
+            MinecraftClient.getInstance().player.sendMessage(String.format("World Seed is: %d", event.seed));
+        }
+      }
+    ```
+
 ## Readme Language
 
 [中文](./READMEzh.md)

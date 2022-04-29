@@ -12,7 +12,7 @@ import com.seedfinding.mcfeature.structure.PillagerOutpost;
 import com.seedfinding.mcfeature.structure.Shipwreck;
 import com.seedfinding.mcfeature.structure.UniformStructure;
 import com.seedfinding.mcseed.lcg.LCG;
-import kaptainwutax.seedcrackerX.api.SeedPushEvent;
+import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.decorator.Decorator;
@@ -22,7 +22,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.world.gen.random.ChunkRandom;
 import net.minecraft.world.gen.random.Xoroshiro128PlusPlusRandom;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -77,7 +76,7 @@ public class TimeMachine {
         }
         if (this.worldSeeds.size() == 1 && !this.shouldTerminate) {
             long seed = worldSeeds.stream().findFirst().get();
-            MinecraftForge.EVENT_BUS.post(new SeedPushEvent(seed));
+            SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.pushWorldSeed(seed));
             MinecraftClient client = MinecraftClient.getInstance();
             if (Config.get().databaseSubmits && client.getNetworkHandler().getPlayerList().size() > 10 &&
                     !client.getNetworkHandler().getConnection().isLocal()) {

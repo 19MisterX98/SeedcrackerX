@@ -6,6 +6,7 @@ import com.seedfinding.mcfeature.structure.Structure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.ScheduledSet;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.util.WorldSavePath;
@@ -17,7 +18,7 @@ import java.util.Scanner;
 
 public class StructureSave {
 
-    public static final File saveDir = new File(new File(MinecraftClient.getInstance().runDirectory, "config"), "SeedCrackerX_Structures");
+    public static final File saveDir = new File(FabricLoader.getInstance().getConfigDir().toFile(), "SeedCrackerX saved structures");
     private static final List<RegionStructure<?,?>> structureTypes = List.of(Features.IGLOO,Features.BURIED_TREASURE,
             Features.PILLAGER_OUTPOST,Features.DESERT_PYRAMID, Features.JUNGLE_PYRAMID, Features.END_CITY,
             Features.MONUMENT, Features.SHIPWRECK, Features.SWAMP_HUT);

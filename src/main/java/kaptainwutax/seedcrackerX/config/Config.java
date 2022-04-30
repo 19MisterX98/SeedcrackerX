@@ -6,11 +6,12 @@ import com.google.gson.GsonBuilder;
 import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
+import net.minecraft.client.MinecraftClient;
 
 import java.io.*;
 
 public class Config {
-    private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "seedcracker.json");
+    private static final File file = new File(new File(MinecraftClient.getInstance().runDirectory, "config"), "seedcracker.json");
     private static Config INSTANCE = new Config();
     public FeatureToggle buriedTreasure = new FeatureToggle(true);
     public FeatureToggle desertTemple = new FeatureToggle(true);

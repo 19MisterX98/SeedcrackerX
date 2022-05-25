@@ -24,7 +24,6 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -61,7 +60,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        newDimension(packet.dimensionType(), new HashedSeedData(packet.sha256Seed()), false);
+        newDimension(new HashedSeedData(packet.sha256Seed()), false);
         var preloaded = StructureSave.loadStructures();
         if (!preloaded.isEmpty()) {
             Log.warn("foundRestorableStructures", preloaded.size());
@@ -70,12 +69,12 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))
     public void onPlayerRespawn(PlayerRespawnS2CPacket packet, CallbackInfo ci) {
-        newDimension(packet.getDimensionType(), new HashedSeedData(packet.getSha256Seed()), true);
+        newDimension(new HashedSeedData(packet.getSha256Seed()), true);
     }
 
-    public void newDimension(RegistryEntry<DimensionType> dimensionEntry, HashedSeedData hashedSeedData, boolean dimensionChange) {
-        DimensionType dimension = dimensionEntry.value();
-        ReloadFinders.reloadHeight(dimension.getMinimumY(), dimension.getMinimumY() + dimension.getLogicalHeight());
+    public void newDimension(HashedSeedData hashedSeedData, boolean dimensionChange) {
+        DimensionType dimension = MinecraftClient.getInstance().world.getDimension();
+        ReloadFinders.reloadHeight(dimension.minY(), dimension.minY() + dimension.logicalHeight());
 
         if (SeedCracker.get().getDataStorage().addHashedSeedData(hashedSeedData, DataAddedEvent.POKE_BIOMES) && Config.get().active && dimensionChange) {
             Log.error(Log.translate("fetchedHashedSeed"));

@@ -16,7 +16,7 @@ import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.HeightContext;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.gen.random.ChunkRandom;
+import net.minecraft.util.math.random.ChunkRandom;
 
 import java.util.HashSet;
 import java.util.Set;

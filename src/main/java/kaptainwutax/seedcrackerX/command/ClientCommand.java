@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import static net.minecraft.server.command.CommandManager.literal;
@@ -14,7 +14,7 @@ public abstract class ClientCommand {
 
     public static void sendFeedback(String message, Formatting color, boolean overlay) {
         try {
-            MinecraftClient.getInstance().player.sendMessage(new LiteralText(message).formatted(color), overlay);
+            MinecraftClient.getInstance().player.sendMessage(Text.literal(message).formatted(color), overlay);
         } catch (Exception e) {
         }
     }

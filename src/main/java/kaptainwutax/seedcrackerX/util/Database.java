@@ -8,7 +8,6 @@ import com.mojang.authlib.exceptions.InvalidCredentialsException;
 import kaptainwutax.seedcrackerX.config.Config;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,16 +25,16 @@ public class Database {
             client.getSessionService().joinServer(client.getSession().getProfile(), client.getSession().getAccessToken(), "seedcrackerx");
         }
         catch (AuthenticationUnavailableException authenticationUnavailableException) {
-            return new TranslatableText("disconnect.loginFailedInfo", new TranslatableText("disconnect.loginFailedInfo.serversUnavailable"));
+            return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.serversUnavailable"));
         }
         catch (InvalidCredentialsException authenticationUnavailableException) {
-            return new TranslatableText("disconnect.loginFailedInfo", new TranslatableText("disconnect.loginFailedInfo.invalidSession"));
+            return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.invalidSession"));
         }
         catch (InsufficientPrivilegesException authenticationUnavailableException) {
-            return new TranslatableText("disconnect.loginFailedInfo", new TranslatableText("disconnect.loginFailedInfo.insufficientPrivileges"));
+            return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.insufficientPrivileges"));
         }
         catch (AuthenticationException authenticationUnavailableException) {
-            return new TranslatableText("disconnect.loginFailedInfo", authenticationUnavailableException.getMessage());
+            return Text.translatable("disconnect.loginFailedInfo", authenticationUnavailableException.getMessage());
         }
         return null;
     }
@@ -47,7 +46,7 @@ public class Database {
         MinecraftClient client = MinecraftClient.getInstance();
         Map<String,Object> data = new HashMap<>();
         data.put("serverIp", client.getNetworkHandler().getConnection().getAddress().toString());
-        data.put("dimension", client.world.getDimension().getEffects().getPath());
+        data.put("dimension", client.world.getDimension().effects().getPath());
         data.put("seed", seed+"L"); //javascript backend likes floating point. so we need to convert it to a string
         data.put("version", Config.get().getVersion().name);
         data.put("username", client.player.getName().getString());

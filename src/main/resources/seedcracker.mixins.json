@@ -9,7 +9,6 @@
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
-    "DimensionTypeMixin",
     "GameRendererMixin"
   ],
   "injectors": {

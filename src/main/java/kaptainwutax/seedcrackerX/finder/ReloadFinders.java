@@ -33,7 +33,7 @@ public class ReloadFinders {
     }
 
     public void reload() {
-        int renderdistance = client.options.viewDistance;
+        int renderdistance = client.options.getViewDistance().getValue();
 
         int playerChunkX = (int) (Math.round(client.player.getX()) >> 4);
         int playerChunkZ = (int) (Math.round(client.player.getZ()) >> 4);

@@ -77,7 +77,7 @@ public abstract class Finder {
 
         if (finderDim != playerDim) return false;
 
-        int renderDistance = mc.options.viewDistance * 16 + 16;
+        int renderDistance = mc.options.getViewDistance().getValue() * 16 + 16;
         Vec3d playerPos = mc.player.getPos();
 
         for (Renderer renderer : this.renderers) {
@@ -100,15 +100,15 @@ public abstract class Finder {
     public abstract boolean isValidDimension(DimensionType dimension);
 
     public boolean isOverworld(DimensionType dimension) {
-        return ((DimensionTypeCaller) dimension).getInfiniburn().getPath().endsWith("overworld");
+        return dimension.effects().getPath().equals("overworld");
     }
 
     public boolean isNether(DimensionType dimension) {
-        return ((DimensionTypeCaller) dimension).getInfiniburn().getPath().endsWith("nether");
+        return dimension.effects().getPath().equals("the_nether");
     }
 
     public boolean isEnd(DimensionType dimension) {
-        return ((DimensionTypeCaller) dimension).getInfiniburn().getPath().endsWith("end");
+        return dimension.effects().getPath().equals("the_end");
     }
 
     public enum Category {
@@ -153,9 +153,4 @@ public abstract class Finder {
             return Arrays.stream(values()).filter(type -> type.category == category).collect(Collectors.toList());
         }
     }
-
-    public interface DimensionTypeCaller {
-        Identifier getInfiniburn();
-    }
-
 }

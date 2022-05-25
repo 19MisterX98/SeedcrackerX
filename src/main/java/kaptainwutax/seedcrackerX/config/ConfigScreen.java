@@ -10,8 +10,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -36,47 +35,47 @@ public class ConfigScreen {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(new TranslatableText("title"))
+                .setTitle(Text.translatable("title"))
                 .setDefaultBackgroundTexture(new Identifier("minecraft:textures/block/blackstone.png"))
                 .setTransparentBackground(true);
         ConfigEntryBuilder eb = builder.entryBuilder();
 
         //=============================CONFIG========================
-        ConfigCategory settings = builder.getOrCreateCategory(new TranslatableText("settings"));
+        ConfigCategory settings = builder.getOrCreateCategory(Text.translatable("settings"));
 
-        settings.addEntry(eb.startBooleanToggle(new TranslatableText("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
-        settings.addEntry(eb.startBooleanToggle(new TranslatableText("settings.database"), config.databaseSubmits)
-                .setTooltip(new TranslatableText("settings.database.tooltip"))
+        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
+        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.database"), config.databaseSubmits)
+                .setTooltip(Text.translatable("settings.database.tooltip"))
                 .setSaveConsumer(val -> config.databaseSubmits = val).build());
-        settings.addEntry(eb.startBooleanToggle(new TranslatableText("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
-        settings.addEntry(eb.startDropdownMenu(new TranslatableText("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), MCVersion::fromString))
+        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
+        settings.addEntry(eb.startDropdownMenu(Text.translatable("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), MCVersion::fromString))
                 .setSelections(getSupportedVersions())
                 .setSuggestionMode(false)
                 .setDefaultValue(config.getVersion())
                 .setSaveConsumer(config::setVersion)
                 .build());
 
-        settings.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
+        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
 
-        settings.addEntry(eb.startTextDescription(new TranslatableText("settings.visuals")).build());
-        settings.addEntry(eb.startEnumSelector(new TranslatableText("settings.outline"), Config.RenderType.class, config.render).setSaveConsumer(val -> config.render = val).build());
+        settings.addEntry(eb.startTextDescription(Text.translatable("settings.visuals")).build());
+        settings.addEntry(eb.startEnumSelector(Text.translatable("settings.outline"), Config.RenderType.class, config.render).setSaveConsumer(val -> config.render = val).build());
 
-        settings.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
+        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
 
-        settings.addEntry(eb.startTextDescription((new TranslatableText("settings.finderToggles"))).build());
+        settings.addEntry(eb.startTextDescription((Text.translatable("settings.finderToggles"))).build());
         for (Finder.Type finder : Finder.Type.values()) {
-            settings.addEntry(eb.startBooleanToggle(new TranslatableText(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());
+            settings.addEntry(eb.startBooleanToggle(Text.translatable(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());
         }
 
-        settings.addEntry(eb.startTextDescription(new LiteralText("==============")).build());
+        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
 
-        settings.addEntry(eb.startBooleanToggle(new TranslatableText("settings.antiXrayMode"), config.antiXrayBypass).setSaveConsumer(val -> config.antiXrayBypass = val).build());
-        settings.addEntry(eb.startTextDescription(new TranslatableText("settings.antiAntiXrayExplained")).build());
+        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.antiXrayMode"), config.antiXrayBypass).setSaveConsumer(val -> config.antiXrayBypass = val).build());
+        settings.addEntry(eb.startTextDescription(Text.translatable("settings.antiAntiXrayExplained")).build());
 
         //=============================INFO========================
-        ConfigCategory info = builder.getOrCreateCategory(new TranslatableText("info"));
+        ConfigCategory info = builder.getOrCreateCategory(Text.translatable("info"));
         //Clear data
-        info.addEntry(eb.startBooleanToggle(new TranslatableText("info.clearData"), false).setSaveConsumer(val -> {
+        info.addEntry(eb.startBooleanToggle(Text.translatable("info.clearData"), false).setSaveConsumer(val -> {
             if (val) {
                 SeedCracker.get().reset();
             }
@@ -84,44 +83,44 @@ public class ConfigScreen {
         //List worldseeds
         Set<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
         if (!worldSeeds.isEmpty()) {
-            SubCategoryBuilder world = eb.startSubCategory(new TranslatableText("info.worldSeeds"));
+            SubCategoryBuilder world = eb.startSubCategory(Text.translatable("info.worldSeeds"));
             for (long worldSeed : worldSeeds) {
-                world.add(eb.startTextField(new LiteralText(""), String.valueOf(worldSeed)).build());
+                world.add(eb.startTextField(Text.literal(""), String.valueOf(worldSeed)).build());
             }
             info.addEntry(world.setExpanded(true).build());
         } else {
-            info.addEntry(eb.startTextDescription(new TranslatableText("info.noWorldSeeds")).build());
+            info.addEntry(eb.startTextDescription(Text.translatable("info.noWorldSeeds")).build());
         }
         //List structureseeds
         Set<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
         if (!structureSeeds.isEmpty()) {
-            SubCategoryBuilder struc = eb.startSubCategory(new TranslatableText("info.structureSeeds"));
+            SubCategoryBuilder struc = eb.startSubCategory(Text.translatable("info.structureSeeds"));
             for (long structureSeed : structureSeeds) {
-                struc.add(eb.startTextField(new LiteralText(""), String.valueOf(structureSeed)).build());
+                struc.add(eb.startTextField(Text.literal(""), String.valueOf(structureSeed)).build());
             }
             info.addEntry(struc.setExpanded(true).build());
         } else {
-            info.addEntry(eb.startTextDescription(new TranslatableText("info.noStructureSeeds")).build());
+            info.addEntry(eb.startTextDescription(Text.translatable("info.noStructureSeeds")).build());
         }
 
         if (config.debug) {
             //List pillarseeds
             List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
             if (pillarSeeds != null) {
-                SubCategoryBuilder pillar = eb.startSubCategory(new TranslatableText("info.pillarSeeds"));
+                SubCategoryBuilder pillar = eb.startSubCategory(Text.translatable("info.pillarSeeds"));
                 for (long structureSeed : pillarSeeds) {
-                    pillar.add(eb.startTextField(new LiteralText(""), String.valueOf(structureSeed)).build());
+                    pillar.add(eb.startTextField(Text.literal(""), String.valueOf(structureSeed)).build());
                 }
                 info.addEntry(pillar.setExpanded(true).build());
             } else {
-                info.addEntry(eb.startTextDescription(new TranslatableText("info.noPillarSeeds")).build());
+                info.addEntry(eb.startTextDescription(Text.translatable("info.noPillarSeeds")).build());
             }
             //Hashed seed
             HashedSeedData hashedSeed = SeedCracker.get().getDataStorage().hashedSeedData;
             if (hashedSeed != null) {
-                info.addEntry(eb.startTextField(new TranslatableText("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
+                info.addEntry(eb.startTextField(Text.translatable("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
             } else {
-                info.addEntry(eb.startTextDescription(new TranslatableText("info.noHashedSeed")).build());
+                info.addEntry(eb.startTextDescription(Text.translatable("info.noHashedSeed")).build());
             }
         }
 

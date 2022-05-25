@@ -20,8 +20,8 @@ import kaptainwutax.seedcrackerX.util.Database;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import net.minecraft.world.gen.random.ChunkRandom;
-import net.minecraft.world.gen.random.Xoroshiro128PlusPlusRandom;
+import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.util.math.random.Xoroshiro128PlusPlusRandom;
 
 import java.util.ArrayList;
 import java.util.HashSet;

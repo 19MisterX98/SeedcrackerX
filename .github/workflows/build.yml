@@ -25,6 +25,7 @@ jobs:
     
     - name: Build with Gradle
       run: |
+        ./gradlew apiJar
         ./gradlew remapApiJar
         ./gradlew build
     

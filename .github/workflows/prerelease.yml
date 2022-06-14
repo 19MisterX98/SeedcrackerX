@@ -30,7 +30,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Remove *-dev.jar
-      run: rm ./build/libs/*-dev.jar
+      run: rm ./build/libs/*-dev.jar || true
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"

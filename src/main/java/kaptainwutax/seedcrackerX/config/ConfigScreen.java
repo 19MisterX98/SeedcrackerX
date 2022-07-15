@@ -2,6 +2,7 @@ package kaptainwutax.seedcrackerX.config;
 
 import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.command.DatabaseCommand;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -10,7 +11,8 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -31,6 +33,12 @@ public class ConfigScreen {
         return newerVersions;
     }
 
+    private MCVersion mcVersionFromString(String version) {
+        MCVersion mcVersion = MCVersion.fromString(version);
+        if (mcVersion == null) return MCVersion.latest();
+        return mcVersion;
+    }
+
     public Screen getConfigScreenByCloth(Screen parent) {
 
         ConfigBuilder builder = ConfigBuilder.create()
@@ -45,10 +53,16 @@ public class ConfigScreen {
 
         settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
         settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.database"), config.databaseSubmits)
-                .setTooltip(Text.translatable("settings.database.tooltip"))
                 .setSaveConsumer(val -> config.databaseSubmits = val).build());
         settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
-        settings.addEntry(eb.startDropdownMenu(Text.translatable("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), MCVersion::fromString))
+        settings.addEntry(eb.startTextDescription(Text.translatable("settings.openDatabase").styled(s -> s
+                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, DatabaseCommand.databaseURL))
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("google sheet")))
+                .withColor(Formatting.BLUE)
+                .withUnderline(true)
+                .withItalic(true)))
+                .build());
+        settings.addEntry(eb.startDropdownMenu(Text.translatable("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), this::mcVersionFromString))
                 .setSelections(getSupportedVersions())
                 .setSuggestionMode(false)
                 .setDefaultValue(config.getVersion())

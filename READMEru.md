@@ -122,13 +122,13 @@ Neil:
 
 - Клонируйте репозиторий.
 
-- Запустите `gradlew genSources <idea|eclipse>`.
+- Выполните `gradlew genSources <idea|eclipse>`.
 
 ## Сборка мода
 
 - Обновите версию в `build.gradle` и `fabric.mod.json`.
 
-- Запустите `gradlew build`.
+- Выполните `gradlew build`.
 
 ## API для других модов
 

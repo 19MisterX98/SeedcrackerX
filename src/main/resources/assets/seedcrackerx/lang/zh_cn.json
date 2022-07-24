@@ -44,7 +44,7 @@
   "finishedSearchNoResult": "搜索完成，无结果。",
   "crossCompare": "交叉比较了种子，并还原为${SEED}。",
   "data.clearData": "清除了数据存储",
-  "data.collectedBits": "您当前已从 %s 位中收集了 %s 位。",
+  "data.collectedBits": "您当前已收集了 %s 位从 %s 位中。",
   "data.collectedLiftingBits": "您当前已收集了 %s 位从 %s 位的可挖掘结构中。",
   "data.restoreStructures": "恢复了 %s 结构",
   "data.restoreFailed": "没有发现前一个会话的结构",

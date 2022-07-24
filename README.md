@@ -14,18 +14,18 @@
 
 Download and install the [fabric mod loader](https://fabricmc.net/use/)
  
-Download the lastest [release or pre-release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
+Download the latest [release or pre-release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
   
 put the .jar files in your mod directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own MultiMC instance folder.
   
 #### Optional
   
-Download the lastest [release](https://github.com/Earthcomputer/multiconnect/releases) of Multiconnect to connect to servers on lower MC versions
+Download the latest [release](https://github.com/Earthcomputer/multiconnect/releases) of Multiconnect to connect to servers on lower MC versions
   
 ## Database
 
-Since the mod is used by many people I decided to create a google spreet for server seeds.
-If you enable the database option in the config gui the mod will send cracked seeds from 10+ player servers directly to the google sheet.
+Since the mod is used by many people, I have decided to create a Google sheet for server seeds.
+If you enable the database option in the config gui the mod will send cracked seeds from 10+ player servers directly to the Google sheet.
 
 [The Sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
 
@@ -34,28 +34,28 @@ If you enable the database option in the config gui the mod will send cracked se
 ### 1.17.X and below
 
 Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically.
-If it doesn't give you a world seed you may want to find another dungeon.
+If it doesn't give you a world seed, you may want to find another dungeon.
 
 This mod also supports cracking the seed via:
-- [structures and endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
+- [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
 - [warped fungus](https://www.youtu.be/HKjwgofhKs4)
 
-### 1.18.X and potentially future versions
+### 1.18.X and Potentially Future Versions
 
 Dungeon cracking, fungus cracking don't work anymore.
 
-Go to the config menu via "/seed gui" and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they arent updated and can give wrong data.
+Go to the config menu via "/seed gui" and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they aren't updated and can give wrong data.
 
-For cracking you now need to find 5 structures from the listed ones:\
+For cracking, you now need to find 5 structures from the listed ones:\
 Desert pyramids, Jungle temples, Witch huts, Shipwrecks, Igloos, Pillager Outposts
 
 Any combination is valid. For example: 3 shipwrecks, 1 pyramid and 1 igloo.
-You can track you process with "/seed data bits" (look at the bits count for liftable structures)
+You can track your process with "/seed data bits" (look at the bits count for liftable structures)
 A structure is found when there is an outline around it.
-After you got enough the cracking process starts automatically. It takes 1-5 mins
+After you get enough, the cracking process starts automatically. This process takes around 1-5 mins.
 The mod may ask you to find additional structures after this.
-Its more likely to happen with less bits and structures of the same type.
-After reducing your structure seeds the mod will brute force your world seed via dungeon positions or hashed seed.
+It's more likely to happen with fewer bits and structures of the same type.
+After reducing your structure seeds, the mod will brute force your world seed via dungeon positions or hashed seed.
  
   ### Supported Structures
     - Ocean Monument
@@ -81,12 +81,12 @@ After reducing your structure seeds the mod will brute force your world seed via
   - `/seed gui`
   
   Opens the config gui where you can modify settings like the server mc-version, all finders, database and rendermode.
-  There are command alternatives for most of this but they shouldnt be used anymore.
+  There are command alternatives for most of this, but they should'nt be used anymore.
   
   ### Finder Reload Command
   - `/seed finder reload`
   
-  Rescans the loaded Chunks to find structures that werent found before.
+  Rescans the loaded Chunks to find structures that weren't found before.
 
   ### Data Command
   - `/seed data clear`
@@ -101,8 +101,8 @@ After reducing your structure seeds the mod will brute force your world seed via
   
   - `/seed data restore`
   
-  When you leave a world the mod will save currently collected structure information in a file of the .minecraft/config directory.
-  After rejoining you can restore it with this command.
+  When you leave a world, the mod will save currently collected structure information in a file of the .minecraft/config directory.
+  After rejoining, you can restore it with this command.
   
   
   ### Debug Command

@@ -1,7 +1,7 @@
 {
   "title": "Seed Cracker X",
   "settings": "设置",
-  "settings.active": "活跃",
+  "settings.active": "激活",
   "settings.database": "把有10+玩家的服务器的种子发送到数据库",
   "settings.hideNameDatabase": "在种子数据库中隐藏用户名",
   "settings.version": "版本",

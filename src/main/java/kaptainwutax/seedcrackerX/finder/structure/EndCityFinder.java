@@ -1,8 +1,11 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
+import com.seedfinding.mccore.util.pos.BPos;
+import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
+import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
@@ -102,11 +105,22 @@ public class EndCityFinder extends Finder {
             combinedResult.addAll(positions);
 
             positions.forEach(pos -> {
-                RegionStructure.Data<?> data = Features.END_CITY.at(this.chunkPos.x, this.chunkPos.z);
+                //minecraft 1.19 moved end citys by 1 block reeeeeeeee
+                if (Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_19)) {
+                    BlockPos posFix = pos.add(1, 0, 1);
+                    RegionStructure.Data<?> data = Features.END_CITY.at(posFix.getX()>>4, posFix.getZ()>>4);
 
-                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                    this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(153, 0, 153)));
-                    this.renderers.add(new Cube(pos, new Color(153, 0, 153)));
+                    if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
+                        this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(153, 0, 153)));
+                        this.renderers.add(new Cube(posFix, new Color(153, 0, 153)));
+                    }
+                } else {
+                    RegionStructure.Data<?> data = Features.END_CITY.at(this.chunkPos.x, this.chunkPos.z);
+
+                    if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
+                        this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(153, 0, 153)));
+                        this.renderers.add(new Cube(pos, new Color(153, 0, 153)));
+                    }
                 }
             });
         });

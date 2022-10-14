@@ -4,6 +4,7 @@
   "settings.active": "激活",
   "settings.database": "把有10+玩家的服务器的种子发送到数据库",
   "settings.hideNameDatabase": "在种子数据库中隐藏用户名",
+  "settings.openDatabase": "打开数据库",
   "settings.version": "版本",
   "settings.visuals": "视觉效果",
   "settings.outline": "渲染轮廓",
@@ -88,4 +89,5 @@
   "fungus.usableAsWorldSeed": "这个结构种子也可用作世界种子",
   "database.success": "发送成功",
   "database.fail": "发送失败"
+  
 }

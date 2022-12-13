@@ -5,10 +5,10 @@ import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.minecraft.server.command.ServerCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.util.Formatting;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class FinderCommand extends ClientCommand {
     ReloadFinders reloadFinders = new ReloadFinders();
@@ -19,7 +19,7 @@ public class FinderCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
         for (Finder.Type finderType : Finder.Type.values()) {
             builder.then(literal("type")
                     .then(literal(finderType.toString())

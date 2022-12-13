@@ -3,12 +3,13 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+
 
 public abstract class ClientCommand {
 
@@ -21,10 +22,10 @@ public abstract class ClientCommand {
 
     public abstract String getName();
 
-    public abstract void build(LiteralArgumentBuilder<ServerCommandSource> builder);
+    public abstract void build(LiteralArgumentBuilder<FabricClientCommandSource> builder);
 
-    public final void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralArgumentBuilder<ServerCommandSource> builder = literal(this.getName());
+    public final void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+        LiteralArgumentBuilder<FabricClientCommandSource> builder = literal(this.getName());
         this.build(builder);
         dispatcher.register(literal(ClientCommands.PREFIX).then(builder));
     }

@@ -2,7 +2,7 @@ package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.server.command.ServerCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.util.Util;
 
 public class DatabaseCommand extends ClientCommand {
@@ -15,11 +15,11 @@ public class DatabaseCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
         builder.executes(this::openURL);
     }
 
-    public int openURL(CommandContext<ServerCommandSource> context) {
+    public int openURL(CommandContext<FabricClientCommandSource> context) {
         Util.getOperatingSystem().open(databaseURL);
         return 0;
     }

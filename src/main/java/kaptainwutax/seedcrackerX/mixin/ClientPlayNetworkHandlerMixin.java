@@ -1,6 +1,5 @@
 package kaptainwutax.seedcrackerX.mixin;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
@@ -9,20 +8,14 @@ import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
-import kaptainwutax.seedcrackerX.init.ClientCommands;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.util.telemetry.TelemetrySender;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.command.CommandSource;
-import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
-import net.minecraft.network.packet.s2c.play.CommandTreeS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,18 +37,6 @@ public abstract class ClientPlayNetworkHandlerMixin {
         int chunkX = packet.getX();
         int chunkZ = packet.getZ();
         FinderQueue.get().onChunkData(this.world, new ChunkPos(chunkX, chunkZ));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Inject(method = "<init>", at = @At("RETURN"))
-    public void onInit(MinecraftClient client, Screen screen, ClientConnection connection, GameProfile profile, TelemetrySender telemetrySender, CallbackInfo ci) {
-        ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) this.commandDispatcher);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Inject(method = "onCommandTree", at = @At("TAIL"))
-    public void onOnCommandTree(CommandTreeS2CPacket packet, CallbackInfo ci) {
-        ClientCommands.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) this.commandDispatcher);
     }
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))

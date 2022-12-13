@@ -4,9 +4,11 @@ import com.seedfinding.mcbiome.biome.Biome;
 import com.seedfinding.mcbiome.biome.Biomes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.BiomeKeys;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +51,7 @@ public class BiomeFixer {
         ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
         if (networkHandler == null) return Biomes.VOID;
 
-        Identifier biomeID = networkHandler.getRegistryManager().get(Registry.BIOME_KEY).getId(biome);
+        Identifier biomeID = networkHandler.getRegistryManager().get(RegistryKeys.BIOME).getId(biome);
 
         if (biomeID == null) return Biomes.THE_VOID;
 
@@ -57,6 +59,11 @@ public class BiomeFixer {
     }
 
     public static net.minecraft.world.biome.Biome swap(Biome biome) {
-        return BuiltinRegistries.BIOME.get(biome.getId());
+        // internal, meh
+        var biomeRegistries = BuiltinRegistries.createWrapperLookup().getWrapperOrThrow(RegistryKeys.BIOME);
+
+        return biomeRegistries.getOptional(RegistryKey.of(RegistryKeys.BIOME, new Identifier(biome.getName()))).orElse(
+                biomeRegistries.getOrThrow(BiomeKeys.THE_VOID)
+        ).value();
     }
 }

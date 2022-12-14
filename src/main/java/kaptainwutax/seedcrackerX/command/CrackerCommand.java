@@ -3,10 +3,10 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.minecraft.server.command.ServerCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.util.Formatting;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class CrackerCommand extends ClientCommand {
 
@@ -16,7 +16,7 @@ public class CrackerCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
         builder.then(literal("ON").executes(context -> this.setActive(true)))
                 .then(literal("OFF").executes(context -> this.setActive(false)))
                 .executes(context -> this.toggleActive());

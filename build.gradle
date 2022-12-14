@@ -1,7 +1,7 @@
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -43,6 +43,8 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	include("net.fabricmc.fabric-api:fabric-command-api-v2:${project.command_api_version}")
+	include("net.fabricmc.fabric-api:fabric-api-base:${project.fabric_api_base}")
 	include("net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.resource_loader_version}")
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
@@ -59,7 +61,7 @@ dependencies {
 	implementation('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
 	implementation('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
 	implementation('com.seedfinding:mc_feature:c29fd1fcd746e14c1bcdb127da3113ba273db1fd') { transitive = false }
-	implementation('com.seedfinding:mc_reversal:2.0.0') { transitive = false }
+	implementation('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
 	implementation('com.seedfinding:latticg:1.06')
 
@@ -70,7 +72,7 @@ dependencies {
 	include('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
 	include('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
 	include('com.seedfinding:mc_feature:c29fd1fcd746e14c1bcdb127da3113ba273db1fd') { transitive = false }
-	include('com.seedfinding:mc_reversal:2.0.0') { transitive = false }
+	include('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
 	include('com.seedfinding:latticg:1.06')
 }

@@ -8,11 +8,11 @@ import kaptainwutax.seedcrackerX.config.StructureSave;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.minecraft.server.command.ServerCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Language;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class DataCommand extends ClientCommand {
 
@@ -22,7 +22,7 @@ public class DataCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<ServerCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
         builder.then(literal("clear")
                 .executes(this::clear)
         );
@@ -36,14 +36,14 @@ public class DataCommand extends ClientCommand {
         );
     }
 
-    public int clear(CommandContext<ServerCommandSource> context) {
+    public int clear(CommandContext<FabricClientCommandSource> context) {
         SeedCracker.get().reset();
 
         sendFeedback(Language.getInstance().get("data.clearData"), Formatting.GREEN, false);
         return 0;
     }
 
-    private int printBits(CommandContext<ServerCommandSource> context) {
+    private int printBits(CommandContext<FabricClientCommandSource> context) {
         DataStorage s = SeedCracker.get().getDataStorage();
         String message = Language.getInstance().get("data.collectedBits").formatted((int) s.getBaseBits(), (int) s.getWantedBits());
         String message2 = Language.getInstance().get("data.collectedLiftingBits").formatted((int) s.getLiftingBits(), 40);
@@ -52,7 +52,7 @@ public class DataCommand extends ClientCommand {
         return 0;
     }
 
-    private int restoreData(CommandContext<ServerCommandSource> context) {
+    private int restoreData(CommandContext<FabricClientCommandSource> context) {
         var preloaded = StructureSave.loadStructures();
         if (!preloaded.isEmpty()) {
             for (RegionStructure.Data<?> data : preloaded) {

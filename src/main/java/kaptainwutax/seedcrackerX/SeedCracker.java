@@ -4,7 +4,9 @@ import kaptainwutax.seedcrackerX.api.SeedCrackerAPI;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
+import kaptainwutax.seedcrackerX.init.ClientCommands;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class SeedCracker implements ModInitializer {
         Features.init(Config.get().getVersion());
         FabricLoader.getInstance().getEntrypointContainers("seedcrackerx", SeedCrackerAPI.class).forEach(entrypoint ->
                 entrypoints.add(entrypoint.getEntrypoint()));
+
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> ClientCommands.registerCommands(dispatcher));
     }
 
     public DataStorage getDataStorage() {

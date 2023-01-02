@@ -20,12 +20,13 @@ put the .jar files in your mod directory, either %appdata%/.minecraft/mods/ fold
   
 #### Optional
   
-Download the latest [release](https://github.com/Earthcomputer/multiconnect/releases) of Multiconnect to connect to servers on lower MC versions
+Download the latest release of [Multiconnect](https://github.com/Earthcomputer/multiconnect/releases) or [ViaFabric](https://modrinth.com/mod/viafabric) to connect to servers on lower MC versions
   
 ## Database
 
 Since the mod is used by many people, I have decided to create a Google sheet for server seeds.
 If you enable the database option in the config gui the mod will send cracked seeds from 10+ player servers directly to the Google sheet.
+You also need a minecraft license
 
 [The Sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
 
@@ -40,7 +41,7 @@ This mod also supports cracking the seed via:
 - [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
 - [warped fungus](https://www.youtu.be/HKjwgofhKs4)
 
-### 1.18.X and Potentially Future Versions
+### 1.18.X and higher
 
 Dungeon cracking, fungus cracking don't work anymore.
 
@@ -76,7 +77,10 @@ After reducing your structure seeds, the mod will brute force your world seed vi
     - Warped Fungus
 
 ## Commands
-  
+
+ For 1.19.3 use command 
+ - `/seedcracker`
+
   ### GUI Command
   - `/seed gui`
   
@@ -85,7 +89,6 @@ After reducing your structure seeds, the mod will brute force your world seed vi
   
   ### Finder Reload Command
   - `/seed finder reload`
-  
   Rescans the loaded Chunks to find structures that weren't found before.
 
   ### Data Command

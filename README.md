@@ -89,6 +89,7 @@ After reducing your structure seeds, the mod will brute force your world seed vi
   
   ### Finder Reload Command
   - `/seed finder reload`
+
   Rescans the loaded Chunks to find structures that weren't found before.
 
   ### Data Command

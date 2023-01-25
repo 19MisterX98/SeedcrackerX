@@ -40,7 +40,7 @@
   "info.hashedSeed": "हैश हुआ सीड",
   "info.noHashedSeed": "कोई हैश हुआ सीड नहीं मिला",
   "fetchedHashedSeed": "इस आयाम में वर्ल्ड सीड अलग है",
-  "foundRestorableStructures": "पिछले सत्र से %s सरंचनाएँ मिली। /seed data restore से उन्हें वापिस लाइए",
+  "foundRestorableStructures": "पिछले सत्र से %s सरंचनाएँ मिली। /seedcracker data restore से उन्हें वापिस लाइए",
   "foundStructureSeed": "सरंचना सीड मिला ${SEED}.",
   "finishedSearchNoResult": "बिना कोई परिणामो के खोज पूरी हुई।",
   "crossCompare": "सीड की तुलना की और घटाए गए ${SEED}.",

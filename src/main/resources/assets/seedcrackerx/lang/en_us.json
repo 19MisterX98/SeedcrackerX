@@ -40,7 +40,7 @@
   "info.hashedSeed": "Hashed seed",
   "info.noHashedSeed": "No hashed seed found",
   "fetchedHashedSeed": "The world seed in this dimension is different",
-  "foundRestorableStructures": "Found %s structure/s from the previous session. Restore them with /seed data restore",
+  "foundRestorableStructures": "Found %s structure/s from the previous session. Restore them with /seedcracker data restore",
   "foundStructureSeed": "Found structure seed ${SEED}.",
   "finishedSearchNoResult": "Finished search with no results.",
   "crossCompare": "Cross-compared seeds and reduced to ${SEED}.",

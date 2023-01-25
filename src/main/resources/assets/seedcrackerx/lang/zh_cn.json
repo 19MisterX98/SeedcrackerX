@@ -40,7 +40,7 @@
   "info.hashedSeed": "散列化的种子",
   "info.noHashedSeed": "没有找到散列化的种子",
   "fetchedHashedSeed": "获取散列化的世界种子",
-  "foundRestorableStructures": "找到了前一个会话中的 %s 结构。用/seed data restore来恢复它们",
+  "foundRestorableStructures": "找到了前一个会话中的 %s 结构。用/seedcracker data restore来恢复它们",
   "foundStructureSeed": "发现结构种子 ${SEED}",
   "finishedSearchNoResult": "搜索完成，无结果。",
   "crossCompare": "交叉比较了种子，并还原为${SEED}。",

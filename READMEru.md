@@ -15,7 +15,7 @@
   
 #### Опционально
   
-Загрузите последний [релиз](https://github.com/Earthcomputer/multiconnect/releases) Multiconnect для подключения к серверам на более старых версиях MC
+Загрузите последний релиз [Multiconnect](https://github.com/Earthcomputer/multiconnect/releases) или [ViaFabric](https://modrinth.com/mod/viafabric) для подключения к серверам на более старых версиях Майнкрафт
   
 ## База данных
 
@@ -35,7 +35,7 @@
 - [структуры и башни в крае](https://youtu.be/aUuPSZVPH8E?t=462)
 - [искажённые грибы](https://www.youtu.be/HKjwgofhKs4)
 
-### 1.18.X и потенциальные будущие версии
+### 1.18.X и выше
 
 Поиск через сокровищницы и искажённые грибы больше не работает.
 
@@ -71,6 +71,9 @@
     - Искажённый гриб
 
 ## Команды
+
+ Для 1.19.3 используйте команду 
+ - `/seedcracker`
 
   ### Графический интерфейс
   - `/seed gui`

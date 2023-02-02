@@ -40,7 +40,7 @@
   "info.hashedSeed": "Хешированный сид",
   "info.noHashedSeed": "Хешированный сид не был найден",
   "fetchedHashedSeed": "Сид в данном измерении отличается от прошлого.",
-  "foundRestorableStructures": "Найдено %s структур с прошлой сессии. Восстановите их с помощью /seed data restore",
+  "foundRestorableStructures": "Найдено %s структур с прошлой сессии. Восстановите их с помощью /seedcracker data restore",
   "foundStructureSeed": "Найден структурный сид ${SEED}.",
   "finishedSearchNoResult": "Поиск окончен без результатов.",
   "crossCompare": "Перекрестно сравниваем сиды и скоращаем ${SEED}.",

@@ -4,6 +4,7 @@
 
 [中文](./READMEzh.md)
 [Русский](./READMEru.md)
+[Українська](./READMEuk.md)
 
 ## I'm active on:
 
@@ -195,5 +196,3 @@ Mine:
 [Nekzuris](https://github.com/Nekzuris) - README
 
 [19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Author of this fork
-
-[farkon00](https://github.com/farkon00) - README in russian

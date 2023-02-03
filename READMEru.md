@@ -180,5 +180,3 @@ Neil:
 [Nekzuris](https://github.com/Nekzuris) - README
 
 [19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Автор форка
-
-[~~farkon00~~](https://github.com/farkon00) - перевод README на русский

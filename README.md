@@ -16,7 +16,7 @@ Download and install the [fabric mod loader](https://fabricmc.net/use/)
  
 Download the latest [release or pre-release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
   
-put the .jar files in your mod directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own MultiMC instance folder.
+put the .jar file in your mod directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own instance folder.
   
 #### Optional
   
@@ -41,23 +41,21 @@ This mod also supports cracking the seed via:
 - [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
 - [warped fungus](https://www.youtu.be/HKjwgofhKs4)
 
+  ### Supported Decorators
+    - Dungeon
+    - End Gateway
+    - Desert Well
+    - Emerald Ore
+    - Warped Fungus
+
 ### 1.18.X and higher
 
 Dungeon cracking, fungus cracking don't work anymore.
 
-Go to the config menu via "/seed gui" and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they aren't updated and can give wrong data.
+Go to the config menu via "/seedcracker gui" (1.19.3+) or "/seed gui" (before 1.19.3) and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they aren't updated and can give wrong data.
 
-For cracking, you now need to find 5 structures from the listed ones:\
-Desert pyramids, Jungle temples, Witch huts, Shipwrecks, Igloos, Pillager Outposts
+For cracking, you now need to find 5 structures from the listed ones:
 
-Any combination is valid. For example: 3 shipwrecks, 1 pyramid and 1 igloo.
-You can track your process with "/seed data bits" (look at the bits count for liftable structures)
-A structure is found when there is an outline around it.
-After you get enough, the cracking process starts automatically. This process takes around 1-5 mins.
-The mod may ask you to find additional structures after this.
-It's more likely to happen with fewer bits and structures of the same type.
-After reducing your structure seeds, the mod will brute force your world seed via dungeon positions or hashed seed.
- 
   ### Supported Structures
     - Ocean Monument
     - End City
@@ -68,18 +66,19 @@ After reducing your structure seeds, the mod will brute force your world seed vi
     - Shipwreck
     - Igloo
     - Pillager Outpost
-  
-  ### Supported Decorators
-    - Dungeon
-    - End Gateway
-    - Desert Well
-    - Emerald Ore
-    - Warped Fungus
+
+Any combination is valid. For example: 3 shipwrecks, 1 pyramid and 1 igloo.
+You can track your process with "/seed data bits" (look at the bits count for liftable structures)
+A structure is found when there is an outline around it.
+After you get enough, the cracking process starts automatically. This process takes around 1-5 mins.
+The mod may ask you to find additional structures after this.
+It's more likely to happen with fewer bits and structures of the same type.
+After reducing your structure seeds, the mod will brute force your world seed via dungeon positions or hashed seed.
 
 ## Commands
 
- For 1.19.3 use command 
- - `/seedcracker`
+If version of your mod is older than 2.13.1, use prefix
+ - "/seed" instead of "/seedcracker"
 
   ### GUI Command
   - `/seed gui`

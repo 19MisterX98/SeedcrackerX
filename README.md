@@ -48,7 +48,7 @@ You also need a minecraft license
 ### Overworld
 
 Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically.
-If it doesn't give you a world seed, you may want to find another dungeon.
+If it doesn't give you a world seed, you may need to find another dungeon.
 
 ### The Nether
 
@@ -56,7 +56,7 @@ Run around in the warped fungus biome until the mod finds big fungus and starts 
 
 ### The End
 
-You have to find 5 (or more) end cities (fill up regular bits) or end gateways and then return to the center of the end dimension to obtain the pillar seed, after that cracking should begin.
+You have to find 5 (or more) end cities or end gateways and then return to the center of the end dimension to obtain the pillar seed, after that cracking should begin.
 
 #### Video guides:
 - [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
@@ -100,9 +100,6 @@ After reducing your structure seeds, the mod will brute force your world seed vi
 ### The Nether
 
 Fungus cracking don't work anymore, so there are no way to find nether seed using SeedcrackerX, however you can try to crack it yourself by using [Nether_Bedrock_Cracker](https://github.com/19MisterX98/Nether_Bedrock_Cracker)
-
-    - End City
-    - Buried Treasure
     
 ### The End
 
@@ -159,10 +156,8 @@ Neil's:
 - [1.15](https://youtu.be/1ChmLi9og8Q)
 - [1.16](https://youtu.be/aUuPSZVPH8E)
 
-
 Dyiing's
 - [1.18](https://www.youtube.com/watch?v=tKeEyx7jIE4)
-
 
 Mine:
 - [Dungeon cracking & end pillar cracking](https://youtu.be/8ytfZ2MXosY)

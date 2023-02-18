@@ -217,6 +217,10 @@ Mine:
 
 ## Contributors
 
-[KaptainWutax](https://github.com/KaptainWutax) - Author
+[KaptainWutax](https://github.com/KaptainWutax) - Author of the original mod
 
-[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Author of this fork
+[neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) - Video Tutorials
+
+[Nekzuris](https://github.com/Nekzuris) and [ItzSkyReed](https://github.com/ItzSkyReed)  - README
+
+[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Author of SeedCrackerX

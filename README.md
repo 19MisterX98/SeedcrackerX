@@ -41,9 +41,9 @@ You also need a minecraft license
 
 [The Sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
 
-## Usage
+# Usage
 
-### 1.17.X and below
+## 1.17.X and below
 
 ### Overworld
 
@@ -69,7 +69,7 @@ You have to find 5 (or more) end cities (fill up regular bits) or end gateways a
     - Emerald Ore
     - Warped Fungus
 
-### 1.18.X and higher
+## 1.18.X and higher
 
 Dungeon cracking, fungus cracking don't work anymore.
 

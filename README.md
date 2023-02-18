@@ -45,10 +45,20 @@ You also need a minecraft license
 
 ### 1.17.X and below
 
+### Overworld
+
 Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically.
 If it doesn't give you a world seed, you may want to find another dungeon.
 
-This mod also supports cracking the seed via:
+### The Nether
+
+Run around in the warped fungus biome until the mod finds big fungus and starts cracking.
+
+### The End
+
+You have to find 5 (or more) end cities (fill up regular bits) or end gateways and then return to the center of the end dimension to obtain the pillar seed, after that cracking should begin.
+
+#### Video guides:
 - [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
 - [warped fungus](https://www.youtu.be/HKjwgofhKs4)
 

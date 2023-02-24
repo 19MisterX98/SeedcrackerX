@@ -5,11 +5,23 @@
 [中文](./READMEzh.md)
 [Русский](./READMEru.md)
 [Українська](./READMEuk.md)
+[Türkçe](./READMEtr.md)
 
 ## I'm active on:
 
 - [My Discord](https://discord.gg/JRmHzqQYfp)
 - [Youtube](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA)
+
+# Version Tab
+
+| Minecraft Version | SeedCrackerX version | Dependies
+| --- | --- | --- |
+| 1.19.3 | [2.13.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.13.1-test.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/) |
+| 1.19-1.19.2 | [2.13](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13/seedcrackerX-2.13.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/) |
+| 1.18.2 | [2.12](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.12/seedcrackerX-2.12.jar) | [Fabric mod loader](https://fabricmc.net/use/) | 
+| 1.18-1.18.1 | [2.11.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.11.4/seedcrackerX-2.11.4.jar) | [Fabric mod loader](https://fabricmc.net/use/) |
+| 1.17-1.17.1 | [2.10.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.10.1/seedcrackerX-2.10.1.jar) | [Fabric mod loader](https://fabricmc.net/use/) |
+| 1.16.5 | [2.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.7.1/seedcrackerX-0.2.7.jar) | [Fabric mod loader](https://fabricmc.net/use/), [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api),  [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu/files)|
 
 ## Installation
 
@@ -17,7 +29,7 @@ Download and install the [fabric mod loader](https://fabricmc.net/use/)
  
 Download the latest [release or pre-release](https://github.com/19MisterX98/SeedCrackerX/releases) of SeedCrackerX
   
-put the .jar files in your mod directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own MultiMC instance folder.
+put the .jar file in your mod directory, either %appdata%/.minecraft/mods/ folder for the vanilla launcher or your own instance folder.
   
 #### Optional
   
@@ -31,25 +43,53 @@ You also need a minecraft license
 
 [The Sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
 
-## Usage
+# Usage
 
-### 1.17.X and below
+## 1.17.X and below
+
+### Overworld
 
 Run around in the world until the mod finds a dungeon. After the mod found one the cracking process starts automatically.
-If it doesn't give you a world seed, you may want to find another dungeon.
+If it doesn't give you a world seed, you may need to find another dungeon.
 
-This mod also supports cracking the seed via:
+### The Nether
+
+Run around in the warped fungus biome until the mod finds big fungus and starts cracking.
+
+### The End
+
+You have to find 5 (or more) end cities or end gateways and then return to the center of the end dimension to obtain the pillar seed, after that cracking should begin.
+
+#### Video guides:
 - [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
 - [warped fungus](https://www.youtu.be/HKjwgofhKs4)
 
-### 1.18.X and higher
+  ### Supported Decorators
+    - Dungeon
+    - End Gateway
+    - Desert Well
+    - Emerald Ore
+    - Warped Fungus
+
+## 1.18.X and higher
 
 Dungeon cracking, fungus cracking don't work anymore.
 
-Go to the config menu via "/seed gui" and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they aren't updated and can give wrong data.
+### Overworld
 
-For cracking, you now need to find 5 structures from the listed ones:\
-Desert pyramids, Jungle temples, Witch huts, Shipwrecks, Igloos, Pillager Outposts
+Go to the config menu via "/seedcracker gui" (1.19.3+) or "/seed gui" (before 1.19.3) and make sure that Emeralds, Gateways, Biomes, Desert wells and Warped fungi are disabled since they aren't updated and can give wrong data.
+
+For cracking, you now need to get 40 bits of liftable structures and 32 regular bits from the listed ones:
+
+  ### Supported Structures
+  
+    - Igloo - 9 regular and liftable bits
+    - Desert Pyramid - 9 regular and liftable bits
+    - Jungle Temple - 9 regular and liftable bits
+    - Swamp Hut - 9 regular and liftable bits
+    - Shipwreck - 8 regular and liftable bits
+    - Pillager Outpost - 9 lifable bits
+    - Ocean Monument - 9 regular bits
 
 Any combination is valid. For example: 3 shipwrecks, 1 pyramid and 1 igloo.
 You can track your process with "/seed data bits" (look at the bits count for liftable structures)
@@ -58,47 +98,39 @@ After you get enough, the cracking process starts automatically. This process ta
 The mod may ask you to find additional structures after this.
 It's more likely to happen with fewer bits and structures of the same type.
 After reducing your structure seeds, the mod will brute force your world seed via dungeon positions or hashed seed.
- 
-  ### Supported Structures
-    - Ocean Monument
-    - End City
-    - Buried Treasure
-    - Desert Pyramid
-    - Jungle Temple
-    - Swamp Hut
-    - Shipwreck
-    - Igloo
-    - Pillager Outpost
-  
-  ### Supported Decorators
-    - Dungeon
-    - End Gateway
-    - Desert Well
-    - Emerald Ore
-    - Warped Fungus
+
+### The Nether
+
+Fungus cracking don't work anymore, so there are no way to find nether seed using SeedcrackerX, however you can try to crack it yourself by using [Nether_Bedrock_Cracker](https://github.com/19MisterX98/Nether_Bedrock_Cracker)
+    
+### The End
+
+You have to find 5 (or more) end cities (fill up regular bits) and then return to the center of the end dimension to obtain the pillar seed, after that cracking should begin.
+
+- You need to disable end gateways!
 
 ## Commands
 
- For 1.19.3 use command 
- - `/seedcracker`
+If version of your mod is older than 2.13.1, use prefix
+ - `/seed` instead of `/seedcracker`
 
   ### GUI Command
-  - `/seed gui`
+  - `/seedcracker gui`
   
   Opens the config gui where you can modify settings like the server mc-version, all finders, database and rendermode.
   There are command alternatives for most of this, but they should'nt be used anymore.
   
   ### Finder Reload Command
-  - `/seed finder reload`
+  - `/seedcracker finder reload`
 
   Rescans the loaded Chunks to find structures that weren't found before.
 
   ### Data Command
-  - `/seed data clear`
+  - `/seedcracker data clear`
   
   Clears all the collected data without requiring a relog. This is useful for multi-world servers.
   
-  - `/seed data bits`
+  - `/seedcracker data bits`
   
   Display how many bits of information have been collected.
   Normal bits are used for end pillar + structure cracking. Cracking starts at 32 bits.
@@ -111,12 +143,12 @@ After reducing your structure seeds, the mod will brute force your world seed vi
   
   
   ### Debug Command
-  - `/seed cracker debug`
+  - `/seedcracker cracker debug`
 
   Additional info is shown
   
   ### Database Command
-  - `/seed database`
+  - `/seedcracker database`
   
   Opens a [google sheet](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing) that is maintained by the mod
   
@@ -126,10 +158,8 @@ Neil's:
 - [1.15](https://youtu.be/1ChmLi9og8Q)
 - [1.16](https://youtu.be/aUuPSZVPH8E)
 
-
 Dyiing's
 - [1.18](https://www.youtube.com/watch?v=tKeEyx7jIE4)
-
 
 Mine:
 - [Dungeon cracking & end pillar cracking](https://youtu.be/8ytfZ2MXosY)
@@ -189,10 +219,10 @@ Mine:
 
 ## Contributors
 
-[KaptainWutax](https://github.com/KaptainWutax) - Author
+[KaptainWutax](https://github.com/KaptainWutax) - Author of the original mod
 
-[neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) - Video Tutorial
+[neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) - Video Tutorials
 
-[Nekzuris](https://github.com/Nekzuris) - README
+[Nekzuris](https://github.com/Nekzuris) and [ItzSkyReed](https://github.com/ItzSkyReed)  - README
 
-[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Author of this fork
+[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Author of SeedCrackerX

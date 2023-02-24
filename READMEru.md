@@ -223,5 +223,3 @@ Dyiing's
 [Nekzuris](https://github.com/Nekzuris) и [ItzSkyReed](https://github.com/ItzSkyReed)  - README
 
 [19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - Автор SeedCrackerX
-
-[farkon00](https://github.com/farkon00) и [ItzSkyReed](https://github.com/ItzSkyReed) - перевод README на русский

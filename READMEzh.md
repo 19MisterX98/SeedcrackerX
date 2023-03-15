@@ -6,6 +6,8 @@
 
 [English](./README.md)
 [Русский](./READMEru.md)
+[Українська](./READMEuk.md)
+[Türkçe](./READMEtr.md)
 
 ## 我活跃在:
 

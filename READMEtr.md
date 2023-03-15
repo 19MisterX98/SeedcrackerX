@@ -2,9 +2,10 @@
 
 ## Readme dili
 
+[English](./README.md)
 [中文](./READMEzh.md)
 [Русский](./READMEru.md)
-[Türkçe](./READMEtr.md)
+[Українська](./READMEuk.md)
 
 ## Bana ulaşın:
 

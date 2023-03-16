@@ -7,14 +7,15 @@
 
 # Version Tab
 
-| Версия Minecraft | Версия SeedCrackerX | Необходимые дополнения
-| --- | --- | --- |
-| 1.19.3 | [2.13.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.13.1-test.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/) |
-| 1.19-1.19.2 | [2.13](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13/seedcrackerX-2.13.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/) |
-| 1.18.2 | [2.12](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.12/seedcrackerX-2.12.jar) | [Fabric mod loader](https://fabricmc.net/use/) | 
-| 1.18-1.18.1 | [2.11.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.11.4/seedcrackerX-2.11.4.jar) | [Fabric mod loader](https://fabricmc.net/use/) |
-| 1.17-1.17.1 | [2.10.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.10.1/seedcrackerX-2.10.1.jar) | [Fabric mod loader](https://fabricmc.net/use/) |
-| 1.16.5 | [2.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.7.1/seedcrackerX-0.2.7.jar) | [Fabric mod loader](https://fabricmc.net/use/), [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api),  [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu/files)|
+| Версия Minecraft | Версия SeedCrackerX                                                                                    | Необходимые дополнения                                                                                                                                                                         |
+|------------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.19.4           | [2.14](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.14.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
+| 1.19.3           | [2.13.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13.1/seedcrackerX-2.13.1.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
+| 1.19-1.19.2      | [2.13](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13/seedcrackerX-2.13.jar)       | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
+| 1.18.2           | [2.12](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.12/seedcrackerX-2.12.jar)       | [Fabric mod loader](https://fabricmc.net/use/)                                                                                                                                                 | 
+| 1.18-1.18.1      | [2.11.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.11.4/seedcrackerX-2.11.4.jar) | [Fabric mod loader](https://fabricmc.net/use/)                                                                                                                                                 |
+| 1.17-1.17.1      | [2.10.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.10.1/seedcrackerX-2.10.1.jar) | [Fabric mod loader](https://fabricmc.net/use/)                                                                                                                                                 |
+| 1.16.5           | [2.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.7.1/seedcrackerX-0.2.7.jar)      | [Fabric mod loader](https://fabricmc.net/use/), [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api),  [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu/files) |
 
 ## Установка
 

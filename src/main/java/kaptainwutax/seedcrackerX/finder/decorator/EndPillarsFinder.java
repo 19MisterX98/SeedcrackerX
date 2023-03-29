@@ -38,7 +38,7 @@ public class EndPillarsFinder extends Finder {
                 x = Math.round(x);
                 z = Math.round(z);
             }
-            this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, new ChunkPos(new BlockPos((int)x, 0, (int)z)), new BlockPos((int)x, 0, (int)z));
+            this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, new ChunkPos(BlockPos.ofFloored(x, 0, z)), BlockPos.ofFloored(x, 0, z));
         }
     }
 

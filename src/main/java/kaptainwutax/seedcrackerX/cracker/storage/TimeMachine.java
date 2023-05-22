@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TimeMachine {
-    public static Logger logger = LoggerFactory.getLogger("timeMachine");
+    private static final Logger logger = LoggerFactory.getLogger("timeMachine");
 
     public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 

@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StructureSave {
-    public static Logger logger = LoggerFactory.getLogger("structureSave");
+    private static final Logger logger = LoggerFactory.getLogger("structureSave");
 
     public static final File saveDir = new File(FabricLoader.getInstance().getConfigDir().toFile(), "SeedCrackerX saved structures");
     private static final List<RegionStructure<?,?>> structureTypes = List.of(Features.IGLOO,Features.BURIED_TREASURE,

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 
 public class Config {
-    public static Logger logger = LoggerFactory.getLogger("config");
+    private static final Logger logger = LoggerFactory.getLogger("config");
 
     private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "seedcracker.json");
     private static Config INSTANCE = new Config();

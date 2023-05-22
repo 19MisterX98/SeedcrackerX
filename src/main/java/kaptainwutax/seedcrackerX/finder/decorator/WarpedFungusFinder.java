@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WarpedFungusFinder extends BlockFinder {
-    public static Logger logger = LoggerFactory.getLogger("warpedFungusFinder");
+    private static final Logger logger = LoggerFactory.getLogger("warpedFungusFinder");
 
     private static final Predicate<Block> prdc = block -> (block == Blocks.SHROOMLIGHT || block == Blocks.WARPED_WART_BLOCK);
 

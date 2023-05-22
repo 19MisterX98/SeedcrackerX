@@ -7,9 +7,14 @@ import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 
 public class Config {
+    public static Logger logger = LoggerFactory.getLogger("config");
+
     private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "seedcracker.json");
     private static Config INSTANCE = new Config();
     public FeatureToggle buriedTreasure = new FeatureToggle(true);
@@ -43,7 +48,7 @@ public class Config {
 
             gson.toJson(INSTANCE, writer);
         } catch (IOException e) {
-            System.out.println("seedcracker could't save config");
+            logger.error("seedcracker could't save config");
             e.printStackTrace();
         }
     }
@@ -55,10 +60,10 @@ public class Config {
             INSTANCE = gson.fromJson(reader, Config.class);
         } catch (Exception e) {
             if (file.exists()) {
-                System.out.println("seedcracker couldn't load config, deleting it...");
+                logger.error("seedcracker couldn't load config, deleting it...");
                 file.delete();
             } else {
-                System.out.println("seedcracker couldn't find config");
+                logger.warn("seedcracker couldn't find config");
             }
         }
     }

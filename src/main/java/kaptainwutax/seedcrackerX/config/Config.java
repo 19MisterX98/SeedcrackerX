@@ -48,8 +48,7 @@ public class Config {
 
             gson.toJson(INSTANCE, writer);
         } catch (IOException e) {
-            logger.error("seedcracker could't save config");
-            e.printStackTrace();
+            logger.error("seedcracker could't save config", e);
         }
     }
 
@@ -60,10 +59,10 @@ public class Config {
             INSTANCE = gson.fromJson(reader, Config.class);
         } catch (Exception e) {
             if (file.exists()) {
-                logger.error("seedcracker couldn't load config, deleting it...");
+                logger.error("seedcracker couldn't load config, deleting it...", e);
                 file.delete();
             } else {
-                logger.warn("seedcracker couldn't find config");
+                logger.warn("seedcracker couldn't find config", e);
             }
         }
     }

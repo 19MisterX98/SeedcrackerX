@@ -43,8 +43,7 @@ public class StructureSave {
             }
             writer.close();
         } catch (IOException e) {
-            logger.error("seedcracker could't save structures");
-            e.printStackTrace();
+            logger.error("seedcracker could't save structures", e);
         }
     }
 
@@ -69,8 +68,7 @@ public class StructureSave {
                 }
             }
         } catch (IOException e) {
-            logger.error("seedcracker could't load previous structures");
-            e.printStackTrace();
+            logger.error("seedcracker could't load previous structures", e);
         }
         return result;
     }

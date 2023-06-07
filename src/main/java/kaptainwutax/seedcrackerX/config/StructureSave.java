@@ -16,7 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StructureSave {
+    private static final Logger logger = LoggerFactory.getLogger("structureSave");
 
     public static final File saveDir = new File(FabricLoader.getInstance().getConfigDir().toFile(), "SeedCrackerX saved structures");
     private static final List<RegionStructure<?,?>> structureTypes = List.of(Features.IGLOO,Features.BURIED_TREASURE,
@@ -39,7 +43,7 @@ public class StructureSave {
             }
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("seedcracker could't save structures", e);
         }
     }
 
@@ -64,7 +68,7 @@ public class StructureSave {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("seedcracker could't load previous structures", e);
         }
         return result;
     }

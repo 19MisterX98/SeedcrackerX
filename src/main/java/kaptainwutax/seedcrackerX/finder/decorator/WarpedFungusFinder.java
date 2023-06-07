@@ -25,7 +25,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class WarpedFungusFinder extends BlockFinder {
+    private static final Logger logger = LoggerFactory.getLogger("warpedFungusFinder");
 
     private static final Predicate<Block> prdc = block -> (block == Blocks.SHROOMLIGHT || block == Blocks.WARPED_WART_BLOCK);
 
@@ -204,7 +208,7 @@ public class WarpedFungusFinder extends BlockFinder {
                             blocktype = 3;
                         } else {
                             blocktype = 0;
-                            System.out.println("error found illegal Block: " + block.getName() + " at " + pos.add(x, y, z).toShortString());
+                            logger.error("error found illegal Block: " + block.getName() + " at " + pos.add(x, y, z).toShortString());
                         }
                         layers[counter][x + layerSize][z + layerSize] = blocktype;
                     }

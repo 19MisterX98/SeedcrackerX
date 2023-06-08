@@ -34,7 +34,11 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TimeMachine {
+    private static final Logger logger = LoggerFactory.getLogger("timeMachine");
 
     public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 
@@ -291,7 +295,7 @@ public class TimeMachine {
                                 Log.warn("tmachine.printSeedsInConsole");
                             }
                         } else {
-                            System.out.println("Found world seed " + worldSeed);
+                            logger.info("Found world seed " + worldSeed);
                         }
                     }
 
@@ -389,7 +393,7 @@ public class TimeMachine {
                             Log.warn("tmachine.printSeedsInConsole");
                         }
                     } else {
-                        System.out.println("Found world seed " + worldSeed);
+                        logger.info("Found world seed " + worldSeed);
                     }
                 }
 

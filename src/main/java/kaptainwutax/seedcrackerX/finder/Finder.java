@@ -10,7 +10,6 @@ import kaptainwutax.seedcrackerX.util.HeightContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -73,7 +72,7 @@ public abstract class Finder {
 
     public boolean shouldRender() {
         DimensionType finderDim = this.world.getDimension();
-        DimensionType playerDim = mc.player.world.getDimension();
+        DimensionType playerDim = mc.player.clientWorld.getDimension();
 
         if (finderDim != playerDim) return false;
 

@@ -43,27 +43,26 @@ public class Config {
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        // make sure that the config directory exists
+        file.getParentFile().mkdirs();
 
         try (FileWriter writer = new FileWriter(file)) {
-
             gson.toJson(INSTANCE, writer);
         } catch (IOException e) {
-            logger.error("seedcracker could't save config", e);
+            logger.error("seedcracker couldn't save config", e);
         }
     }
 
     public static void load() {
         Gson gson = new Gson();
 
+        if (!file.exists()) return;
+
         try (Reader reader = new FileReader(file)) {
             INSTANCE = gson.fromJson(reader, Config.class);
         } catch (Exception e) {
-            if (file.exists()) {
-                logger.error("seedcracker couldn't load config, deleting it...", e);
-                file.delete();
-            } else {
-                logger.warn("seedcracker couldn't find config", e);
-            }
+            logger.error("seedcracker couldn't load config, deleting it...", e);
+            file.delete();
         }
     }
 

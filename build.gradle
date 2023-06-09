@@ -54,24 +54,24 @@ dependencies {
 
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
 
-	implementation('com.seedfinding:mc_math:0eb505174da8a92550f8ec6efe254e0fa936cc0d') { transitive = false }
-	implementation('com.seedfinding:mc_seed:5518e3ba3ee567fb0b51c15958967f70a6a19e02') { transitive = false }
-	implementation('com.seedfinding:mc_core:d685a37f0a466d4bf800e7f285daf9ef73c81678') { transitive = false }
-	implementation('com.seedfinding:mc_noise:a6ab8e6c688491829f8d2adf845392da22ef8e9c') { transitive = false }
-	implementation('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
-	implementation('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
-	implementation('com.seedfinding:mc_feature:c29fd1fcd746e14c1bcdb127da3113ba273db1fd') { transitive = false }
+	implementation('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
+	implementation('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
+	implementation('com.seedfinding:mc_core:d64d5f90be66300da41ef58f4f1736db2499784f') { transitive = false }
+	implementation('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
+	implementation('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
+	implementation('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }
+	implementation('com.seedfinding:mc_feature:919b7e513cc1e87e029a9cd703fc4e2dc8686229') { transitive = false }
 	implementation('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
 	implementation('com.seedfinding:latticg:1.06')
 
-	include('com.seedfinding:mc_math:0eb505174da8a92550f8ec6efe254e0fa936cc0d') { transitive = false }
-	include('com.seedfinding:mc_seed:5518e3ba3ee567fb0b51c15958967f70a6a19e02') { transitive = false }
-	include('com.seedfinding:mc_core:d685a37f0a466d4bf800e7f285daf9ef73c81678') { transitive = false }
-	include('com.seedfinding:mc_noise:a6ab8e6c688491829f8d2adf845392da22ef8e9c') { transitive = false }
-	include('com.seedfinding:mc_biome:b2271807a047bb43ac60c8c20ad47e315f19b9a6') { transitive = false }
-	include('com.seedfinding:mc_terrain:9e937ddb838e28e79423c287fa18b1ce66f061d7') { transitive = false }
-	include('com.seedfinding:mc_feature:c29fd1fcd746e14c1bcdb127da3113ba273db1fd') { transitive = false }
+	include('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
+	include('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
+	include('com.seedfinding:mc_core:d64d5f90be66300da41ef58f4f1736db2499784f') { transitive = false }
+	include('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
+	include('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
+	include('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }
+	include('com.seedfinding:mc_feature:919b7e513cc1e87e029a9cd703fc4e2dc8686229') { transitive = false }
 	include('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
 	include('com.seedfinding:latticg:1.06')

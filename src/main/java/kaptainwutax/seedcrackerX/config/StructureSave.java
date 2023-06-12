@@ -32,16 +32,16 @@ public class StructureSave {
         File saveFile = new File(saveDir, getWorldName());
         try {
             saveFile.createNewFile();
-            FileWriter writer = new FileWriter(saveFile);
-            for (DataStorage.Entry<Feature.Data<?>> dataEntry : baseData) {
-                if (dataEntry.data.feature instanceof Structure structure) {
-                    String data = Structure.getName(structure.getClass()) + ";" + dataEntry.data.chunkX +
+            try (FileWriter writer = new FileWriter(saveFile)) {
+                for (DataStorage.Entry<Feature.Data<?>> dataEntry : baseData) {
+                    if (dataEntry.data.feature instanceof Structure structure) {
+                        String data = Structure.getName(structure.getClass()) + ";" + dataEntry.data.chunkX +
                             ";" + dataEntry.data.chunkZ +
                             "\n";
-                    writer.write(data);
+                        writer.write(data);
+                    }
                 }
             }
-            writer.close();
         } catch (IOException e) {
             logger.error("seedcracker couldn't save structures", e);
         }
@@ -52,9 +52,8 @@ public class StructureSave {
         File saveFile = new File(saveDir, getWorldName());
         List<RegionStructure.Data<?>> result = new ArrayList<>();
         if (!saveFile.exists()) return result;
-        try {
-            FileInputStream fis = new FileInputStream(saveFile);
-            Scanner sc = new Scanner(fis);
+        try (FileInputStream fis = new FileInputStream(saveFile);
+            Scanner sc = new Scanner(fis)) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] info = line.split(";");

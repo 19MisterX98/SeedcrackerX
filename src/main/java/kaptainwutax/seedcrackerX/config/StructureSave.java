@@ -43,7 +43,7 @@ public class StructureSave {
             }
             writer.close();
         } catch (IOException e) {
-            logger.error("seedcracker could't save structures", e);
+            logger.error("seedcracker couldn't save structures", e);
         }
     }
 
@@ -68,7 +68,7 @@ public class StructureSave {
                 }
             }
         } catch (IOException e) {
-            logger.error("seedcracker could't load previous structures", e);
+            logger.error("seedcracker couldn't load previous structures", e);
         }
         return result;
     }
@@ -78,9 +78,9 @@ public class StructureSave {
             ClientConnection connection = MinecraftClient.getInstance().getNetworkHandler().getConnection();
             if (connection.isLocal()) {
                 String address = MinecraftClient.getInstance().getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();
-                return address.replace("/","_")+".txt";
+                return address.replace("/","_").replace(":", "_")+".txt";
             } else {
-                return connection.getAddress().toString().replace("/","_")+".txt";
+                return connection.getAddress().toString().replace("/","_").replace(":", "_")+".txt";
             }
         }
         return "Invalid.txt";

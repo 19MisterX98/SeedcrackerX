@@ -52,8 +52,10 @@ public class StructureSave {
         File saveFile = new File(saveDir, getWorldName());
         List<RegionStructure.Data<?>> result = new ArrayList<>();
         if (!saveFile.exists()) return result;
-        try (FileInputStream fis = new FileInputStream(saveFile);
-            Scanner sc = new Scanner(fis)) {
+        try (
+            FileInputStream fis = new FileInputStream(saveFile);
+            Scanner sc = new Scanner(fis)
+        ) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] info = line.split(";");
@@ -66,6 +68,8 @@ public class StructureSave {
                     }
                 }
             }
+        } catch (FileNotFoundException e) {
+            logger.warn("seedcracker couldn't find the structures file", e);
         } catch (IOException e) {
             logger.error("seedcracker couldn't load previous structures", e);
         }

@@ -5,7 +5,6 @@ import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.decorator.DesertWell;
 import com.seedfinding.mcfeature.decorator.EndGateway;
 import com.seedfinding.mcfeature.structure.*;
-import io.netty.util.internal.ConcurrentSet;
 import kaptainwutax.seedcrackerX.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;

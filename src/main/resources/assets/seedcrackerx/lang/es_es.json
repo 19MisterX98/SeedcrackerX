@@ -10,7 +10,7 @@
   "settings.outline": "Dibujar los contornos",
   "settings.finderToggles": "Conmutadores del buscador",
   "settings.antiXrayMode": "Modo de sin xray",
-  "settings.antiAntiXrayExplained": "Envía paquetes al servidor sí un suelo de calabozo contiene más de piedra labrada y piedra labrada musgosa. En respuesta el servidor le dice al cliente los bloques actuales. Lo podría provocar antitrampas supersensibles pero todavía nadie se ha quejado sobre prohibiciónes y patadas (el versión 2.9.0 lo tiene siempre activado y se ha descargado como 2000 veces). Lo hace que el proceso sea más eficiente y yo recomiendo que lo mantengas activado.",
+  "settings.antiAntiXrayExplained": "Envía paquetes al servidor si un suelo de calabozo contiene más de piedra labrada y piedra labrada musgosa. En respuesta el servidor le dice al cliente los bloques actuales. Lo podría provocar antitrampas supersensibles pero todavía nadie se ha quejado sobre prohibiciónes y patadas (el versión 2.9.0 lo tiene siempre activado y se ha descargado como 2000 veces). Lo hace que el proceso sea más eficiente y yo recomiendo que lo mantengas activado.",
   "finder.buriedTreasures": "Tesoroes enterrados",
   "finder.desertTemples": "Templos del desierto",
   "finder.endCities": "Ciudades del End",

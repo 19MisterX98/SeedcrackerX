@@ -100,19 +100,18 @@ tasks.withType(Jar) {
 }
 
 task apiJar(type: Jar) {
-	classifier "api-dev"
-
+	archiveClassifier.set('api-dev')
 	from sourceSets.api.output
 }
 
 task remapApiJar(type: RemapJarTask) {
-	classifier "api"
+	archiveClassifier.set('api')
 
 	input = apiJar.archiveFile.get().asFile
 	addNestedDependencies = false
 }
 
-prepareRemapApiJar.dependsOn(apiJar)
+remapApiJar.dependsOn(apiJar)
 
 publishing {
 	publications {

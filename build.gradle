@@ -56,7 +56,7 @@ dependencies {
 
 	implementation('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
 	implementation('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
-	implementation('com.seedfinding:mc_core:d64d5f90be66300da41ef58f4f1736db2499784f') { transitive = false }
+	implementation('com.seedfinding:mc_core:144493514fc9bfb735ce21838e48426625f29e43') { transitive = false }
 	implementation('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
 	implementation('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
 	implementation('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }
@@ -67,7 +67,7 @@ dependencies {
 
 	include('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
 	include('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
-	include('com.seedfinding:mc_core:d64d5f90be66300da41ef58f4f1736db2499784f') { transitive = false }
+	include('com.seedfinding:mc_core:144493514fc9bfb735ce21838e48426625f29e43') { transitive = false }
 	include('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
 	include('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
 	include('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }

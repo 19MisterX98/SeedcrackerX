@@ -34,14 +34,14 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onChunkData", at = @At(value = "TAIL"))
     private void onChunkData(ChunkDataS2CPacket packet, CallbackInfo ci) {
-        int chunkX = packet.getX();
-        int chunkZ = packet.getZ();
+        int chunkX = packet.getChunkX();
+        int chunkZ = packet.getChunkZ();
         FinderQueue.get().onChunkData(this.world, new ChunkPos(chunkX, chunkZ));
     }
 
     @Inject(method = "onGameJoin", at = @At(value = "TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        newDimension(new HashedSeedData(packet.sha256Seed()), false);
+        newDimension(new HashedSeedData(packet.commonPlayerSpawnInfo().seed()), false);
         var preloaded = StructureSave.loadStructures();
         if (!preloaded.isEmpty()) {
             Log.warn("foundRestorableStructures", preloaded.size());
@@ -50,7 +50,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onPlayerRespawn", at = @At(value = "TAIL"))
     public void onPlayerRespawn(PlayerRespawnS2CPacket packet, CallbackInfo ci) {
-        newDimension(new HashedSeedData(packet.getSha256Seed()), true);
+        newDimension(new HashedSeedData(packet.commonPlayerSpawnInfo().seed()), true);
     }
 
     public void newDimension(HashedSeedData hashedSeedData, boolean dimensionChange) {

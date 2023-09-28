@@ -22,7 +22,7 @@ public class Database {
     public static Text joinFakeServerForAuth() {
         try {
             MinecraftClient client = MinecraftClient.getInstance();
-            client.getSessionService().joinServer(client.getSession().getProfile(), client.getSession().getAccessToken(), "seedcrackerx");
+            client.getSessionService().joinServer(client.getSession().getUuidOrNull(), client.getSession().getAccessToken(), "seedcrackerx");
         }
         catch (AuthenticationUnavailableException authenticationUnavailableException) {
             return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.serversUnavailable"));

@@ -8,7 +8,7 @@ import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.block.enums.BlockFace;
 import net.minecraft.block.enums.WireConnection;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -121,7 +121,7 @@ public class JunglePyramidFinder extends AbstractTempleFinder {
         finder.addBlock(Blocks.CHISELED_STONE_BRICKS.getDefaultState(), 8, -2, 11);
         finder.addBlock(Blocks.CHISELED_STONE_BRICKS.getDefaultState(), 9, -2, 11);
         finder.addBlock(Blocks.CHISELED_STONE_BRICKS.getDefaultState(), 10, -2, 11);
-        BlockState blockState_6 = (Blocks.LEVER.getDefaultState().with(LeverBlock.FACING, Direction.NORTH)).with(LeverBlock.FACE, WallMountLocation.WALL);
+        BlockState blockState_6 = (Blocks.LEVER.getDefaultState().with(LeverBlock.FACING, Direction.NORTH)).with(LeverBlock.FACE, BlockFace.WALL);
         finder.addBlock(blockState_6, 8, -2, 12);
         finder.addBlock(blockState_6, 9, -2, 12);
         finder.addBlock(blockState_6, 10, -2, 12);

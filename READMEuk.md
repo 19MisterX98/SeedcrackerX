@@ -34,7 +34,7 @@
 
 Також мод підтримую знаходження сіда через:
 - [Структури й вежі краю](https://youtu.be/aUuPSZVPH8E?t=462)
-- [Скажені гриби](https://www.youtu.be/HKjwgofhKs4)
+- [Скажені гриби](https://youtu.be/HKjwgofhKs4)
 
 ### 1.18.X та вище
 
@@ -128,7 +128,7 @@ Dyiing
 Від мене:
 - [Знаходження за допомогою веж Краю та спавнерів](https://youtu.be/8ytfZ2MXosY)
 - [Знаходження у незері](https://youtu.be/HKjwgofhKs4)
-- [Знаходження за структурами](https://www.youtu.be/UXVrBaOR8H0)
+- [Знаходження за структурами](https://youtu.be/UXVrBaOR8H0)
 
 
 ## Підготовка до роботи

@@ -65,7 +65,7 @@ You have to find 5 (or more) end cities or end gateways and then return to the c
 
 #### Video guides:
 - [Structures and Endpillars](https://youtu.be/aUuPSZVPH8E?t=462)
-- [warped fungus](https://www.youtu.be/HKjwgofhKs4)
+- [warped fungus](https://youtu.be/HKjwgofhKs4)
 
   ### Supported Decorators
     - Dungeon
@@ -167,7 +167,7 @@ Dyiing's
 Mine:
 - [Dungeon cracking & end pillar cracking](https://youtu.be/8ytfZ2MXosY)
 - [Nether cracking](https://youtu.be/HKjwgofhKs4)
-- [Structure cracking](https://www.youtu.be/UXVrBaOR8H0)
+- [Structure cracking](https://youtu.be/UXVrBaOR8H0)
 
 
 ## Setting up the Workspace

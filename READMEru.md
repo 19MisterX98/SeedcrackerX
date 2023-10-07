@@ -57,7 +57,7 @@
 
 #### Видео-Гайды:
 - [Структуры и энд-измерение](https://youtu.be/aUuPSZVPH8E?t=462)
-- [Искаженный гриб](https://www.youtu.be/HKjwgofhKs4)
+- [Искаженный гриб](https://youtu.be/HKjwgofhKs4)
 - [На русском языке](https://www.youtube.com/watch?v=u8qKsIvjpx8)
 
   ### Поддерживаемые декораторы
@@ -165,7 +165,7 @@ Dyiing's
 Мои:
 - [Dungeon cracking & end pillar cracking](https://youtu.be/8ytfZ2MXosY)
 - [Nether cracking](https://youtu.be/HKjwgofhKs4)
-- [Structure cracking](https://www.youtu.be/UXVrBaOR8H0)
+- [Structure cracking](https://youtu.be/UXVrBaOR8H0)
 
 ## Настройка рабочего пространства
 

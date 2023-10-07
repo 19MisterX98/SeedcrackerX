@@ -40,7 +40,7 @@ Eğer mod, dünya seed'i bulamazsa başka bir zindan aramanız gerekebilir.
 
 Bu mod ayrıca şunlar ile seed bulabilir:
 - [Yapılar ve End Kuleleri](https://youtu.be/aUuPSZVPH8E?t=462)
-- [Eğri Mantar](https://www.youtu.be/HKjwgofhKs4)
+- [Eğri Mantar](https://youtu.be/HKjwgofhKs4)
 
 ### 1.18.X ve üst sürümleri
 
@@ -135,7 +135,7 @@ Dyiing'in
 Proje Sahibinin:
 - [Zindan ve End Kuleleri ile bulma](https://youtu.be/8ytfZ2MXosY)
 - [Nether ile bulma](https://youtu.be/HKjwgofhKs4)
-- [Yapı ile bulma](https://www.youtu.be/UXVrBaOR8H0)
+- [Yapı ile bulma](https://youtu.be/UXVrBaOR8H0)
 
 ## -- DEVAMI MOD GELİŞTİRİCİLERİ İÇİN --
 

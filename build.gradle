@@ -12,6 +12,11 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+configurations {
+	includedLibrary
+	implementation.extendsFrom includedLibrary
+}
+
 sourceSets {
 	api {
 		java {
@@ -54,27 +59,22 @@ dependencies {
 
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}") {transitive = false}
 
-	implementation('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
-	implementation('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
-	implementation('com.seedfinding:mc_core:144493514fc9bfb735ce21838e48426625f29e43') { transitive = false }
-	implementation('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
-	implementation('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
-	implementation('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }
-	implementation('com.seedfinding:mc_feature:919b7e513cc1e87e029a9cd703fc4e2dc8686229') { transitive = false }
-	implementation('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
+	includedLibrary('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
+	includedLibrary('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
+	includedLibrary('com.seedfinding:mc_core:144493514fc9bfb735ce21838e48426625f29e43') { transitive = false }
+	includedLibrary('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
+	includedLibrary('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
+	includedLibrary('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }
+	includedLibrary('com.seedfinding:mc_feature:919b7e513cc1e87e029a9cd703fc4e2dc8686229') { transitive = false }
+	includedLibrary('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
-	implementation('com.seedfinding:latticg:1.06')
+	includedLibrary('com.seedfinding:latticg:1.06')
+}
 
-	include('com.seedfinding:mc_math:ffd2edcfcc0d18147549c88cc7d8ec6cf21b5b91') { transitive = false }
-	include('com.seedfinding:mc_seed:1ead6fcefe7e8de4b3d60cd6c4e993f1e8f33409') { transitive = false }
-	include('com.seedfinding:mc_core:144493514fc9bfb735ce21838e48426625f29e43') { transitive = false }
-	include('com.seedfinding:mc_noise:7e3ba65e181796c4a2a1c8881d840b2254b92962') { transitive = false }
-	include('com.seedfinding:mc_biome:41a42cb9019a552598f12089059538853e18ec78') { transitive = false }
-	include('com.seedfinding:mc_terrain:b4246cbd5880c4f8745ccb90e1b102bde3448126') { transitive = false }
-	include('com.seedfinding:mc_feature:919b7e513cc1e87e029a9cd703fc4e2dc8686229') { transitive = false }
-	include('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
-
-	include('com.seedfinding:latticg:1.06')
+jar {
+	from(configurations.includedLibrary.collect { it.isDirectory() ? it : zipTree(it) }) {
+		include 'com/seedfinding/**'
+	}
 }
 
 processResources {
@@ -85,28 +85,28 @@ processResources {
 	}
 }
 
-tasks.withType(AbstractArchiveTask) {
+tasks.withType(AbstractArchiveTask).configureEach {
 	reproducibleFileOrder = true
 	preserveFileTimestamps = false
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.encoding = "UTF-8"
 }
 
-tasks.withType(Jar) {
+tasks.withType(Jar).configureEach {
 	from "LICENSE.txt"
 	from sourceSets.api.output
 }
 
-task apiJar(type: Jar) {
-	classifier "api-dev"
+tasks.register('apiJar') {
+	archiveClassifier.set("api-dev")
 
 	from sourceSets.api.output
 }
 
-task remapApiJar(type: RemapJarTask) {
-	classifier "api"
+tasks.register('remapApiJar') {
+	archiveClassifier.set("api")
 
 	input = apiJar.archiveFile.get().asFile
 	addNestedDependencies = false

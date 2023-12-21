@@ -99,13 +99,13 @@ tasks.withType(Jar).configureEach {
 	from sourceSets.api.output
 }
 
-tasks.register('apiJar') {
+task apiJar(type: Jar) {
 	archiveClassifier.set("api-dev")
 
 	from sourceSets.api.output
 }
 
-tasks.register('remapApiJar') {
+task remapApiJar(type: RemapJarTask) {
 	archiveClassifier.set("api")
 
 	input = apiJar.archiveFile.get().asFile

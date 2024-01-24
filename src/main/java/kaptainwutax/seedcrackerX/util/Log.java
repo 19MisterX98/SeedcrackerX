@@ -49,7 +49,11 @@ public class Log {
         PlayerEntity player = getPlayer();
 
         if (player != null) {
-            schedule(() -> player.sendMessage(Text.literal(data[0]).append(text).append(Text.literal(data[1])), false));
+            MutableText text1 = Text.literal(data[0]).append(text);
+            if (data.length > 1) {
+                text1.append(Text.literal(data[1]));
+            }
+            schedule(() -> player.sendMessage(text1, false));
         }
     }
 

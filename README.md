@@ -92,7 +92,7 @@ For cracking, you now need to get 40 bits of liftable structures and 32 regular 
     - Jungle Temple - 9 regular and liftable bits
     - Swamp Hut - 9 regular and liftable bits
     - Shipwreck - 8 regular and liftable bits
-    - Pillager Outpost - 9 lifable bits
+    - Pillager Outpost - 9 liftable bits
     - Ocean Monument - 9 regular bits
 
 Any combination is valid. For example: 3 shipwrecks, 1 pyramid and 1 igloo.
@@ -122,7 +122,7 @@ If version of your mod is older than 2.13.1, use prefix
   - `/seedcracker gui`
   
   Opens the config gui where you can modify settings like the server mc-version, all finders, database and rendermode.
-  There are command alternatives for most of this, but they should'nt be used anymore.
+  There are command alternatives for most of this, but they shouldn't be used anymore.
   
   ### Finder Reload Command
   - `/seedcracker finder reload`

@@ -1,9 +1,26 @@
 # SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
+# Мови README
+
+[English](./README.md)
+[中文](./READMEzh.md)
+[Русский](./READMEru.md)
+[Türkçe](./READMEtr.md)
+
 ## Мої активності:
 
 - [Мій Discord](https://discord.gg/JRmHzqQYfp)
 - [Youtube](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA)
+
+# Версiї
+| Версiя Minecraft | Версiя SeedCrackerX | Залежностi
+| --- | --- | --- |
+| 1.19.3 | [2.13.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.13.1-test.jar) | [Завантажник модiв Fabric 0.14.0+](https://fabricmc.net/use/) |
+| 1.19-1.19.2 | [2.13](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13/seedcrackerX-2.13.jar) | [Завантажник модiв Fabric 0.14.0+](https://fabricmc.net/use/) |
+| 1.18.2 | [2.12](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.12/seedcrackerX-2.12.jar) | [Завантажник модiв Fabric](https://fabricmc.net/use/) | 
+| 1.18-1.18.1 | [2.11.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.11.4/seedcrackerX-2.11.4.jar) | [Завантажник модiв Fabric](https://fabricmc.net/use/) |
+| 1.17-1.17.1 | [2.10.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.10.1/seedcrackerX-2.10.1.jar) | [Завантажник модiв Fabric](https://fabricmc.net/use/) |
+| 1.16.5 | [2.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.7.1/seedcrackerX-0.2.7.jar) | [Завантажник модiв Fabric](https://fabricmc.net/use/), [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api),  [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu/files)|
 
 ## Встановлення
 

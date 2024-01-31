@@ -1,5 +1,12 @@
 # SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
+## Языки README
+
+[English](./README.md)
+[中文](./READMEzh.md)
+[Українська](./READMEuk.md)
+[Türkçe](./READMEtr.md)
+
 ## Моя активность:
 
 [Дискорд](https://discord.gg/JRmHzqQYfp)

@@ -38,7 +38,7 @@
 
 此Mod也支持通过以下方式来破解种子.
 - [结构和黑曜石柱](https://youtu.be/aUuPSZVPH8E?t=462)
-- [诡异菌](https://www.youtu.be/HKjwgofhKs4)
+- [诡异菌](https://youtu.be/HKjwgofhKs4)
 
 ### 1.18.X及未来版本
 
@@ -123,7 +123,7 @@ Neil的:
 我的:
 - [地牢破解和黑曜石柱破解](https://youtu.be/8ytfZ2MXosY)
 - [下界破解](https://youtu.be/HKjwgofhKs4)
-- [结构破解](https://www.youtu.be/UXVrBaOR8H0)
+- [结构破解](https://youtu.be/UXVrBaOR8H0)
 ## 设置工作区
 
 -克隆此仓库.

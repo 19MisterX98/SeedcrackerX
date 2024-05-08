@@ -4,8 +4,8 @@
 
 ## 其他语言自述
 
-[English](./README.md)
-[Русский](./READMEru.md)
+[English](../README.md)
+[Русский](READMEru.md)
 
 ## 我活跃在:
 

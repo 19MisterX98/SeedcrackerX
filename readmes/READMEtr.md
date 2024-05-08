@@ -2,8 +2,8 @@
 
 ## Readme dili
 
-[中文](./READMEzh.md)
-[Русский](./READMEru.md)
+[中文](READMEzh.md)
+[Русский](READMEru.md)
 [Türkçe](./READMEtr.md)
 
 ## Bana ulaşın:

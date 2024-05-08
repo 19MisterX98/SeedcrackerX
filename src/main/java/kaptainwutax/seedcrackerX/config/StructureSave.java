@@ -75,7 +75,7 @@ public class StructureSave {
                 }
             }
         } catch (FileNotFoundException e) {
-            logger.warn("seedcracker couldn't find the structures file", e);
+            logger.warn("seedcracker couldn't find a structures file");
             return result;
         } catch (IOException e) {
             logger.error("seedcracker couldn't load previous structures", e);

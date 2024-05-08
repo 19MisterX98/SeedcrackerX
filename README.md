@@ -2,10 +2,10 @@
 
 ## Readme Language
 
-[中文](./READMEzh.md)
-[Русский](./READMEru.md)
-[Українська](./READMEuk.md)
-[Türkçe](./READMEtr.md)
+[中文](readmes/READMEzh.md)
+[Русский](readmes/READMEru.md)
+[Українська](readmes/READMEuk.md)
+[Türkçe](readmes/READMEtr.md)
 
 ## I'm active on:
 
@@ -16,7 +16,8 @@
 
 | Minecraft Version | SeedCrackerX version                                                                                       | Dependencies                                                                                                                                                                                   |
 |-------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1.20.4            | [2.14.6](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.14.6.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
+| 1.20.6            | [2.14.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.14.7.jar) | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
+| 1.20.4            | [2.14.6](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.6/seedcrackerX-2.14.6.jar)     | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
 | 1.20.2            | [2.14.5](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.5/seedcrackerX-2.14.5.jar)     | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
 | 1.20-1.20.1       | [2.14.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.4/seedcrackerX-2.14.4.jar)     | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |
 | 1.19.4            | [2.14.2](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.2/seedcrackerX-2.14.2.jar)     | [Fabric mod loader 0.14.0+](https://fabricmc.net/use/)                                                                                                                                         |

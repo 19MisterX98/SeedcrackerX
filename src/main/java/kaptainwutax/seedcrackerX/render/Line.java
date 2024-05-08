@@ -1,9 +1,9 @@
 package kaptainwutax.seedcrackerX.render;
 
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4f;
 
 public class Line extends Renderer {
 
@@ -26,14 +26,14 @@ public class Line extends Renderer {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, Vec3d cameraPos) {
-        this.putVertex(vertexConsumer, matrixStack, this.start, cameraPos);
-        this.putVertex(vertexConsumer, matrixStack, this.end, cameraPos);
+    public void render(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vec3d cameraPos) {
+        this.putVertex(vertexConsumer, matrix4f, this.start, cameraPos);
+        this.putVertex(vertexConsumer, matrix4f, this.end, cameraPos);
     }
 
-    protected void putVertex(VertexConsumer vertexConsumer, MatrixStack matrixStack, Vec3d pos, Vec3d cameraPos) {
+    protected void putVertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Vec3d pos, Vec3d cameraPos) {
         vertexConsumer.vertex(
-                matrixStack.peek().getPositionMatrix(),
+                matrix4f,
                 (float) (pos.x - cameraPos.x),
                 (float) (pos.y - cameraPos.y),
                 (float) (pos.z - cameraPos.z)

@@ -4,10 +4,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import kaptainwutax.seedcrackerX.config.Config;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.Matrix4f;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,10 +51,8 @@ public class FinderQueue {
         });
     }
 
-    public void renderFinders(MatrixStack matrixStack, Camera camera) {
+    public void renderFinders(Matrix4f matrix4f, Camera camera) {
         if (Config.get().render == Config.RenderType.OFF) return;
-
-        matrixStack.push();
 
         Vec3d camPos = camera.getPos();
 
@@ -73,7 +71,7 @@ public class FinderQueue {
 
         this.finderControl.getActiveFinders().forEach(finder -> {
             if (finder.shouldRender()) {
-                finder.render(matrixStack, buffer, camPos);
+                finder.render(matrix4f, buffer, camPos);
             }
         });
 
@@ -83,7 +81,6 @@ public class FinderQueue {
         RenderSystem.enableDepthTest();
         RenderSystem.disableBlend();
 
-        matrixStack.pop();
         RenderSystem.applyModelViewMatrix();
     }
 

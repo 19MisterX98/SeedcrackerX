@@ -3,5 +3,5 @@ before_install:
   # Fix: https://github.com/jitpack/jitpack.io/issues/4506#issuecomment-864562270
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
   - sdk update
-  - sdk install java 17.0.1-zulu
-  - sdk use java 17.0.1-zulu
+  - sdk install java 21.34.19-zulu
+  - sdk use java 21.34.19-zulu

@@ -9,6 +9,7 @@ import kaptainwutax.seedcrackerX.cracker.decorator.DeepDungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
+import kaptainwutax.seedcrackerX.finder.Finder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,37 +38,38 @@ public class Features {
     public static void init(MCVersion version) {
         STRUCTURE_TYPES.clear();
 
-        BURIED_TREASURE = safe(STRUCTURE_TYPES, () -> new BuriedTreasure(version));
-        DESERT_PYRAMID = safe(STRUCTURE_TYPES, () -> new DesertPyramid(version));
-        END_CITY = safe(STRUCTURE_TYPES, () -> new EndCity(version));
-        JUNGLE_PYRAMID = safe(STRUCTURE_TYPES, () -> new JunglePyramid(version));
-        MONUMENT = safe(STRUCTURE_TYPES, () -> new Monument(version));
-        SHIPWRECK = safe(STRUCTURE_TYPES, () -> new Shipwreck(version));
-        SWAMP_HUT = safe(STRUCTURE_TYPES, () -> new SwampHut(version));
-        PILLAGER_OUTPOST = safe(STRUCTURE_TYPES, () -> new PillagerOutpost(version));
-        IGLOO = safe(STRUCTURE_TYPES, () -> new Igloo(version));
+        BURIED_TREASURE = safe(STRUCTURE_TYPES, Finder.Type.BURIED_TREASURE, () -> new BuriedTreasure(version));
+        DESERT_PYRAMID = safe(STRUCTURE_TYPES, Finder.Type.DESERT_TEMPLE, () -> new DesertPyramid(version));
+        END_CITY = safe(STRUCTURE_TYPES, Finder.Type.END_CITY, () -> new EndCity(version));
+        JUNGLE_PYRAMID = safe(STRUCTURE_TYPES, Finder.Type.JUNGLE_TEMPLE, () -> new JunglePyramid(version));
+        MONUMENT = safe(STRUCTURE_TYPES, Finder.Type.MONUMENT, () -> new Monument(version));
+        SHIPWRECK = safe(STRUCTURE_TYPES, Finder.Type.SHIPWRECK, () -> new Shipwreck(version));
+        SWAMP_HUT = safe(STRUCTURE_TYPES, Finder.Type.SWAMP_HUT, () -> new SwampHut(version));
+        PILLAGER_OUTPOST = safe(STRUCTURE_TYPES, Finder.Type.PILLAGER_OUTPOST, () -> new PillagerOutpost(version));
+        IGLOO = safe(STRUCTURE_TYPES, Finder.Type.IGLOO, () -> new Igloo(version));
 
-        END_GATEWAY = safe(() -> new EndGateway(version));
-        DESERT_WELL = safe(() -> new DesertWell(version));
-        EMERALD_ORE = safe(() -> new EmeraldOre(version));
-        DUNGEON = safe(() -> new Dungeon(version));
-        DEEP_DUNGEON = safe(() -> new DeepDungeon(version));
-        WARPED_FUNGUS = safe(() -> new WarpedFungus(version));
+        END_GATEWAY = safe(Finder.Type.END_GATEWAY, () -> new EndGateway(version));
+        DESERT_WELL = safe(Finder.Type.DESERT_WELL, () -> new DesertWell(version));
+        EMERALD_ORE = safe(Finder.Type.EMERALD_ORE, () -> new EmeraldOre(version));
+        DUNGEON = safe(Finder.Type.DUNGEON, () -> new Dungeon(version));
+        DEEP_DUNGEON = safe(Finder.Type.DUNGEON, () -> new DeepDungeon(version));
+        WARPED_FUNGUS = safe(Finder.Type.WARPED_FUNGUS, () -> new WarpedFungus(version));
 
         STRUCTURE_TYPES.trimToSize();
     }
 
-    private static <F extends Feature<?, ?>> F safe(Supplier<F> lambda) {
+    private static <F extends Feature<?, ?>> F safe(Finder.Type finderType, Supplier<F> lambda) {
         try {
             return lambda.get();
         } catch (Throwable t) {
             SeedCracker.LOGGER.error("Exception thrown loading feature", t);
+            finderType.enabled.set(false);
             return null;
         }
     }
 
-    private static <F extends RegionStructure<?, ?>> F safe(List<RegionStructure<?, ?>> list, Supplier<F> lambda) {
-        F initializedFeature = safe(lambda);
+    private static <F extends RegionStructure<?, ?>> F safe(List<RegionStructure<?, ?>> list, Finder.Type finderType, Supplier<F> lambda) {
+        F initializedFeature = safe(finderType, lambda);
         if (initializedFeature != null) list.add(initializedFeature);
         return initializedFeature;
     }

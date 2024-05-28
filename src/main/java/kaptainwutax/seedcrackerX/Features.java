@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class Features {
-    public static final List<RegionStructure<?, ?>> STRUCTURE_TYPES = new ArrayList<>();
+    public static final ArrayList<RegionStructure<?, ?>> STRUCTURE_TYPES = new ArrayList<>();
 
     public static BuriedTreasure BURIED_TREASURE;
     public static DesertPyramid DESERT_PYRAMID;
@@ -35,6 +35,8 @@ public class Features {
     public static WarpedFungus WARPED_FUNGUS;
 
     public static void init(MCVersion version) {
+        STRUCTURE_TYPES.clear();
+
         safe(STRUCTURE_TYPES, () -> BURIED_TREASURE = new BuriedTreasure(version));
         safe(STRUCTURE_TYPES, () -> DESERT_PYRAMID = new DesertPyramid(version));
         safe(STRUCTURE_TYPES, () -> END_CITY = new EndCity(version));
@@ -51,6 +53,8 @@ public class Features {
         safe(() -> DUNGEON = new Dungeon(version));
         safe(() -> DEEP_DUNGEON = new DeepDungeon(version));
         safe(() -> WARPED_FUNGUS = new WarpedFungus(version));
+
+        STRUCTURE_TYPES.trimToSize();
     }
 
     private static <F extends Feature<?, ?>> F safe(Supplier<F> lambda) {

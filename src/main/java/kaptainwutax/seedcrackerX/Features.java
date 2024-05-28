@@ -1,6 +1,7 @@
 package kaptainwutax.seedcrackerX;
 
 import com.seedfinding.mccore.version.MCVersion;
+import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.decorator.DesertWell;
 import com.seedfinding.mcfeature.decorator.EndGateway;
 import com.seedfinding.mcfeature.structure.*;
@@ -9,7 +10,12 @@ import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
 public class Features {
+    public static final List<RegionStructure<?, ?>> STRUCTURE_TYPES = new ArrayList<>();
 
     public static BuriedTreasure BURIED_TREASURE;
     public static DesertPyramid DESERT_PYRAMID;
@@ -29,15 +35,15 @@ public class Features {
     public static WarpedFungus WARPED_FUNGUS;
 
     public static void init(MCVersion version) {
-        safe(() -> BURIED_TREASURE = new BuriedTreasure(version));
-        safe(() -> DESERT_PYRAMID = new DesertPyramid(version));
-        safe(() -> END_CITY = new EndCity(version));
-        safe(() -> JUNGLE_PYRAMID = new JunglePyramid(version));
-        safe(() -> MONUMENT = new Monument(version));
-        safe(() -> SHIPWRECK = new Shipwreck(version));
-        safe(() -> SWAMP_HUT = new SwampHut(version));
-        safe(() -> PILLAGER_OUTPOST = new PillagerOutpost(version));
-        safe(() -> IGLOO = new Igloo(version));
+        safe(STRUCTURE_TYPES, () -> BURIED_TREASURE = new BuriedTreasure(version));
+        safe(STRUCTURE_TYPES, () -> DESERT_PYRAMID = new DesertPyramid(version));
+        safe(STRUCTURE_TYPES, () -> END_CITY = new EndCity(version));
+        safe(STRUCTURE_TYPES, () -> JUNGLE_PYRAMID = new JunglePyramid(version));
+        safe(STRUCTURE_TYPES, () -> MONUMENT = new Monument(version));
+        safe(STRUCTURE_TYPES, () -> SHIPWRECK = new Shipwreck(version));
+        safe(STRUCTURE_TYPES, () -> SWAMP_HUT = new SwampHut(version));
+        safe(STRUCTURE_TYPES, () -> PILLAGER_OUTPOST = new PillagerOutpost(version));
+        safe(STRUCTURE_TYPES, () -> IGLOO = new Igloo(version));
 
         safe(() -> END_GATEWAY = new EndGateway(version));
         safe(() -> DESERT_WELL = new DesertWell(version));
@@ -47,11 +53,18 @@ public class Features {
         safe(() -> WARPED_FUNGUS = new WarpedFungus(version));
     }
 
-    private static void safe(Runnable runnable) {
+    private static <F extends Feature<?, ?>> F safe(Supplier<F> lambda) {
         try {
-            runnable.run();
-        } catch (Exception e) {
+            return lambda.get();
+        } catch (Throwable t) {
+            SeedCracker.LOGGER.error("Exception thrown loading feature", t);
+            return null;
         }
+    }
+
+    private static <F extends Feature<?, ?>> void safe(List<F> list, Supplier<F> lambda) {
+        F initializedFeature = safe(lambda);
+        if (initializedFeature != null) list.add(initializedFeature);
     }
 
 }

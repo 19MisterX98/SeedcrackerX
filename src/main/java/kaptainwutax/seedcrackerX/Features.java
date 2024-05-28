@@ -37,22 +37,22 @@ public class Features {
     public static void init(MCVersion version) {
         STRUCTURE_TYPES.clear();
 
-        safe(STRUCTURE_TYPES, () -> BURIED_TREASURE = new BuriedTreasure(version));
-        safe(STRUCTURE_TYPES, () -> DESERT_PYRAMID = new DesertPyramid(version));
-        safe(STRUCTURE_TYPES, () -> END_CITY = new EndCity(version));
-        safe(STRUCTURE_TYPES, () -> JUNGLE_PYRAMID = new JunglePyramid(version));
-        safe(STRUCTURE_TYPES, () -> MONUMENT = new Monument(version));
-        safe(STRUCTURE_TYPES, () -> SHIPWRECK = new Shipwreck(version));
-        safe(STRUCTURE_TYPES, () -> SWAMP_HUT = new SwampHut(version));
-        safe(STRUCTURE_TYPES, () -> PILLAGER_OUTPOST = new PillagerOutpost(version));
-        safe(STRUCTURE_TYPES, () -> IGLOO = new Igloo(version));
+        BURIED_TREASURE = safe(STRUCTURE_TYPES, () -> new BuriedTreasure(version));
+        DESERT_PYRAMID = safe(STRUCTURE_TYPES, () -> new DesertPyramid(version));
+        END_CITY = safe(STRUCTURE_TYPES, () -> new EndCity(version));
+        JUNGLE_PYRAMID = safe(STRUCTURE_TYPES, () -> new JunglePyramid(version));
+        MONUMENT = safe(STRUCTURE_TYPES, () -> new Monument(version));
+        SHIPWRECK = safe(STRUCTURE_TYPES, () -> new Shipwreck(version));
+        SWAMP_HUT = safe(STRUCTURE_TYPES, () -> new SwampHut(version));
+        PILLAGER_OUTPOST = safe(STRUCTURE_TYPES, () -> new PillagerOutpost(version));
+        IGLOO = safe(STRUCTURE_TYPES, () -> new Igloo(version));
 
-        safe(() -> END_GATEWAY = new EndGateway(version));
-        safe(() -> DESERT_WELL = new DesertWell(version));
-        safe(() -> EMERALD_ORE = new EmeraldOre(version));
-        safe(() -> DUNGEON = new Dungeon(version));
-        safe(() -> DEEP_DUNGEON = new DeepDungeon(version));
-        safe(() -> WARPED_FUNGUS = new WarpedFungus(version));
+        END_GATEWAY = safe(() -> new EndGateway(version));
+        DESERT_WELL = safe(() -> new DesertWell(version));
+        EMERALD_ORE = safe(() -> new EmeraldOre(version));
+        DUNGEON = safe(() -> new Dungeon(version));
+        DEEP_DUNGEON = safe(() -> new DeepDungeon(version));
+        WARPED_FUNGUS = safe(() -> new WarpedFungus(version));
 
         STRUCTURE_TYPES.trimToSize();
     }
@@ -66,9 +66,10 @@ public class Features {
         }
     }
 
-    private static <F extends Feature<?, ?>> void safe(List<F> list, Supplier<F> lambda) {
+    private static <F extends RegionStructure<?, ?>> F safe(List<RegionStructure<?, ?>> list, Supplier<F> lambda) {
         F initializedFeature = safe(lambda);
         if (initializedFeature != null) list.add(initializedFeature);
+        return initializedFeature;
     }
 
 }

@@ -1,7 +1,7 @@
-# Tell Jitpack to build using Java 17 (defaults to 8)
+# Tell Jitpack to build using Java 21 (defaults to 8)
 before_install:
   # Fix: https://github.com/jitpack/jitpack.io/issues/4506#issuecomment-864562270
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
   - sdk update
-  - sdk install java 21.34.19-zulu
-  - sdk use java 21.34.19-zulu
+  - sdk install java 21.0.3-zulu
+  - sdk use java 21.0.3-zulu

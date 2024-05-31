@@ -1,5 +1,6 @@
 package kaptainwutax.seedcrackerX;
 
+import com.mojang.logging.LogUtils;
 import kaptainwutax.seedcrackerX.api.SeedCrackerAPI;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
@@ -8,11 +9,12 @@ import kaptainwutax.seedcrackerX.init.ClientCommands;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 
 public class SeedCracker implements ModInitializer {
-
+    public static final Logger LOGGER = LogUtils.getLogger();
     public static final ArrayList<SeedCrackerAPI> entrypoints = new ArrayList<>();
     private static SeedCracker INSTANCE;
     private final DataStorage dataStorage = new DataStorage();

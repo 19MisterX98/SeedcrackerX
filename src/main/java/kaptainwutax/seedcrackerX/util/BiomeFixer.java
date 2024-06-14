@@ -62,7 +62,7 @@ public class BiomeFixer {
         // internal, meh
         var biomeRegistries = BuiltinRegistries.createWrapperLookup().getWrapperOrThrow(RegistryKeys.BIOME);
 
-        return biomeRegistries.getOptional(RegistryKey.of(RegistryKeys.BIOME, new Identifier(biome.getName()))).orElse(
+        return biomeRegistries.getOptional(RegistryKey.of(RegistryKeys.BIOME, Identifier.ofVanilla(biome.getName()))).orElse(
                 biomeRegistries.getOrThrow(BiomeKeys.THE_VOID)
         ).value();
     }

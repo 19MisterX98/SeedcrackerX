@@ -42,7 +42,7 @@ public class Line extends Renderer {
                 this.color.getFGreen(),
                 this.color.getFBlue(),
                 1.0F
-        ).next();
+        );
     }
 
     @Override

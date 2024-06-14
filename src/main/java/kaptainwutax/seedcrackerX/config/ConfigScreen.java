@@ -44,7 +44,7 @@ public class ConfigScreen {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
                 .setTitle(Text.translatable("title"))
-                .setDefaultBackgroundTexture(new Identifier("minecraft:textures/block/blackstone.png"))
+                .setDefaultBackgroundTexture(Identifier.of("minecraft:textures/block/blackstone.png"))
                 .setTransparentBackground(true);
         ConfigEntryBuilder eb = builder.entryBuilder();
 

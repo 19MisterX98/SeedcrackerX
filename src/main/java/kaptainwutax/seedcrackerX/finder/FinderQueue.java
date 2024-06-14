@@ -56,8 +56,7 @@ public class FinderQueue {
 
         Vec3d camPos = camera.getPos();
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+
 
         if (Config.get().render == Config.RenderType.XRAY) {
             RenderSystem.disableDepthTest();
@@ -67,7 +66,8 @@ public class FinderQueue {
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
         RenderSystem.lineWidth(2.0f);
 
-        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
         this.finderControl.getActiveFinders().forEach(finder -> {
             if (finder.shouldRender()) {
@@ -75,9 +75,11 @@ public class FinderQueue {
             }
         });
 
-        if (buffer.isBuilding()) {
-            tessellator.draw();
+        var builtBuffer = buffer.endNullable();
+        if (builtBuffer != null) {
+            BufferRenderer.drawWithGlobalProgram(builtBuffer);
         }
+
         RenderSystem.enableDepthTest();
         RenderSystem.disableBlend();
 

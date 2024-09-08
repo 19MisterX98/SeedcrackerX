@@ -5,12 +5,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
+import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
+import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 
+import kaptainwutax.seedcrackerX.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.concurrent.Executors;
 
 public class Config {
     private static final Logger logger = LoggerFactory.getLogger("config");
@@ -35,11 +39,14 @@ public class Config {
     public FeatureToggle biome = new FeatureToggle(false);
     public RenderType render = RenderType.XRAY;
     public boolean active = true;
+    public boolean wholeCpu = false;
     public boolean debug = false;
     public boolean antiXrayBypass = true;
     private MCVersion version = MCVersion.latest();
     public boolean databaseSubmits = false;
     public boolean anonymusSubmits = false;
+
+    public static int threads = 5;
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -51,7 +58,17 @@ public class Config {
         } catch (IOException e) {
             logger.error("seedcracker couldn't save config", e);
         }
+
+        if (get().wholeCpu) {
+            threads = ThreadUtils.getAvailableThreads();
+        } else {
+            threads = 5;
+        }
+
+        FinderQueue.SERVICE = Executors.newFixedThreadPool(threads);
+        TimeMachine.SERVICE = Executors.newFixedThreadPool(threads);
     }
+
 
     public static void load() {
         Gson gson = new Gson();

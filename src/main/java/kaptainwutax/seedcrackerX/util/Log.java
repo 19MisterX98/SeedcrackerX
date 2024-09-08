@@ -40,7 +40,7 @@ public class Log {
         }
     }
 
-    public static void printSeed(String translateKey, long seedValue) {
+    public static void printSeed(String translateKey, long seedValue, long elapsed) {
         String message = translate(translateKey);
         String[] data = message.split(Pattern.quote("${SEED}"));
         String seed = String.valueOf(seedValue);
@@ -53,7 +53,20 @@ public class Log {
             if (data.length > 1) {
                 text1.append(Text.literal(data[1]));
             }
+
+            String elapsedTime = formatElapsedTime(elapsed);
+            text1.append(Text.literal(" in " + elapsedTime));
             schedule(() -> player.sendMessage(text1, false));
+        }
+    }
+
+    private static String formatElapsedTime(long elapsed) {
+        if (elapsed < 1000) {
+            return elapsed + " ms";
+        } else if (elapsed < 60000) {
+            return String.format("%.2f s", elapsed / 1000.0);
+        } else {
+            return String.format("%.2f min", elapsed / 60000.0);
         }
     }
 

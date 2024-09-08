@@ -22,6 +22,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.random.ChunkRandom;
 import net.minecraft.util.math.random.Xoroshiro128PlusPlusRandom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,18 +31,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TimeMachine {
     private static final Logger logger = LoggerFactory.getLogger("timeMachine");
 
-    public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
+    public static ExecutorService SERVICE = Executors.newFixedThreadPool(Config.threads);
 
     private final LCG inverseLCG = LCG.JAVA.combine(-2);
     public boolean isRunning = false;
@@ -49,6 +48,8 @@ public class TimeMachine {
     public Set<Long> structureSeeds = new HashSet<>();
     public Set<Long> worldSeeds = new HashSet<>();
     protected DataStorage dataStorage;
+
+    private long start = 0;
 
     public TimeMachine(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
@@ -103,7 +104,7 @@ public class TimeMachine {
 
         for (int pillarSeed = 0; pillarSeed < 1 << 16 && !this.shouldTerminate; pillarSeed++) {
             if (this.dataStorage.pillarData.test(pillarSeed)) {
-                Log.printSeed("tmachine.foundPillarSeed", pillarSeed);
+                Log.printSeed("tmachine.foundPillarSeed", pillarSeed, System.currentTimeMillis() - start);
                 this.pillarSeeds.add(pillarSeed);
             }
         }
@@ -136,6 +137,7 @@ public class TimeMachine {
             }
         }
         Log.warn("tmachine.startLifting", dataList.size());
+        start = System.currentTimeMillis();
 
         // You could first lift on 1L<<18 with %2 since that would be a smaller range
         // Then lift on 1<<19 with those 1<<18 fixed with % 4 and for nextInt(24)
@@ -144,8 +146,8 @@ public class TimeMachine {
             ChunkRand rand = new ChunkRand();
             for (UniformStructure.Data<?> data : dataList) {
                 rand.setRegionSeed(lowerBits, data.regionX, data.regionZ, data.feature.getSalt(), Config.get().getVersion());
-                if (rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) % 4 != data.offsetX % 4 ||
-                        rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) % 4 != data.offsetZ % 4) {
+                if (rand.nextInt(((UniformStructure<?>) data.feature).getOffset()) % 4 != data.offsetX % 4 ||
+                        rand.nextInt(((UniformStructure<?>) data.feature).getOffset()) % 4 != data.offsetZ % 4) {
                     return false;
                 }
             }
@@ -168,7 +170,16 @@ public class TimeMachine {
             return true;
         });
 
-        this.structureSeeds = strutureSeedStream.parallel().collect(Collectors.toSet());
+        ForkJoinPool customThreadPool = new ForkJoinPool(Config.threads);
+        Long seed = customThreadPool.submit(() ->
+                strutureSeedStream.parallel().findFirst().orElse(null)
+        ).join();
+
+        customThreadPool.shutdown();
+
+        this.structureSeeds = new HashSet<>();
+        if (seed != null)
+            this.structureSeeds.add(seed);
 
         if (!this.structureSeeds.isEmpty()) {
             Log.warn("tmachine.structureSeedSearchFinished");
@@ -201,7 +212,7 @@ public class TimeMachine {
             AtomicInteger completion = new AtomicInteger();
             ProgressListener progressListener = new ProgressListener();
 
-            for (int threadId = 0; threadId < 4; threadId++) {
+            for (int threadId = 0; threadId < Config.threads - 1; threadId++) {
                 int fThreadId = threadId;
 
                 SERVICE.submit(() -> {
@@ -228,7 +239,7 @@ public class TimeMachine {
 
                         if (matches) {
                             this.structureSeeds.add(seed);
-                            Log.printSeed("foundStructureSeed", seed);
+                            Log.printSeed("foundStructureSeed", seed, System.currentTimeMillis() - start);
                         }
 
                     }
@@ -290,7 +301,7 @@ public class TimeMachine {
                     if (matches) {
                         this.worldSeeds.add(worldSeed);
                         if (this.worldSeeds.size() < 10) {
-                            Log.printSeed("tmachine.foundWorldSeed", worldSeed);
+                            Log.printSeed("tmachine.foundWorldSeed", worldSeed, System.currentTimeMillis() - start);
                             if (this.worldSeeds.size() == 9) {
                                 Log.warn("tmachine.printSeedsInConsole");
                             }
@@ -318,7 +329,7 @@ public class TimeMachine {
             for (long structureSeed : this.structureSeeds) {
                 WorldSeed.fromHash(structureSeed, this.dataStorage.hashedSeedData.getHashedSeed()).forEach(worldSeed -> {
                     this.worldSeeds.add(worldSeed);
-                    Log.printSeed("tmachine.foundWorldSeed", worldSeed);
+                    Log.printSeed("tmachine.foundWorldSeed", worldSeed, System.currentTimeMillis() - start);
                 });
 
                 if (this.shouldTerminate) {
@@ -359,7 +370,7 @@ public class TimeMachine {
 
                 if (matches) {
                     this.worldSeeds.add(worldSeed);
-                    Log.printSeed("tmachine.foundWorldSeed", worldSeed);
+                    Log.printSeed("tmachine.foundWorldSeed", worldSeed, System.currentTimeMillis() - start);
                 }
                 if (this.shouldTerminate) {
                     return false;
@@ -388,7 +399,7 @@ public class TimeMachine {
                 if (matches) {
                     this.worldSeeds.add(worldSeed);
                     if (this.worldSeeds.size() < 10) {
-                        Log.printSeed("tmachine.foundWorldSeed", worldSeed);
+                        Log.printSeed("tmachine.foundWorldSeed", worldSeed, System.currentTimeMillis() - start);
                         if (this.worldSeeds.size() == 9) {
                             Log.warn("tmachine.printSeedsInConsole");
                         }
@@ -413,7 +424,7 @@ public class TimeMachine {
         Log.warn("tmachine.randomSeedSearch");
         for (long structureSeed : this.structureSeeds) {
             StructureSeed.toRandomWorldSeeds(structureSeed).forEach(s ->
-                    Log.printSeed("tmachine.foundWorldSeed", s));
+                    Log.printSeed("tmachine.foundWorldSeed", s, System.currentTimeMillis() - start));
 
         }
 
@@ -470,7 +481,7 @@ public class TimeMachine {
 
         if (!result.isEmpty() && this.structureSeeds.size() > result.size()) {
             if (result.size() < 10) {
-                result.forEach(seed -> Log.printSeed("foundStructureSeed", seed));
+                result.forEach(seed -> Log.printSeed("foundStructureSeed", seed, System.currentTimeMillis() - start));
             } else {
                 Log.warn("tmachine.succeedReducing", result.size());
             }

@@ -46,7 +46,7 @@ public class Config {
     public boolean databaseSubmits = false;
     public boolean anonymusSubmits = false;
 
-    public static int threads = 2;
+    public static int threads = 5;
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -62,7 +62,7 @@ public class Config {
         if (get().wholeCpu) {
             threads = ThreadUtils.getAvailableThreads();
         } else {
-            threads = 2;
+            threads = 5;
         }
 
         FinderQueue.SERVICE = Executors.newFixedThreadPool(threads);

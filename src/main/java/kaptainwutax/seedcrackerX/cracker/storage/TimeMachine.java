@@ -22,6 +22,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.random.ChunkRandom;
 import net.minecraft.util.math.random.Xoroshiro128PlusPlusRandom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,13 +31,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TimeMachine {
     private static final Logger logger = LoggerFactory.getLogger("timeMachine");
@@ -147,8 +146,8 @@ public class TimeMachine {
             ChunkRand rand = new ChunkRand();
             for (UniformStructure.Data<?> data : dataList) {
                 rand.setRegionSeed(lowerBits, data.regionX, data.regionZ, data.feature.getSalt(), Config.get().getVersion());
-                if (rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) % 4 != data.offsetX % 4 ||
-                        rand.nextInt(((UniformStructure<?>)data.feature).getOffset()) % 4 != data.offsetZ % 4) {
+                if (rand.nextInt(((UniformStructure<?>) data.feature).getOffset()) % 4 != data.offsetX % 4 ||
+                        rand.nextInt(((UniformStructure<?>) data.feature).getOffset()) % 4 != data.offsetZ % 4) {
                     return false;
                 }
             }
@@ -171,7 +170,16 @@ public class TimeMachine {
             return true;
         });
 
-        this.structureSeeds = strutureSeedStream.parallel().collect(Collectors.toSet());
+        ForkJoinPool customThreadPool = new ForkJoinPool(Config.threads);
+        Long seed = customThreadPool.submit(() ->
+                strutureSeedStream.parallel().findFirst().orElse(null)
+        ).join();
+
+        customThreadPool.shutdown();
+
+        this.structureSeeds = new HashSet<>();
+        if (seed != null)
+            this.structureSeeds.add(seed);
 
         if (!this.structureSeeds.isEmpty()) {
             Log.warn("tmachine.structureSeedSearchFinished");

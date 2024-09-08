@@ -76,6 +76,10 @@ public class ConfigScreen {
 
         settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
 
+        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.wholeCpu"), config.wholeCpu).setSaveConsumer(val -> config.wholeCpu = val).build());
+        settings.addEntry(eb.startTextDescription(Text.translatable("settings.wholeCpuExplained")).build());
+        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
+
         settings.addEntry(eb.startTextDescription((Text.translatable("settings.finderToggles"))).build());
         for (Finder.Type finder : Finder.Type.values()) {
             settings.addEntry(eb.startBooleanToggle(Text.translatable(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());

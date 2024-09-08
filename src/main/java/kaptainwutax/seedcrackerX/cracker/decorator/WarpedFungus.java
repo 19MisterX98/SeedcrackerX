@@ -64,6 +64,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
         public final List<BlockPos> posList = new ArrayList<>();
         private final int BlockX;
         private final int BlockZ;
+        private long start = 0;
 
         public Data(WarpedFungus feature, int blockX, int blockZ, Biome biome, List<BlockPos> posList, FullFungusData fungusData) {
             super(feature, blockX, blockZ, biome);
@@ -81,11 +82,12 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
             if (this.feature.getVersion().isNewerThan(MCVersion.v1_17_1)) return;
 
             Log.warn("fungus.start", BlockX, BlockZ);
+            start = System.currentTimeMillis();
 
             List<Long> fungusSeeds = fullFungi.crackSeed().boxed().toList();
 
             Log.debug("====================================");
-            fungusSeeds.forEach(s -> Log.printSeed("fungus.fungusSeed", s));
+            fungusSeeds.forEach(s -> Log.printSeed("fungus.fungusSeed", s, System.currentTimeMillis() - start));
 
             if (fungusSeeds.isEmpty()) {
                 Log.warn("fungus.wrongData");
@@ -105,7 +107,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
             Log.warn("fungus.gotStructureSeeds");
             for (Long structureSeed : structureSeedList) {
-                Log.printSeed("foundStructureSeed", structureSeed);
+                Log.printSeed("foundStructureSeed", structureSeed, System.currentTimeMillis() - start);
                 if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
                     result.add(structureSeed);
                 }
@@ -113,7 +115,7 @@ public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data>
 
             if (result.size() == 1) {
                 Log.debug("====================================");
-                result.forEach(seed -> Log.printSeed("crossCompare", seed));
+                result.forEach(seed -> Log.printSeed("crossCompare", seed, System.currentTimeMillis() - start));
                 Log.warn("fungus.usableAsWorldSeed");
                 dataStorage.getTimeMachine().structureSeeds = result;
             }

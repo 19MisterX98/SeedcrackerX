@@ -88,6 +88,7 @@
   "fungus.gotStructureSeeds": "got structure seeds:",
   "fungus.usableAsWorldSeed": "this structure seed is also usable as worldseed",
   "database.success": "sent seed to database successfully",
-  "database.fail": "failed to send the seed to database"
-
+  "database.fail": "failed to send the seed to database",
+  "settings.wholeCpu": "I paid for the whole CPU",
+  "settings.wholeCpuExplained": "Will use as many core as possible in your CPU to crack seed faster"
 }

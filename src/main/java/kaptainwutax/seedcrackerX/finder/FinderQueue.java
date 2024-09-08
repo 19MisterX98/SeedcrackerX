@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class FinderQueue {
 
     private final static FinderQueue INSTANCE = new FinderQueue();
-    public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
+    public static ExecutorService SERVICE = Executors.newFixedThreadPool(Config.threads);
 
     public FinderControl finderControl = new FinderControl();
 

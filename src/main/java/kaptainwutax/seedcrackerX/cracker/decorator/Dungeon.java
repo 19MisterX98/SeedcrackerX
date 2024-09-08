@@ -116,6 +116,8 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
         public static final float MIN_FLOOR_BITS = 26.0F;
         public static final float MAX_FLOOR_BITS = 48.0F;
 
+        private long start = 0;
+
         public final int offsetX;
         public final int blockX;
         public final int offsetZ;
@@ -162,6 +164,8 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
 
 
             Log.warn("dungeon.start");
+            start = System.currentTimeMillis();
+
             boolean debug = kaptainwutax.seedcrackerX.config.Config.get().debug;
             if (debug) {
                 StringBuilder floorString = new StringBuilder();
@@ -231,7 +235,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
                 if (result.isEmpty()) {
                     Log.warn("dungeon.finishedNeedAnotherOne");
                 } else if (result.size() == 1) {
-                    result.forEach(seed -> Log.printSeed("foundStructureSeed", seed));
+                    result.forEach(seed -> Log.printSeed("foundStructureSeed", seed, System.currentTimeMillis() - start));
                     dataStorage.getTimeMachine().structureSeeds = result;
                     dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
                 } else {
@@ -246,7 +250,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
                         ChunkRandomReverser.reversePopulationSeed((decoratorSeed ^ LCG.JAVA.multiplier)
                                         - this.feature.getConfig().getSalt(this.biome),
                                 this.chunkX << 4, this.chunkZ << 4, this.feature.getVersion()).forEach(structureSeed -> {
-                            Log.printSeed("foundStructureSeed", structureSeed);
+                            Log.printSeed("foundStructureSeed", structureSeed, System.currentTimeMillis() - start);
                             if (!dataStorage.getTimeMachine().structureSeeds.add(structureSeed)) {
                                 result.add(structureSeed);
                             }
@@ -256,7 +260,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
                     }
                 }
                 if (result.size() == 1) {
-                    result.forEach(seed -> Log.printSeed("crossCompare", seed));
+                    result.forEach(seed -> Log.printSeed("crossCompare", seed, System.currentTimeMillis() - start));
                     dataStorage.getTimeMachine().structureSeeds = result;
                 }
                 dataStorage.getTimeMachine().poke(TimeMachine.Phase.BIOMES);

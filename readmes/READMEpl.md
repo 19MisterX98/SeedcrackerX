@@ -122,7 +122,7 @@ Dla wersji moda starszych niż 2.13.1 należy używać prefiksu
   ### Komenda GUI
   - `/seedcracker gui`
   
-  Otwiera menu konfiguracji, w którym możesz dostosować ustawienia takie jak wersja Minecrafta na serwerze, opcje "znajdywarki" (finders), bazę danych oraz tryb renderowania.
+  Otwiera menu konfiguracji, w którym możesz dostosować ustawienia takie jak wersja Minecrafta na serwerze, opcje "znajdywarki" (finder), bazę danych oraz tryb renderowania.
   Istnieją alternatywne komendy do większości tych funkcji, jednak nie zaleca się już ich używania.
   
   ### Komenda Przeładowania Znajdywarki

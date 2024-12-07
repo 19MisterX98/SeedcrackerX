@@ -28,7 +28,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.14.0",
-    "minecraft": ">=1.21.2 <=1.21.3"
+    "minecraft": ">=1.21.4 <=1.21.4"
   },
   "suggests": {
     "flamingo": "*"

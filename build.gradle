@@ -72,9 +72,8 @@ java {
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
-	}
+	from("LICENSE")
+
 	from(configurations.includedLibrary.collect { it.isDirectory() ? it : zipTree(it) }) {
 		include 'com/seedfinding/**'
 	}

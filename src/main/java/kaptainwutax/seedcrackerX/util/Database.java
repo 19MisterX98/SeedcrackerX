@@ -1,5 +1,6 @@
 package kaptainwutax.seedcrackerX.util;
 
+import com.google.common.hash.Hashing;
 import com.mojang.authlib.HttpAuthenticationService;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
@@ -8,6 +9,7 @@ import com.mojang.authlib.exceptions.InvalidCredentialsException;
 import kaptainwutax.seedcrackerX.config.Config;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import org.apache.http.HttpStatus;
 
 import java.io.IOException;
 import java.net.URI;
@@ -40,29 +42,29 @@ public class Database {
     }
 
     public static void handleDatabaseCall(Long seed) {
-        HttpClient httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
-        MinecraftClient client = MinecraftClient.getInstance();
-        Map<String,Object> data = new HashMap<>();
-        data.put("serverIp", client.getNetworkHandler().getConnection().getAddress().toString());
-        data.put("dimension", client.world.getDimension().effects().getPath());
-        data.put("seed", seed+"L"); //javascript backend likes floating point. so we need to convert it to a string
-        data.put("version", Config.get().getVersion().name);
-        data.put("username", client.player.getName().getString());
-        data.put("hash", Config.get().anonymusSubmits? 1 : 0);
+        try (HttpClient httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2)
+            .build()) {
 
+            MinecraftClient client = MinecraftClient.getInstance();
+            Map<String, Object> data = new HashMap<>();
+            data.put("serverIp", client.getNetworkHandler().getConnection().getAddress().toString());
+            data.put("dimension", client.world.getDimension().effects().getPath());
+            data.put("seed", seed + "L"); //javascript backend likes floating point. so we need to convert it to a string
+            data.put("version", Config.get().getVersion().name);
+            data.put("username", client.player.getName().getString());
+            data.put("hash", Config.get().anonymusSubmits ? 1 : 0);
+            data.put("hashedSeed", Long.toString(Hashing.sha256().hashLong(seed).asLong()));
 
-        HttpRequest request = HttpRequest.newBuilder()
+            HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(HttpAuthenticationService.buildQuery(data)))
                 .uri(URI.create("https://script.google.com/macros/s/AKfycbye87L-fEYq2EkgczvhKb_kGecp5wL1oX95vg45TRSwNvpv7K-53zoInGTeI1FZ0kv7DA/exec"))
                 .setHeader("User-Agent", "SeedcrackerX mod")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .build();
 
-        try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 302) { //the page says "document moved" but the post gets processed
+            if (response.statusCode() == HttpStatus.SC_MOVED_TEMPORARILY) { // the page says "document moved" but the post gets processed
                 Log.warn("database.success");
             } else {
                 Log.warn("database.fail");

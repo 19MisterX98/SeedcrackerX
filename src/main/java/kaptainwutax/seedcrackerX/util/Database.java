@@ -54,7 +54,7 @@ public class Database {
             data.put("version", Config.get().getVersion().name);
             data.put("username", client.player.getName().getString());
             data.put("hash", Config.get().anonymusSubmits ? 1 : 0);
-            data.put("hashedSeed", Long.toString(Hashing.sha256().hashLong(seed).asLong()));
+            data.put("hashedSeed", Hashing.sha256().hashLong(seed).asLong() + "L");
 
             HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(HttpAuthenticationService.buildQuery(data)))

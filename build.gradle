@@ -17,6 +17,7 @@ repositories {
 	maven { url "https://maven.seedfinding.com/" }
 	maven { url "https://maven-snapshots.seedfinding.com/" }
 	maven { url "https://jitpack.io" }
+	maven { url "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
 }
 
 configurations {
@@ -52,6 +53,10 @@ dependencies {
 	includedLibrary('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
 	includedLibrary('com.seedfinding:latticg:1.06')
+
+	modRuntimeOnly('me.djtheredstoner:DevAuth-fabric:1.1.0') {
+		exclude group: 'net.fabricmc', module: 'fabric-loader'
+	}
 }
 
 processResources {

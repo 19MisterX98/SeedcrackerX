@@ -6,6 +6,7 @@ import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.FinderQueue;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
+import kaptainwutax.seedcrackerX.util.Database;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
@@ -32,6 +33,8 @@ public class SeedCracker implements ModInitializer {
                 entrypoints.add(entrypoint.getEntrypoint()));
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> ClientCommands.registerCommands(dispatcher));
+
+        Database.fetchSeeds();
     }
 
     public DataStorage getDataStorage() {

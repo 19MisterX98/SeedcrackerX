@@ -3,6 +3,7 @@ package kaptainwutax.seedcrackerX.finder;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import kaptainwutax.seedcrackerX.config.Config;
+import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.render.*;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -61,7 +62,7 @@ public class FinderQueue {
         if (Config.get().render == Config.RenderType.XRAY) {
             RenderSystem.disableDepthTest();
         }
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
         RenderSystem.lineWidth(2.0f);
@@ -83,7 +84,7 @@ public class FinderQueue {
         RenderSystem.enableDepthTest();
         RenderSystem.disableBlend();
 
-        RenderSystem.applyModelViewMatrix();
+        RenderSystem.restoreProjectionMatrix();
     }
 
     public List<Finder.Type> getActiveFinderTypes() {

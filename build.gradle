@@ -1,35 +1,13 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-configurations {
-	includedLibrary
-	implementation.extendsFrom includedLibrary
-}
-
-sourceSets {
-	api {
-		java {
-			compileClasspath += main.compileClasspath
-		}
-	}
-
-	main {
-		java {
-			compileClasspath += api.output
-			runtimeClasspath += api.output
-		}
-	}
+base {
+	archivesName = project.archives_base_name
 }
 
 repositories {
@@ -39,6 +17,12 @@ repositories {
 	maven { url "https://maven.seedfinding.com/" }
 	maven { url "https://maven-snapshots.seedfinding.com/" }
 	maven { url "https://jitpack.io" }
+	maven { url "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
+}
+
+configurations {
+	includedLibrary
+	implementation.extendsFrom includedLibrary
 }
 
 dependencies {
@@ -69,11 +53,9 @@ dependencies {
 	includedLibrary('com.seedfinding:mc_reversal:ca64c0890c106f1a2207623c316fce86f250b918') { transitive = false }
 
 	includedLibrary('com.seedfinding:latticg:1.06')
-}
 
-jar {
-	from(configurations.includedLibrary.collect { it.isDirectory() ? it : zipTree(it) }) {
-		include 'com/seedfinding/**'
+	modRuntimeOnly('me.djtheredstoner:DevAuth-fabric:1.1.0') {
+		exclude group: 'net.fabricmc', module: 'fabric-loader'
 	}
 }
 
@@ -85,92 +67,37 @@ processResources {
 	}
 }
 
-tasks.withType(AbstractArchiveTask).configureEach {
-	reproducibleFileOrder = true
-	preserveFileTimestamps = false
-}
-
 tasks.withType(JavaCompile).configureEach {
-	options.encoding = "UTF-8"
+	it.options.release = 21
 }
 
-tasks.withType(Jar).configureEach {
-	from "LICENSE.txt"
-	from sourceSets.api.output
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
-tasks.register('apiJar', Jar) {
-	archiveClassifier.set("api-dev")
+jar {
+	from("LICENSE")
 
-	from sourceSets.api.output
+	from(configurations.includedLibrary.collect { it.isDirectory() ? it : zipTree(it) }) {
+		include 'com/seedfinding/**'
+	}
 }
 
-tasks.register('remapApiJar', RemapJarTask) {
-	archiveClassifier.set("api")
-
-	input = apiJar.archiveFile.get().asFile
-	addNestedDependencies = false
-
-	dependsOn(apiJar)
-}
-
-build.dependsOn remapApiJar
-
+// configure the maven publication
 publishing {
 	publications {
-		def configurePom = {
-			packaging 'jar'
-			inceptionYear = '2021'
-			licenses {
-				license {
-					name = 'MIT'
-					url = 'https://github.com/19MisterX98/SeedcrackerX/blob/master/LICENSE.md'
-				}
-			}
-			url = 'https://github.com/19MisterX98/SeedcrackerX'
-			issueManagement {
-				url = 'https://github.com/19MisterX98/SeedcrackerX/issues'
-			}
-			scm {
-				url = 'https://github.com/19MisterX98/SeedcrackerX'
-			}
-			developers {
-				developer {
-					name = 'MisterX'
-					id = '19MisterX98'
-				}
-				developer {
-					name = 'Kap'
-					id = 'KaptainWutax'
-				}
-			}
-		}
-
-		mod(MavenPublication) {
-			artifactId 'seedcrackerx'
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			pom configurePom
-			pom.name = 'seedcrackerx'
-			pom.description = 'The seedcrackerx mod JAR'
-		}
-		api(MavenPublication) {
-			artifactId 'seedcrackerx-api'
-			artifact(remapApiJar) {
-				builtBy remapApiJar
-				classifier = ''
-			}
-			pom configurePom
-			pom.name = 'seedcrackerx-api'
-			pom.description = 'The seedcrackerx API'
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
+			from components.java
 		}
 	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
-		maven {
-			def releasesRepoUrl = "https://jitpack.io/com/github/19MisterX98/SeedcrackerX/latest"
-			def snapshotsRepoUrl = "https://jitpack.io/com/github/19MisterX98/SeedcrackerX/snapshots"
-			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-		}
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
 	}
 }

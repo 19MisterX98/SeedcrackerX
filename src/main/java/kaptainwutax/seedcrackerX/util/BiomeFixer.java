@@ -51,7 +51,11 @@ public class BiomeFixer {
         ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
         if (networkHandler == null) return Biomes.VOID;
 
-        Identifier biomeID = networkHandler.getRegistryManager().get(RegistryKeys.BIOME).getId(biome);
+        Identifier biomeID = networkHandler
+                .getRegistryManager()
+                .getOptional(RegistryKeys.BIOME)
+                .map(reg -> reg.getId(biome))
+                .orElse(null);
 
         if (biomeID == null) return Biomes.THE_VOID;
 
@@ -60,7 +64,7 @@ public class BiomeFixer {
 
     public static net.minecraft.world.biome.Biome swap(Biome biome) {
         // internal, meh
-        var biomeRegistries = BuiltinRegistries.createWrapperLookup().getWrapperOrThrow(RegistryKeys.BIOME);
+        var biomeRegistries = BuiltinRegistries.createWrapperLookup().getOrThrow(RegistryKeys.BIOME);
 
         return biomeRegistries.getOptional(RegistryKey.of(RegistryKeys.BIOME, Identifier.ofVanilla(biome.getName()))).orElse(
                 biomeRegistries.getOrThrow(BiomeKeys.THE_VOID)

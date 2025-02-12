@@ -65,6 +65,7 @@
   "tmachine.decoratorWorldSeedSearch": "Suche nach Welten-Seed mit Dekoratoren...",
   "tmachine.hashedSeedWorldSeedSearch": "Suche nach Welten-Seed mit Hashed Seed...",
   "tmachine.foundWorldSeed": "Welt-Seed gefunden ${SEED}.",
+  "tmachine.foundWorldSeedFromDatabase": "Welt-Seed ${SEED} in der Datenbank gefunden.",
   "tmachine.worldSeedSearchFinished": "Die Suche nach dem Welt-Seed ist abgeschlossen.",
   "tmachine.noResultsRevertingToBiomes": "Suche wurde ohne Ergebnis beendet. Es wird zur biom-basierten Suche zurückgekehrt.",
   "tmachine.moreBiomesNeeded": "Du musst mehr Informationen über die Biome sammeln.",

@@ -19,7 +19,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -103,9 +102,10 @@ public class Database {
     }
 
     private static void parseCsv(String csv) {
-        Arrays.stream(csv.split("\n")).skip(1).forEach(row -> {
+        String[] rows = csv.split("\n");
+        for (int i = rows.length - 1; i >= 1; i--) {
             try {
-                String[] seedEntry = row.split(",");
+                String[] seedEntry = rows[i].split(",");
                 String connection = seedEntry[0];
                 String seedString = seedEntry[2];
                 long seed = Long.parseLong(seedString.substring(0, seedString.length() - 1));
@@ -114,6 +114,6 @@ public class Database {
                 hashedSeedToSeed.put(hashedSeed, seed);
             } catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
             }
-        });
+        }
     }
 }

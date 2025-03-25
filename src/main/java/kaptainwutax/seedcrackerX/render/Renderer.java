@@ -1,13 +1,13 @@
 package kaptainwutax.seedcrackerX.render;
 
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
 
 public abstract class Renderer {
 
-    public abstract void render(Matrix4f matrix, VertexConsumer vertexConsumer, Vec3d cameraPos);
+    public abstract void render(MatrixStack.Entry matrix, VertexConsumer vertexConsumer, Vec3d cameraPos);
 
     public abstract BlockPos getPos();
 

@@ -1,17 +1,20 @@
 package kaptainwutax.seedcrackerX.finder;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.DepthTestFunction;
 import kaptainwutax.seedcrackerX.config.Config;
-import net.minecraft.client.gl.ShaderProgramKeys;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.joml.Matrix4f;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -20,6 +23,19 @@ public class FinderQueue {
 
     private final static FinderQueue INSTANCE = new FinderQueue();
     public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
+
+    private static final RenderPipeline LINES_NO_DEPTH_PIPELINE = RenderPipelines.register(
+            RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
+                    .withLocation(Identifier.of("seedcrackerx", "pipeline/lines_no_depth"))
+                    .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+                    .withFragmentShader(Identifier.of("seedcrackerx", "core/rendertype_lines"))
+                    .build()
+    );
+    public static final RenderLayer LINES_NO_DEPTH_LAYER = RenderLayer.of("seedcrackerx_no_depth", 3 * 512, LINES_NO_DEPTH_PIPELINE, RenderLayer.MultiPhaseParameters.builder()
+            .layering(RenderPhase.VIEW_OFFSET_Z_LAYERING)
+
+            .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(2f)))
+            .build(false));
 
     public FinderControl finderControl = new FinderControl();
 
@@ -52,39 +68,24 @@ public class FinderQueue {
         });
     }
 
-    public void renderFinders(Matrix4f matrix4f, Camera camera) {
+    static {
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> {
+            context.matrixStack().push();
+            FinderQueue.get().renderFinders(context.matrixStack().peek(), context.consumers().getBuffer(FinderQueue.LINES_NO_DEPTH_LAYER), context.camera());
+            context.matrixStack().pop();
+        });
+    }
+
+    public void renderFinders(MatrixStack.Entry matrix4f, VertexConsumer buffer, Camera camera) {
         if (Config.get().render == Config.RenderType.OFF) return;
 
         Vec3d camPos = camera.getPos();
-
-
-
-        if (Config.get().render == Config.RenderType.XRAY) {
-            RenderSystem.disableDepthTest();
-        }
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.lineWidth(2.0f);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
         this.finderControl.getActiveFinders().forEach(finder -> {
             if (finder.shouldRender()) {
                 finder.render(matrix4f, buffer, camPos);
             }
         });
-
-        var builtBuffer = buffer.endNullable();
-        if (builtBuffer != null) {
-            BufferRenderer.drawWithGlobalProgram(builtBuffer);
-        }
-
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableBlend();
-
-        RenderSystem.restoreProjectionMatrix();
     }
 
     public List<Finder.Type> getActiveFinderTypes() {

@@ -8,8 +8,7 @@
   "client": [
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
-    "ClientWorldMixin",
-    "GameRendererMixin"
+    "ClientWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -44,7 +44,7 @@ public class Log {
         String message = translate(translateKey);
         String[] data = message.split(Pattern.quote("${SEED}"));
         String seed = String.valueOf(seedValue);
-        Text text = Texts.bracketed((Text.literal(seed)).styled(style -> style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, seed)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("chat.copy.click"))).withInsertion(seed)));
+        Text text = Texts.bracketed((Text.literal(seed)).styled(style -> style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent.CopyToClipboard(seed)).withHoverEvent(new HoverEvent.ShowText(Text.translatable("chat.copy.click"))).withInsertion(seed)));
 
         PlayerEntity player = getPlayer();
 
@@ -58,7 +58,7 @@ public class Log {
     }
 
     public static void printDungeonInfo(String message) {
-        Text text = Texts.bracketed((Text.literal(message)).styled(style -> style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, message)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("chat.copy.click"))).withInsertion(message)));
+        Text text = Texts.bracketed((Text.literal(message)).styled(style -> style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent.CopyToClipboard(message)).withHoverEvent(new HoverEvent.ShowText( Text.translatable("chat.copy.click"))).withInsertion(message)));
 
         PlayerEntity player = getPlayer();
 

@@ -9,12 +9,12 @@ import kaptainwutax.seedcrackerX.util.FeatureToggle;
 import kaptainwutax.seedcrackerX.util.HeightContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,7 +88,7 @@ public abstract class Finder {
         return false;
     }
 
-    public void render(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vec3d cameraPos) {
+    public void render(MatrixStack.Entry matrix4f, VertexConsumer vertexConsumer, Vec3d cameraPos) {
         this.renderers.forEach(renderer -> renderer.render(matrix4f, vertexConsumer, cameraPos));
     }
 

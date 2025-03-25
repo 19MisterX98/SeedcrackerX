@@ -1,9 +1,9 @@
 package kaptainwutax.seedcrackerX.render;
 
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
 
 public class Line extends Renderer {
 
@@ -26,12 +26,13 @@ public class Line extends Renderer {
     }
 
     @Override
-    public void render(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vec3d cameraPos) {
-        this.putVertex(vertexConsumer, matrix4f, this.start, cameraPos);
-        this.putVertex(vertexConsumer, matrix4f, this.end, cameraPos);
+    public void render(MatrixStack.Entry matrix4f, VertexConsumer vertexConsumer, Vec3d cameraPos) {
+        Vec3d normal = this.end.subtract(this.start).normalize();
+        this.putVertex(vertexConsumer, matrix4f, this.start,normal, cameraPos);
+        this.putVertex(vertexConsumer, matrix4f, this.end, normal, cameraPos);
     }
 
-    protected void putVertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Vec3d pos, Vec3d cameraPos) {
+    protected void putVertex(VertexConsumer vertexConsumer, MatrixStack.Entry matrix4f, Vec3d pos, Vec3d normal, Vec3d cameraPos) {
         vertexConsumer.vertex(
                 matrix4f,
                 (float) (pos.x - cameraPos.x),
@@ -42,6 +43,11 @@ public class Line extends Renderer {
                 this.color.getFGreen(),
                 this.color.getFBlue(),
                 1.0F
+        ).normal(
+                matrix4f,
+                (float) normal.getX(),
+                (float) normal.getY(),
+                (float) normal.getZ()
         );
     }
 

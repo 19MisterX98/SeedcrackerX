@@ -15,6 +15,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -56,8 +57,8 @@ public class ConfigScreen {
                 .setSaveConsumer(val -> config.databaseSubmits = val).build());
         settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
         settings.addEntry(eb.startTextDescription(Text.translatable("settings.openDatabase").styled(s -> s
-                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, DatabaseCommand.databaseURL))
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("google sheet")))
+                .withClickEvent(new ClickEvent.OpenUrl(URI.create(DatabaseCommand.databaseURL)))
+                .withHoverEvent(new HoverEvent.ShowText(Text.literal("google sheet")))
                 .withColor(Formatting.BLUE)
                 .withUnderline(true)
                 .withItalic(true)))

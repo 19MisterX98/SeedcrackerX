@@ -27,8 +27,11 @@
     "seedcracker.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.0",
-    "minecraft": ">=1.21.5 <=1.21.5"
+    "fabricloader": ">=${loader_version}",
+    "minecraft": ">=1.21.5 <1.22",
+    "fabric-api": "*",
+    "cloth-config": "*",
+    "modmenu": "*"
   },
   "suggests": {
     "flamingo": "*"

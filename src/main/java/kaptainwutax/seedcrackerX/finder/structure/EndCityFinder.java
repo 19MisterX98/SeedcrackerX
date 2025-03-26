@@ -1,6 +1,5 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
-import com.seedfinding.mccore.util.pos.BPos;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;

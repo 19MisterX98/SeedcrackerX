@@ -33,7 +33,8 @@
     "fabric-command-api-v2": "*",
     "fabric-rendering-v1": "*",
     "fabric-resource-loader-v0": "*",
-    "cloth-config": "*"
+    "cloth-config": "*",
+    "fabric-api": ">=0.119.6",
   },
   "suggests": {
     "flamingo": "*",

@@ -28,6 +28,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	include modImplementation(fabricApi.module("fabric-api-base", project.fabric_api_version))
+	include modImplementation(fabricApi.module("fabric-transitive-access-wideners-v1", project.fabric_api_version))
 	include modImplementation(fabricApi.module("fabric-command-api-v2", project.fabric_api_version))
 	include modImplementation(fabricApi.module("fabric-rendering-v1", project.fabric_api_version))
 	include modImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_api_version))

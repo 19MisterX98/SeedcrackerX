@@ -25,6 +25,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+* The `SeedCrackerNetworkHandler` mixin is a sophisticated Minecraft mod component designed to enhance 
+* seed tracking and analysis by intercepting critical network events during chunk loading, 
+* game joining, and player respawning. It extends the game's network handling capabilities to support the SeedCrackerX 
+* mod's advanced seed cracking mechanisms. The mixin integrates closely with several key dependencies like 
+* `SeedCracker`, `HashedSeedData`, and `Database` to dynamically track and process seed-related information. It enables 
+* real-time seed data collection by intercepting network events, reloading finders based on dimension changes, and attempting to 
+* retrieve full world seeds from a remote database. Key functionalities include capturing hashed 
+* seed data during critical game state transitions, managing finder reloading through `ReloadFinders`, and facilitating 
+* seed information submission and retrieval via the `Database` class. The implementation provides a flexible, event-driven approach 
+* to seed analysis, allowing the mod to gather and process seed-related data across different Minecraft game contexts.
+* By leveraging Minecraft's network handler and integrating with the mod's configuration and data management systems, this 
+* mixin serves as a crucial bridge between game events and seed cracking functionality, enabling more sophisticated world generation analysis and seed discovery techniques.
+*/
+
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayNetworkHandlerMixin {
 

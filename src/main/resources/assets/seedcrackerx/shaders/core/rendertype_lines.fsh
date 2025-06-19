@@ -1,8 +1,10 @@
 #version 150
 
-uniform vec4 ColorModulator;
+#moj_import <minecraft:fog.glsl>
+#moj_import <minecraft:dynamictransforms.glsl>
 
-in float vertexDistance;
+in float sphericalVertexDistance;
+in float cylindricalVertexDistance;
 in vec4 vertexColor;
 
 out vec4 fragColor;

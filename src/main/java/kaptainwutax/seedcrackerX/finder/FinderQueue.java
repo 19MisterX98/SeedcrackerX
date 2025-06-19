@@ -11,6 +11,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class FinderQueue {
 
     private final static FinderQueue INSTANCE = new FinderQueue();
+    private static final Logger log = LoggerFactory.getLogger(FinderQueue.class);
     public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 
     private static final RenderPipeline LINES_NO_DEPTH_PIPELINE = RenderPipelines.register(

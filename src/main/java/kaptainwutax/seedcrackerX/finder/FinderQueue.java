@@ -3,7 +3,7 @@ package kaptainwutax.seedcrackerX.finder;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.DepthTestFunction;
 import kaptainwutax.seedcrackerX.config.Config;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import kaptainwutax.seedcrackerX.render.EndMainPassEvent;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -72,7 +72,7 @@ public class FinderQueue {
     }
 
     static {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> {
+        EndMainPassEvent.END_MAIN_PASS.register(context -> {
             context.matrixStack().push();
             FinderQueue.get().renderFinders(context.matrixStack().peek(), context.consumers().getBuffer(FinderQueue.LINES_NO_DEPTH_LAYER), context.camera());
             context.matrixStack().pop();

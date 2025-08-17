@@ -26,7 +26,7 @@ public abstract class ClientWorldMixin extends World {
     }
 
     @Inject(method = "disconnect", at = @At("HEAD"))
-    private void disconnect(CallbackInfo ci) {
+    private void disconnect(Text reasonText, CallbackInfo ci) {
         StructureSave.saveStructures(SeedCracker.get().getDataStorage().baseSeedData);
         SeedCracker.get().reset();
     }

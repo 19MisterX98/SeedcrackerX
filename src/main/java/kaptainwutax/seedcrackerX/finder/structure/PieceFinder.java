@@ -1,14 +1,18 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
 import kaptainwutax.seedcrackerX.finder.Finder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,7 +21,7 @@ import java.util.Map;
 
 public class PieceFinder extends Finder {
 
-    private final BlockBox boundingBox;
+    private final BoundingBox boundingBox;
     protected Map<BlockPos, BlockState> structure = new LinkedHashMap<>();
     protected List<BlockPos> searchPositions = new ArrayList<>();
 
@@ -25,11 +29,11 @@ public class PieceFinder extends Finder {
     protected int width;
     protected int height;
     protected int depth;
-    protected BlockMirror mirror;
-    protected BlockRotation rotation;
+    protected Mirror mirror;
+    protected Rotation rotation;
     private boolean debug;
 
-    public PieceFinder(World world, ChunkPos chunkPos, Direction facing, Vec3i size) {
+    public PieceFinder(Level world, ChunkPos chunkPos, Direction facing, Vec3i size) {
         super(world, chunkPos);
 
         this.setOrientation(facing);
@@ -38,12 +42,12 @@ public class PieceFinder extends Finder {
         this.depth = size.getZ();
 
         if (this.facing.getAxis() == Direction.Axis.Z) {
-            this.boundingBox = new BlockBox(
+            this.boundingBox = new BoundingBox(
                     0, 0, 0,
                     size.getX() - 1, size.getY() - 1, size.getZ() - 1
             );
         } else {
-            this.boundingBox = new BlockBox(
+            this.boundingBox = new BoundingBox(
                     0, 0, 0,
                     size.getZ() - 1, size.getY() - 1, size.getX() - 1
             );
@@ -68,12 +72,12 @@ public class PieceFinder extends Finder {
 
         //FOR DEBUGGING PIECES.
         if (this.debug) {
-            MinecraftClient.getInstance().execute(() -> {
+            Minecraft.getInstance().execute(() -> {
                 int y = this.rotation.ordinal() * 15 + this.mirror.ordinal() * 30 + 120;
 
                 if (this.chunkPos.x % 2 == 0 && this.chunkPos.z % 2 == 0) {
                     this.structure.forEach((pos, state) -> {
-                        this.world.setBlockState(this.chunkPos.getStartPos().add(pos).add(0, y, 0), state, 0);
+                        this.world.setBlock(this.chunkPos.getWorldPosition().offset(pos).offset(0, y, 0), state, 0);
                     });
                 }
             });
@@ -83,7 +87,7 @@ public class PieceFinder extends Finder {
             boolean found = true;
 
             for (Map.Entry<BlockPos, BlockState> entry : this.structure.entrySet()) {
-                BlockPos pos = this.chunkPos.getStartPos().add(center.add(entry.getKey()));
+                BlockPos pos = this.chunkPos.getWorldPosition().offset(center.offset(entry.getKey()));
                 BlockState state = this.world.getBlockState(pos);
 
                 //Blockstate may change when it gets placed in the world, that's why it's using the block here.
@@ -94,7 +98,7 @@ public class PieceFinder extends Finder {
             }
 
             if (found) {
-                result.add(this.chunkPos.getStartPos().add(center));
+                result.add(this.chunkPos.getWorldPosition().offset(center));
             }
         }
 
@@ -105,25 +109,25 @@ public class PieceFinder extends Finder {
         this.facing = facing;
 
         if (facing == null) {
-            this.rotation = BlockRotation.NONE;
-            this.mirror = BlockMirror.NONE;
+            this.rotation = Rotation.NONE;
+            this.mirror = Mirror.NONE;
         } else {
             switch (facing) {
                 case SOUTH:
-                    this.mirror = BlockMirror.LEFT_RIGHT;
-                    this.rotation = BlockRotation.NONE;
+                    this.mirror = Mirror.LEFT_RIGHT;
+                    this.rotation = Rotation.NONE;
                     break;
                 case WEST:
-                    this.mirror = BlockMirror.LEFT_RIGHT;
-                    this.rotation = BlockRotation.CLOCKWISE_90;
+                    this.mirror = Mirror.LEFT_RIGHT;
+                    this.rotation = Rotation.CLOCKWISE_90;
                     break;
                 case EAST:
-                    this.mirror = BlockMirror.NONE;
-                    this.rotation = BlockRotation.CLOCKWISE_90;
+                    this.mirror = Mirror.NONE;
+                    this.rotation = Rotation.CLOCKWISE_90;
                     break;
                 default:
-                    this.mirror = BlockMirror.NONE;
-                    this.rotation = BlockRotation.NONE;
+                    this.mirror = Mirror.NONE;
+                    this.rotation = Rotation.NONE;
             }
         }
 
@@ -134,16 +138,16 @@ public class PieceFinder extends Finder {
             return x;
         } else {
             return switch (this.facing) {
-                case NORTH, SOUTH -> this.boundingBox.getMinX() + x;
-                case WEST -> this.boundingBox.getMaxX() - z;
-                case EAST -> this.boundingBox.getMinX() + z;
+                case NORTH, SOUTH -> this.boundingBox.minX() + x;
+                case WEST -> this.boundingBox.maxX() - z;
+                case EAST -> this.boundingBox.minX() + z;
                 default -> x;
             };
         }
     }
 
     protected int applyYTransform(int y) {
-        return this.facing == null ? y : y + this.boundingBox.getMinY();
+        return this.facing == null ? y : y + this.boundingBox.minY();
     }
 
     protected int applyZTransform(int x, int z) {
@@ -151,9 +155,9 @@ public class PieceFinder extends Finder {
             return z;
         } else {
             return switch (this.facing) {
-                case NORTH -> this.boundingBox.getMaxZ() - z;
-                case SOUTH -> this.boundingBox.getMinZ() + z;
-                case WEST, EAST -> this.boundingBox.getMinZ() + x;
+                case NORTH -> this.boundingBox.maxZ() - z;
+                case SOUTH -> this.boundingBox.minZ() + z;
+                case WEST, EAST -> this.boundingBox.minZ() + x;
                 default -> z;
             };
         }
@@ -165,9 +169,9 @@ public class PieceFinder extends Finder {
         int z = this.applyZTransform(ox, oz);
         BlockPos pos = new BlockPos(x, y, z);
 
-        return !this.boundingBox.contains(pos) ?
-                Blocks.AIR.getDefaultState() :
-                this.structure.getOrDefault(pos, Blocks.AIR.getDefaultState());
+        return !this.boundingBox.isInside(pos) ?
+                Blocks.AIR.defaultBlockState() :
+                this.structure.getOrDefault(pos, Blocks.AIR.defaultBlockState());
     }
 
     protected void fillWithOutline(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState outline, BlockState inside, boolean onlyReplaceAir) {
@@ -194,17 +198,17 @@ public class PieceFinder extends Finder {
                 this.applyZTransform(x, z)
         );
 
-        if (this.boundingBox.contains(pos)) {
+        if (this.boundingBox.isInside(pos)) {
             if (state == null) {
                 this.structure.remove(pos);
                 return;
             }
 
-            if (this.mirror != BlockMirror.NONE) {
+            if (this.mirror != Mirror.NONE) {
                 state = state.mirror(this.mirror);
             }
 
-            if (this.rotation != BlockRotation.NONE) {
+            if (this.rotation != Rotation.NONE) {
                 state = state.rotate(this.rotation);
             }
 

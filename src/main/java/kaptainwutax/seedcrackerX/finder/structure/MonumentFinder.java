@@ -5,19 +5,18 @@ import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class MonumentFinder extends Finder {
     protected final Vec3i size = new Vec3i(8, 5, 8);
     protected List<PieceFinder> finders = new ArrayList<>();
 
-    public MonumentFinder(World world, ChunkPos chunkPos) {
+    public MonumentFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos);
 
         PieceFinder finder = new PieceFinder(world, chunkPos, Direction.NORTH, size);
@@ -45,7 +44,7 @@ public class MonumentFinder extends Finder {
         SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> pos.getY() != 56);
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new MonumentFinder(world, chunkPos));
         finders.add(new MonumentFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
@@ -56,7 +55,7 @@ public class MonumentFinder extends Finder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
         if (BiomeFixer.swap(biome).getCategory() != com.seedfinding.mcbiome.biome.Biome.Category.OCEAN) return new ArrayList<>();
         Map<PieceFinder, List<BlockPos>> result = this.findInChunkPieces();
         List<BlockPos> combinedResult = new ArrayList<>();
@@ -74,8 +73,8 @@ public class MonumentFinder extends Finder {
                 RegionStructure.Data<?> data = Features.MONUMENT.at(monumentStart.x, monumentStart.z);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                    this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(0, 0, 255)));
-                    this.renderers.add(new Cube(monumentStart.getStartPos().add(0, pos.getY(), 0), new Color(0, 0, 255)));
+                    this.cuboids.add(new Cuboid(pos, pieceFinder.getLayout(), ARGB.color(0, 0, 255)));
+                    this.cuboids.add(new Cuboid(monumentStart.getWorldPosition().offset(0, pos.getY(), 0), ARGB.color(0, 0, 255)));
                 }
             });
         });
@@ -99,11 +98,11 @@ public class MonumentFinder extends Finder {
     }
 
     public void buildStructure(PieceFinder finder) {
-        BlockState prismarine = Blocks.PRISMARINE.getDefaultState();
-        BlockState prismarineBricks = Blocks.PRISMARINE_BRICKS.getDefaultState();
-        BlockState darkPrismarine = Blocks.DARK_PRISMARINE.getDefaultState();
-        BlockState seaLantern = Blocks.SEA_LANTERN.getDefaultState();
-        BlockState water = Blocks.WATER.getDefaultState();
+        BlockState prismarine = Blocks.PRISMARINE.defaultBlockState();
+        BlockState prismarineBricks = Blocks.PRISMARINE_BRICKS.defaultBlockState();
+        BlockState darkPrismarine = Blocks.DARK_PRISMARINE.defaultBlockState();
+        BlockState seaLantern = Blocks.SEA_LANTERN.defaultBlockState();
+        BlockState water = Blocks.WATER.defaultBlockState();
 
         //4 bottom pillars.
         for (int i = 0; i < 4; i++) {

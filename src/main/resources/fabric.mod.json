@@ -28,11 +28,13 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": ">=1.21.6 <1.22",
+    "minecraft": ">=1.21.9 <1.22",
     "fabric-api-base": "*",
+    "fabric-transitive-access-wideners-v1": "*",
     "fabric-command-api-v2": "*",
     "fabric-rendering-v1": "*",
     "fabric-resource-loader-v0": "*",
+    "fabric-resource-loader-v1": "*",
     "cloth-config": "*"
   },
   "suggests": {

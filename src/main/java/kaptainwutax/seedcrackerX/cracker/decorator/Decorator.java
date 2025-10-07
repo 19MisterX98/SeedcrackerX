@@ -6,7 +6,7 @@ import com.seedfinding.mccore.rand.ChunkRand;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcterrain.TerrainGenerator;
-import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +32,9 @@ public abstract class Decorator<C extends Decorator.Config, D extends Decorator.
         return true;
     }
 
-    public boolean canStart(D data, long worldSeed, ChunkRandom rand) {
-        long l = rand.setPopulationSeed(worldSeed, data.chunkX << 4, data.chunkZ << 4);
-        rand.setDecoratorSeed(l, this.getIndex(data.biome), this.getStep(data.biome));
+    public boolean canStart(D data, long worldSeed, WorldgenRandom rand) {
+        long l = rand.setDecorationSeed(worldSeed, data.chunkX << 4, data.chunkZ << 4);
+        rand.setFeatureSeed(l, this.getIndex(data.biome), this.getStep(data.biome));
         return true;
     }
 
@@ -87,7 +87,7 @@ public abstract class Decorator<C extends Decorator.Config, D extends Decorator.
             this.biome = biome;
         }
 
-        public boolean testStart(long worldSeed, ChunkRandom rand) {
+        public boolean testStart(long worldSeed, WorldgenRandom rand) {
             return ((Decorator) this.feature).canStart(this, worldSeed, rand);
         }
     }

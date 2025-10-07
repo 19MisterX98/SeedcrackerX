@@ -4,16 +4,26 @@ import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.decorator.DesertWell;
 import com.seedfinding.mcfeature.decorator.EndGateway;
-import com.seedfinding.mcfeature.structure.*;
+import com.seedfinding.mcfeature.structure.BuriedTreasure;
+import com.seedfinding.mcfeature.structure.OldStructure;
+import com.seedfinding.mcfeature.structure.PillagerOutpost;
+import com.seedfinding.mcfeature.structure.Shipwreck;
+import com.seedfinding.mcfeature.structure.Structure;
+import com.seedfinding.mcfeature.structure.TriangularStructure;
+import com.seedfinding.mcfeature.structure.UniformStructure;
 import kaptainwutax.seedcrackerX.config.ConfigScreen;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
-import kaptainwutax.seedcrackerX.cracker.decorator.*;
+import kaptainwutax.seedcrackerX.cracker.decorator.Decorator;
+import kaptainwutax.seedcrackerX.cracker.decorator.DeepDungeon;
+import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
+import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
+import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.BlockUpdateQueue;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -69,8 +79,8 @@ public class DataStorage {
     public void tick() {
         if (openGui) {
             ConfigScreen configscreen = new ConfigScreen();
-            Screen screen = configscreen.getConfigScreenByCloth(MinecraftClient.getInstance().currentScreen);
-            MinecraftClient.getInstance().setScreen(screen);
+            Screen screen = configscreen.getConfigScreenByCloth(Minecraft.getInstance().screen);
+            Minecraft.getInstance().setScreen(screen);
             openGui = false;
         }
         if (!this.timeMachine.isRunning) {

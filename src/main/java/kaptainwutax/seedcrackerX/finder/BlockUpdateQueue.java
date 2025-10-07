@@ -1,10 +1,10 @@
 package kaptainwutax.seedcrackerX.finder;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,12 +12,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BlockUpdateQueue {
-    private final Queue<Pair<Thread, ArrayList<BlockPos>>> blocksAndAction = new LinkedList<>();
+    private final Queue<Tuple<Thread, ArrayList<BlockPos>>> blocksAndAction = new LinkedList<>();
     private final HashSet<BlockPos> alreadyChecked = new HashSet<>();
 
     public boolean add(ArrayList<BlockPos> blockPoses, BlockPos originPos, Thread operationAtEnd) {
         if (alreadyChecked.add(originPos)) {
-            blocksAndAction.add(new Pair<>(operationAtEnd, blockPoses));
+            blocksAndAction.add(new Tuple<>(operationAtEnd, blockPoses));
             return true;
         }
         return false;
@@ -26,26 +26,26 @@ public class BlockUpdateQueue {
     public void tick() {
         if (blocksAndAction.isEmpty()) return;
 
-        Pair<Thread, ArrayList<BlockPos>> current = blocksAndAction.peek();
-        ArrayList<BlockPos> currentBlocks = current.getRight();
+        Tuple<Thread, ArrayList<BlockPos>> current = blocksAndAction.peek();
+        ArrayList<BlockPos> currentBlocks = current.getB();
         for (int i = 0; i < 5; i++) {
             if (currentBlocks.isEmpty()) {
-                current.getLeft().start();
+                current.getA().start();
                 blocksAndAction.remove();
                 if (blocksAndAction.isEmpty()) {
                     return;
                 } else {
                     current = blocksAndAction.peek();
-                    currentBlocks = current.getRight();
+                    currentBlocks = current.getB();
                 }
             }
-            if (MinecraftClient.getInstance().getNetworkHandler() == null) {
+            if (Minecraft.getInstance().getConnection() == null) {
                 blocksAndAction.clear();
                 return;
             }
-            PlayerActionC2SPacket p = new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, currentBlocks.remove(0),
+            ServerboundPlayerActionPacket p = new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.ABORT_DESTROY_BLOCK, currentBlocks.remove(0),
                     Direction.DOWN);
-            MinecraftClient.getInstance().getNetworkHandler().sendPacket(p);
+            Minecraft.getInstance().getConnection().send(p);
         }
     }
 }

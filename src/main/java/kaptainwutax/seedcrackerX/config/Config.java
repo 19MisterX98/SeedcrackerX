@@ -6,11 +6,14 @@ import com.google.gson.GsonBuilder;
 import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 
 public class Config {
     private static final Logger logger = LoggerFactory.getLogger("config");

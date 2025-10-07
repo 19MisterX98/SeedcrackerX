@@ -6,10 +6,10 @@
   "mixins": [
   ],
   "client": [
-    "ClientPlayerEntityMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "ClientWorldMixin",
-    "WorldRendererMixin"
+    "ClientLevelMixin",
+    "ClientPacketListenerMixin",
+    "LevelRendererMixin",
+    "LocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

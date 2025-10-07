@@ -1,20 +1,30 @@
 package kaptainwutax.seedcrackerX.finder;
 
 import kaptainwutax.seedcrackerX.config.Config;
-import kaptainwutax.seedcrackerX.finder.decorator.*;
+import kaptainwutax.seedcrackerX.finder.decorator.DesertWellFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.EndGatewayFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.EndPillarsFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.WarpedFungusFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
-import kaptainwutax.seedcrackerX.finder.structure.*;
-import kaptainwutax.seedcrackerX.render.Renderer;
+import kaptainwutax.seedcrackerX.finder.structure.BuriedTreasureFinder;
+import kaptainwutax.seedcrackerX.finder.structure.DesertPyramidFinder;
+import kaptainwutax.seedcrackerX.finder.structure.EndCityFinder;
+import kaptainwutax.seedcrackerX.finder.structure.IglooFinder;
+import kaptainwutax.seedcrackerX.finder.structure.JunglePyramidFinder;
+import kaptainwutax.seedcrackerX.finder.structure.MonumentFinder;
+import kaptainwutax.seedcrackerX.finder.structure.OutpostFinder;
+import kaptainwutax.seedcrackerX.finder.structure.ShipwreckFinder;
+import kaptainwutax.seedcrackerX.finder.structure.SwampHutFinder;
+import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 import kaptainwutax.seedcrackerX.util.HeightContext;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,12 +48,12 @@ public abstract class Finder {
         }
     }
 
-    protected MinecraftClient mc = MinecraftClient.getInstance();
-    protected List<Renderer> renderers = new ArrayList<>();
-    protected World world;
+    protected Minecraft mc = Minecraft.getInstance();
+    protected final List<Cuboid> cuboids = new ArrayList<>();
+    protected Level world;
     protected ChunkPos chunkPos;
 
-    public Finder(World world, ChunkPos chunkPos) {
+    public Finder(Level world, ChunkPos chunkPos) {
         this.world = world;
         this.chunkPos = chunkPos;
     }
@@ -60,7 +70,7 @@ public abstract class Finder {
         return newList;
     }
 
-    public World getWorld() {
+    public Level getWorld() {
         return this.world;
     }
 
@@ -71,43 +81,39 @@ public abstract class Finder {
     public abstract List<BlockPos> findInChunk();
 
     public boolean shouldRender() {
-        DimensionType finderDim = this.world.getDimension();
-        DimensionType playerDim = mc.player.clientWorld.getDimension();
+        DimensionType finderDim = this.world.dimensionType();
+        DimensionType playerDim = mc.player.level().dimensionType();
 
         if (finderDim != playerDim) return false;
 
-        int renderDistance = mc.options.getViewDistance().getValue() * 16 + 16;
-        Vec3d playerPos = mc.player.getPos();
+        int renderDistance = mc.options.renderDistance().get() * 16 + 16;
+        Vec3 playerPos = mc.player.position();
 
-        for (Renderer renderer : this.renderers) {
-            BlockPos pos = renderer.getPos();
-            double distance = playerPos.squaredDistanceTo(pos.getX(), playerPos.y, pos.getZ());
+        for (Cuboid cuboid : this.cuboids) {
+            BlockPos pos = cuboid.getCenterPos();
+            double distance = playerPos.distanceToSqr(pos.getX(), playerPos.y, pos.getZ());
             if (distance <= renderDistance * renderDistance + 32) return true;
         }
 
         return false;
     }
 
-    public void render(MatrixStack.Entry matrix4f, VertexConsumer vertexConsumer, Vec3d cameraPos) {
-        this.renderers.forEach(renderer -> renderer.render(matrix4f, vertexConsumer, cameraPos));
-    }
-
     public boolean isUseless() {
-        return this.renderers.isEmpty();
+        return this.cuboids.isEmpty();
     }
 
     public abstract boolean isValidDimension(DimensionType dimension);
 
     public boolean isOverworld(DimensionType dimension) {
-        return dimension.effects().getPath().equals("overworld");
+        return dimension.effectsLocation().getPath().equals("overworld");
     }
 
     public boolean isNether(DimensionType dimension) {
-        return dimension.effects().getPath().equals("the_nether");
+        return dimension.effectsLocation().getPath().equals("the_nether");
     }
 
     public boolean isEnd(DimensionType dimension) {
-        return dimension.effects().getPath().equals("the_end");
+        return dimension.effectsLocation().getPath().equals("the_end");
     }
 
     public enum Category {

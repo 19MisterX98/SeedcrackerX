@@ -15,8 +15,8 @@ import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.TimeMachine;
 import kaptainwutax.seedcrackerX.util.HeightContext;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -68,7 +68,7 @@ public class Dungeon extends Decorator<Decorator.Config, Dungeon.Data> {
     }
 
     @Override
-    public boolean canStart(Dungeon.Data data, long worldSeed, ChunkRandom rand) {
+    public boolean canStart(Dungeon.Data data, long worldSeed, WorldgenRandom rand) {
         super.canStart(data, worldSeed, rand);
         int x, y, z;
 

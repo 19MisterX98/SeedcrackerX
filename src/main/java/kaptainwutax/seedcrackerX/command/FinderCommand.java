@@ -6,9 +6,9 @@ import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 
 public class FinderCommand extends ClientCommand {
     ReloadFinders reloadFinders = new ReloadFinders();
@@ -46,7 +46,7 @@ public class FinderCommand extends ClientCommand {
     }
 
     private int printFinderType(Finder.Type finderType) {
-        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 
@@ -59,7 +59,7 @@ public class FinderCommand extends ClientCommand {
     private int setFinderType(Finder.Type finderType, boolean flag, boolean save) {
         finderType.enabled.set(flag);
         if (save) Config.save();
-        sendFeedback(Log.translate("finder.setFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(flag).toUpperCase() + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("finder.setFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(flag).toUpperCase() + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 

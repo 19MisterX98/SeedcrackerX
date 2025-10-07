@@ -6,7 +6,7 @@ import com.seedfinding.mccore.rand.ChunkRand;
 import com.seedfinding.mccore.state.Dimension;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mccore.version.VersionMap;
-import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 public class DeepDungeon extends Decorator<Decorator.Config, DeepDungeon.Data> {
 
@@ -28,7 +28,7 @@ public class DeepDungeon extends Decorator<Decorator.Config, DeepDungeon.Data> {
     }
 
     @Override
-    public boolean canStart(DeepDungeon.Data data, long worldSeed, ChunkRandom rand) {
+    public boolean canStart(DeepDungeon.Data data, long worldSeed, WorldgenRandom rand) {
         super.canStart(data, worldSeed, rand);
         int x, y, z;
 

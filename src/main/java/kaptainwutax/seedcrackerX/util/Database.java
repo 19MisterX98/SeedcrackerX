@@ -4,10 +4,9 @@ import com.mojang.authlib.HttpAuthenticationService;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.exceptions.InsufficientPrivilegesException;
-import com.mojang.authlib.exceptions.InvalidCredentialsException;
 import kaptainwutax.seedcrackerX.config.Config;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.ContentType;
@@ -34,22 +33,19 @@ public class Database {
     private static final Map<String, Long> connectionToSeed = new HashMap<>();
     private static final Map<Long, Long> hashedSeedToSeed = new HashMap<>();
 
-    public static Text joinFakeServerForAuth() {
+    public static Component joinFakeServerForAuth() {
         try {
-            MinecraftClient client = MinecraftClient.getInstance();
-            client.getSessionService().joinServer(client.getSession().getUuidOrNull(), client.getSession().getAccessToken(), "seedcrackerx");
+            Minecraft client = Minecraft.getInstance();
+            client.services().sessionService().joinServer(client.getUser().getProfileId(), client.getUser().getAccessToken(), "seedcrackerx");
         }
         catch (AuthenticationUnavailableException authenticationUnavailableException) {
-            return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.serversUnavailable"));
-        }
-        catch (InvalidCredentialsException authenticationUnavailableException) {
-            return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.invalidSession"));
+            return Component.translatable("disconnect.loginFailedInfo", Component.translatable("disconnect.loginFailedInfo.serversUnavailable"));
         }
         catch (InsufficientPrivilegesException authenticationUnavailableException) {
-            return Text.translatable("disconnect.loginFailedInfo", Text.translatable("disconnect.loginFailedInfo.insufficientPrivileges"));
+            return Component.translatable("disconnect.loginFailedInfo", Component.translatable("disconnect.loginFailedInfo.insufficientPrivileges"));
         }
         catch (AuthenticationException authenticationUnavailableException) {
-            return Text.translatable("disconnect.loginFailedInfo", authenticationUnavailableException.getMessage());
+            return Component.translatable("disconnect.loginFailedInfo", authenticationUnavailableException.getMessage());
         }
         return null;
     }
@@ -63,10 +59,10 @@ public class Database {
     }
 
     public static void handleDatabaseCall(Long seed) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         Map<String,Object> data = new HashMap<>();
-        data.put("serverIp", client.getNetworkHandler().getConnection().getAddress().toString());
-        data.put("dimension", client.world.getDimension().effects().getPath());
+        data.put("serverIp", client.getConnection().getConnection().getRemoteAddress().toString());
+        data.put("dimension", client.level.dimensionType().effectsLocation().getPath());
         data.put("seed", seed+"L"); //javascript backend likes floating point. so we need to convert it to a string
         data.put("version", Config.get().getVersion().name);
         data.put("username", client.player.getName().getString());

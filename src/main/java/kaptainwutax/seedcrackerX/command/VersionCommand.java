@@ -5,9 +5,9 @@ import com.seedfinding.mccore.version.MCVersion;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 
 public class VersionCommand extends ClientCommand {
 
@@ -27,7 +27,7 @@ public class VersionCommand extends ClientCommand {
     private int setVersion(MCVersion version) {
         Config.get().setVersion(version);
         Config.save();
-        ClientCommand.sendFeedback(Log.translate("version.setVersion") + " " + version + ".", Formatting.AQUA, true);
+        ClientCommand.sendFeedback(Log.translate("version.setVersion") + " " + version + ".", ChatFormatting.AQUA, true);
         return 0;
     }
 

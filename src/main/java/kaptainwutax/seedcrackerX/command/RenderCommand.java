@@ -4,9 +4,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 
 public class RenderCommand extends ClientCommand {
 
@@ -29,14 +29,14 @@ public class RenderCommand extends ClientCommand {
     }
 
     private int printRenderMode() {
-        sendFeedback(Log.translate("render.getRenderMode") + " [" + Config.get().render + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("render.getRenderMode") + " [" + Config.get().render + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 
     private int setRenderMode(Config.RenderType renderType) {
         Config.get().render = renderType;
         Config.save();
-        sendFeedback(Log.translate("render.setRenderMode") + " [" + Config.get().render + "].", Formatting.AQUA, false);
+        sendFeedback(Log.translate("render.setRenderMode") + " [" + Config.get().render + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 

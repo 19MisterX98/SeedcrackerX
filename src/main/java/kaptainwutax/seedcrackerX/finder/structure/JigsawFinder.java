@@ -1,9 +1,12 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,14 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 public class JigsawFinder extends PieceFinder {
-    public JigsawFinder(World world, ChunkPos chunkPos, Direction facing, Vec3i size) {
+    public JigsawFinder(Level world, ChunkPos chunkPos, Direction facing, Vec3i size) {
         super(world, chunkPos, facing, size);
     }
 
     public static Map<Direction, List<BlockPos>> getSearchPositions(int xRotation, int zRotation, int xOffset, int zOffset, Vec3i size) {
         Map<Direction, List<BlockPos>> positions = new HashMap<>();
 
-        for(Direction direction : Direction.Type.HORIZONTAL) {
+        for(Direction direction : Direction.Plane.HORIZONTAL) {
             positions.put(direction, new ArrayList<>());
             //this was painful and my hope is to never do it again
             int x = switch (direction) {
@@ -51,15 +54,15 @@ public class JigsawFinder extends PieceFinder {
     @Override
     public void setOrientation(Direction facing) {
         this.facing = facing;
-        this.mirror = BlockMirror.NONE;
+        this.mirror = Mirror.NONE;
         if (facing == null) {
-            this.rotation = BlockRotation.NONE;
+            this.rotation = Rotation.NONE;
         } else {
             switch (facing) {
-                case SOUTH -> this.rotation = BlockRotation.CLOCKWISE_180;
-                case WEST -> this.rotation = BlockRotation.COUNTERCLOCKWISE_90;
-                case EAST -> this.rotation = BlockRotation.CLOCKWISE_90;
-                default -> this.rotation = BlockRotation.NONE;
+                case SOUTH -> this.rotation = Rotation.CLOCKWISE_180;
+                case WEST -> this.rotation = Rotation.COUNTERCLOCKWISE_90;
+                case EAST -> this.rotation = Rotation.CLOCKWISE_90;
+                default -> this.rotation = Rotation.NONE;
             }
         }
     }

@@ -1,7 +1,14 @@
 package kaptainwutax.seedcrackerX.init;
 
 import com.mojang.brigadier.CommandDispatcher;
-import kaptainwutax.seedcrackerX.command.*;
+import kaptainwutax.seedcrackerX.command.ClientCommand;
+import kaptainwutax.seedcrackerX.command.CrackerCommand;
+import kaptainwutax.seedcrackerX.command.DataCommand;
+import kaptainwutax.seedcrackerX.command.DatabaseCommand;
+import kaptainwutax.seedcrackerX.command.FinderCommand;
+import kaptainwutax.seedcrackerX.command.GuiCommand;
+import kaptainwutax.seedcrackerX.command.RenderCommand;
+import kaptainwutax.seedcrackerX.command.VersionCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import java.util.ArrayList;

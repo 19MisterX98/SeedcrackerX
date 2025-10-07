@@ -4,9 +4,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 
 public class CrackerCommand extends ClientCommand {
 
@@ -30,9 +30,9 @@ public class CrackerCommand extends ClientCommand {
     private void feedback(boolean success, boolean flag) {
         String action = Log.translate(flag ? "cracker.enabled" : "cracker.disabled");
         if (success) {
-            sendFeedback(Log.translate("cracker.successfully") + action, Formatting.GREEN, false);
+            sendFeedback(Log.translate("cracker.successfully") + action, ChatFormatting.GREEN, false);
         } else {
-            sendFeedback(Log.translate("cracker.already") + action, Formatting.RED, false);
+            sendFeedback(Log.translate("cracker.already") + action, ChatFormatting.RED, false);
         }
         Config.save();
     }

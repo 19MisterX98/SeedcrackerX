@@ -7,14 +7,14 @@ import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import kaptainwutax.seedcrackerX.render.Cuboid;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class EndPillarsFinder extends Finder {
     private final boolean alreadyFound;
     protected BedrockMarkerFinder[] bedrockMarkers = new BedrockMarkerFinder[10];
 
-    public EndPillarsFinder(World world, ChunkPos chunkPos) {
+    public EndPillarsFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos);
 
         this.alreadyFound = !SeedCracker.get().getDataStorage().addPillarData(null, DataAddedEvent.POKE_PILLARS);
@@ -38,11 +38,11 @@ public class EndPillarsFinder extends Finder {
                 x = Math.round(x);
                 z = Math.round(z);
             }
-            this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, new ChunkPos(BlockPos.ofFloored(x, 0, z)), BlockPos.ofFloored(x, 0, z));
+            this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, new ChunkPos(BlockPos.containing(x, 0, z)), BlockPos.containing(x, 0, z));
         }
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new EndPillarsFinder(world, chunkPos));
         return finders;
@@ -61,7 +61,7 @@ public class EndPillarsFinder extends Finder {
             PillarData pillarData = new PillarData(result.stream().map(Vec3i::getY).collect(Collectors.toList()));
 
             if (SeedCracker.get().getDataStorage().addPillarData(pillarData, DataAddedEvent.POKE_PILLARS)) {
-                result.forEach(pos -> this.renderers.add(new Cube(pos, new Color(128, 0, 128))));
+                result.forEach(pos -> this.cuboids.add(new Cuboid(pos, ARGB.color(128, 0, 128))));
             }
 
         }
@@ -78,7 +78,7 @@ public class EndPillarsFinder extends Finder {
 
         protected static List<BlockPos> SEARCH_POSITIONS;
 
-        public BedrockMarkerFinder(World world, ChunkPos chunkPos, BlockPos xz) {
+        public BedrockMarkerFinder(Level world, ChunkPos chunkPos, BlockPos xz) {
             super(world, chunkPos, Blocks.BEDROCK);
             this.searchPositions = SEARCH_POSITIONS;
         }

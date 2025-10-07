@@ -3,20 +3,19 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.init.ClientCommands;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
-
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 
 public abstract class ClientCommand {
 
-    public static void sendFeedback(String message, Formatting color, boolean overlay) {
+    public static void sendFeedback(String message, ChatFormatting color, boolean overlay) {
         try {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal(message).formatted(color), overlay);
+            Minecraft.getInstance().player.displayClientMessage(Component.literal(message).withStyle(color), overlay);
         } catch (Exception e) {
         }
     }

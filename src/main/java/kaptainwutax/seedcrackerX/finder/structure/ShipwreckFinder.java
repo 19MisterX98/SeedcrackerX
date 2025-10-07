@@ -6,34 +6,38 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.enums.ChestType;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockBox;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShipwreckFinder extends BlockFinder {
 
-    public ShipwreckFinder(World world, ChunkPos chunkPos) {
+    public ShipwreckFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.CHEST);
         this.searchPositions = CHUNK_POSITIONS;
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new ShipwreckFinder(world, chunkPos));
 
@@ -52,7 +56,7 @@ public class ShipwreckFinder extends BlockFinder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
 
         if (!Features.SHIPWRECK.isValidBiome(BiomeFixer.swap(biome))) {
             return new ArrayList<>();
@@ -62,7 +66,7 @@ public class ShipwreckFinder extends BlockFinder {
 
         result.removeIf(pos -> {
             BlockState state = this.world.getBlockState(pos);
-            if (state.get(ChestBlock.CHEST_TYPE) != ChestType.SINGLE) return true;
+            if (state.getValue(ChestBlock.TYPE) != ChestType.SINGLE) return true;
 
             BlockEntity blockEntity = this.world.getBlockEntity(pos);
             if (!(blockEntity instanceof ChestBlockEntity)) return true;
@@ -77,8 +81,8 @@ public class ShipwreckFinder extends BlockFinder {
      * Source: https://github.com/skyrising/casual-mod/blob/master/src/main/java/de/skyrising/casual/ShipwreckFinder.java
      */
     private boolean onChestFound(BlockPos pos) {
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable(pos.getX(), pos.getY(), pos.getZ());
-        Direction chestFacing = world.getBlockState(pos).get(ChestBlock.FACING);
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
+        Direction chestFacing = world.getBlockState(pos).getValue(ChestBlock.FACING);
 
         int[] stairs = new int[4];
         int totalStairs = 0;
@@ -93,10 +97,10 @@ public class ShipwreckFinder extends BlockFinder {
                     Block neighborBlock = neighborState.getBlock();
                     if (neighborBlock == Blocks.VOID_AIR) return false;
 
-                    if (neighborBlock instanceof StairsBlock) {
+                    if (neighborBlock instanceof StairBlock) {
                         stairs[y + 1]++;
                         totalStairs++;
-                    } else if (neighborBlock instanceof TrapdoorBlock) {
+                    } else if (neighborBlock instanceof TrapDoorBlock) {
                         trapdoors[y + 1]++;
                         totalTrapdoors++;
                     }
@@ -124,7 +128,7 @@ public class ShipwreckFinder extends BlockFinder {
                 chestY = 5;
                 chestZ = 17;
                 length = 22;
-                direction = chestFacing.rotateYClockwise();
+                direction = chestFacing.getClockWise();
             }
         } else if (totalTrapdoors == 0) { // rightsideup that have backhalf
             if (stairs[0] == 4) {
@@ -143,21 +147,21 @@ public class ShipwreckFinder extends BlockFinder {
             } else if (stairs[0] == 3 && totalStairs > 5) {
                 chestX = 5;
                 chestZ = 6;
-                direction = chestFacing.rotateYCounterclockwise();
+                direction = chestFacing.getCounterClockWise();
             } else if (totalStairs == 3 && stairs[0] == 1 && stairs[2] == 1 && stairs[3] == 1) { // upsidedown full
                 chestX = 3;
                 chestY = 5;
                 chestZ = 17;
                 length = 28;
-                direction = chestFacing.rotateYClockwise();
+                direction = chestFacing.getClockWise();
             }
 
             mutablePos.set(pos);
             mutablePos.move(0, -chestY, 0);
-            mutablePos.move(direction.rotateYClockwise(), chestX - 4);
+            mutablePos.move(direction.getClockWise(), chestX - 4);
             mutablePos.move(direction, -chestZ - 1);
 
-            if (this.world.getBlockState(mutablePos).isIn(BlockTags.AXE_MINEABLE)) {
+            if (this.world.getBlockState(mutablePos).is(BlockTags.MINEABLE_WITH_AXE)) {
                 if (length == 17) { // sideways
                     chestZ += 11;
                     length += 11;
@@ -167,7 +171,7 @@ public class ShipwreckFinder extends BlockFinder {
                 }
                 mutablePos.move(0, 10, 0);
 
-                if (this.world.getBlockState(mutablePos).isIn(BlockTags.LOGS)) {
+                if (this.world.getBlockState(mutablePos).is(BlockTags.LOGS)) {
                     height = 21;
                 }
             }
@@ -184,17 +188,17 @@ public class ShipwreckFinder extends BlockFinder {
         if (chestZ != 0) {
             mutablePos.set(pos);
             mutablePos.move(direction, 15 - chestZ);
-            mutablePos.move(direction.rotateYClockwise(), chestX - 4);
-            BlockPos.Mutable pos2 = new BlockPos.Mutable(mutablePos.getX(), mutablePos.getY(), mutablePos.getZ());
+            mutablePos.move(direction.getClockWise(), chestX - 4);
+            BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos(mutablePos.getX(), mutablePos.getY(), mutablePos.getZ());
             pos2.move(0, -chestY, 0);
             pos2.move(direction, -15);
-            pos2.move(direction.rotateYClockwise(), 4);
-            BlockPos.Mutable pos3 = new BlockPos.Mutable(pos2.getX(), pos2.getY(), pos2.getZ());
+            pos2.move(direction.getClockWise(), 4);
+            BlockPos.MutableBlockPos pos3 = new BlockPos.MutableBlockPos(pos2.getX(), pos2.getY(), pos2.getZ());
             pos3.move(direction, length - 1);
-            pos3.move(direction.rotateYClockwise(), -8);
+            pos3.move(direction.getClockWise(), -8);
             pos3.move(0, height - 1, 0);
 
-            BlockBox box = new BlockBox(
+            BoundingBox box = new BoundingBox(
                     Math.min(pos2.getX(), pos3.getX()), pos2.getY(), Math.min(pos2.getZ(), pos3.getZ()),
                     Math.max(pos2.getX(), pos3.getX()) + 1, pos3.getY() + 1, Math.max(pos2.getZ(), pos3.getZ()) + 1);
 
@@ -204,8 +208,8 @@ public class ShipwreckFinder extends BlockFinder {
                 RegionStructure.Data<?> data = Features.SHIPWRECK.at(new ChunkPos(mutablePos).x, new ChunkPos(mutablePos).z);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
-                    this.renderers.add(new Cuboid(box, new Color(0, 255, 255)));
-                    this.renderers.add(new Cube(new ChunkPos(mutablePos).getStartPos().offset(Direction.UP, mutablePos.getY()), new Color(0, 255, 255)));
+                    this.cuboids.add(new Cuboid(box, ARGB.color(0, 255, 255)));
+                    this.cuboids.add(new Cuboid(new ChunkPos(mutablePos).getWorldPosition().relative(Direction.UP, mutablePos.getY()), ARGB.color(0, 255, 255)));
                     return true;
                 }
             }

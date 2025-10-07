@@ -32,6 +32,8 @@ public class SeedCracker implements ModInitializer {
         FabricLoader.getInstance().getEntrypointContainers("seedcrackerx", SeedCrackerAPI.class).forEach(entrypoint ->
                 entrypoints.add(entrypoint.getEntrypoint()));
 
+        FinderQueue.registerEvents();
+
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> ClientCommands.registerCommands(dispatcher));
 
         Database.fetchSeeds();

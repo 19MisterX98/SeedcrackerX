@@ -1,22 +1,25 @@
 package kaptainwutax.seedcrackerX.finder;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.platform.DepthTestFunction;
+import com.mojang.blaze3d.vertex.PoseStack;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.render.EndMainPassEvent;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import kaptainwutax.seedcrackerX.render.ExtractStateEvent;
+import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
+import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.OptionalDouble;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -27,18 +30,7 @@ public class FinderQueue {
     private static final Logger log = LoggerFactory.getLogger(FinderQueue.class);
     public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 
-    private static final RenderPipeline LINES_NO_DEPTH_PIPELINE = RenderPipelines.register(
-            RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
-                    .withLocation(Identifier.of("seedcrackerx", "pipeline/lines_no_depth"))
-                    .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-                    .withFragmentShader(Identifier.of("seedcrackerx", "core/rendertype_lines"))
-                    .build()
-    );
-    public static final RenderLayer LINES_NO_DEPTH_LAYER = RenderLayer.of("seedcrackerx_no_depth", 3 * 512, LINES_NO_DEPTH_PIPELINE, RenderLayer.MultiPhaseParameters.builder()
-            .layering(RenderPhase.VIEW_OFFSET_Z_LAYERING)
-
-            .lineWidth(new RenderPhase.LineWidth(OptionalDouble.of(2f)))
-            .build(false));
+    private static final RenderStateDataKey<Set<Cuboid>> CUBOID_SET_KEY = RenderStateDataKey.create(() -> "SeedCrackerX cuboid set");
 
     public FinderControl finderControl = new FinderControl();
 
@@ -46,11 +38,16 @@ public class FinderQueue {
         this.clear();
     }
 
+    public static void registerEvents() {
+        ExtractStateEvent.EXTRACT_STATE.register((state, camera, deltaTracker) -> FinderQueue.get().extractCuboids(state, camera, deltaTracker));
+        EndMainPassEvent.END_MAIN_PASS.register((bufferSource, poseStack, state) -> FinderQueue.get().renderCuboids(bufferSource, poseStack, state));
+    }
+
     public static FinderQueue get() {
         return INSTANCE;
     }
 
-    public void onChunkData(World world, ChunkPos chunkPos) {
+    public void onChunkData(Level world, ChunkPos chunkPos) {
         if (!Config.get().active) return;
 
         getActiveFinderTypes().forEach(type -> {
@@ -59,7 +56,7 @@ public class FinderQueue {
                     List<Finder> finders = type.finderBuilder.build(world, chunkPos);
 
                     finders.forEach(finder -> {
-                        if (finder.isValidDimension(world.getDimension())) {
+                        if (finder.isValidDimension(world.dimensionType())) {
                             finder.findInChunk();
                             this.finderControl.addFinder(type, finder);
                         }
@@ -71,24 +68,26 @@ public class FinderQueue {
         });
     }
 
-    static {
-        EndMainPassEvent.END_MAIN_PASS.register(context -> {
-            context.matrixStack().push();
-            FinderQueue.get().renderFinders(context.matrixStack().peek(), context.consumers().getBuffer(FinderQueue.LINES_NO_DEPTH_LAYER), context.camera());
-            context.matrixStack().pop();
-        });
-    }
-
-    public void renderFinders(MatrixStack.Entry matrix4f, VertexConsumer buffer, Camera camera) {
-        if (Config.get().render == Config.RenderType.OFF) return;
-
-        Vec3d camPos = camera.getPos();
-
+    private void extractCuboids(LevelRenderState state, Camera camera, DeltaTracker deltaTracker) {
+        if (Config.get().render == Config.RenderType.OFF) {
+            state.setData(CUBOID_SET_KEY, Collections.emptySet());
+            return;
+        }
+        Set<Cuboid> cuboids = new HashSet<>();
         this.finderControl.getActiveFinders().forEach(finder -> {
             if (finder.shouldRender()) {
-                finder.render(matrix4f, buffer, camPos);
+                finder.cuboids.forEach(cuboid -> cuboids.add(cuboid.offset(camera)));
             }
         });
+        state.setData(CUBOID_SET_KEY, cuboids);
+    }
+
+    public void renderCuboids(MultiBufferSource.BufferSource bufferSource, PoseStack poseStack, LevelRenderState state) {
+        Set<Cuboid> cuboids = state.getData(CUBOID_SET_KEY);
+        if (cuboids == null) {
+            return;
+        }
+        cuboids.forEach(cuboid -> cuboid.render(poseStack, bufferSource));
     }
 
     public List<Finder.Type> getActiveFinderTypes() {
@@ -100,5 +99,4 @@ public class FinderQueue {
     public void clear() {
         this.finderControl = new FinderControl();
     }
-
 }

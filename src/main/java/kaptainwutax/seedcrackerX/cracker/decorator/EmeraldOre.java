@@ -6,7 +6,7 @@ import com.seedfinding.mccore.rand.ChunkRand;
 import com.seedfinding.mccore.state.Dimension;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mccore.version.VersionMap;
-import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 public class EmeraldOre extends Decorator<Decorator.Config, EmeraldOre.Data> {
 
@@ -53,7 +53,7 @@ public class EmeraldOre extends Decorator<Decorator.Config, EmeraldOre.Data> {
     }
 
     @Override
-    public boolean canStart(EmeraldOre.Data data, long structureSeed, ChunkRandom rand) {
+    public boolean canStart(EmeraldOre.Data data, long structureSeed, WorldgenRandom rand) {
         return true;
         //super.canStart(data, structureSeed, rand);
         //int x, y, z;

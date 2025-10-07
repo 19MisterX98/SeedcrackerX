@@ -7,19 +7,18 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +31,10 @@ public class EndCityFinder extends Finder {
     protected final Vec3i size = new Vec3i(8, 4, 8);
     protected List<PieceFinder> finders = new ArrayList<>();
 
-    public EndCityFinder(World world, ChunkPos chunkPos) {
+    public EndCityFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos);
 
-        Direction.Type.HORIZONTAL.forEach(direction -> {
+        Direction.Plane.HORIZONTAL.forEach(direction -> {
             PieceFinder finder = new PieceFinder(world, chunkPos, direction, size);
 
             finder.searchPositions = SEARCH_POSITIONS;
@@ -49,7 +48,7 @@ public class EndCityFinder extends Finder {
         SEARCH_POSITIONS = buildSearchPositions(CHUNK_POSITIONS, pos -> pos.getY() > 90 && pos.getY() < 40);
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new EndCityFinder(world, chunkPos));
         finders.add(new EndCityFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
@@ -59,11 +58,11 @@ public class EndCityFinder extends Finder {
     }
 
     private void buildStructure(PieceFinder finder) {
-        BlockState air = Blocks.AIR.getDefaultState();
-        BlockState endstoneBricks = Blocks.END_STONE_BRICKS.getDefaultState();
-        BlockState purpur = Blocks.PURPUR_BLOCK.getDefaultState();
-        BlockState purpurPillar = Blocks.PURPUR_PILLAR.getDefaultState();
-        BlockState purpleGlass = Blocks.MAGENTA_STAINED_GLASS.getDefaultState();
+        BlockState air = Blocks.AIR.defaultBlockState();
+        BlockState endstoneBricks = Blocks.END_STONE_BRICKS.defaultBlockState();
+        BlockState purpur = Blocks.PURPUR_BLOCK.defaultBlockState();
+        BlockState purpurPillar = Blocks.PURPUR_PILLAR.defaultBlockState();
+        BlockState purpleGlass = Blocks.MAGENTA_STAINED_GLASS.defaultBlockState();
 
         //Walls
         finder.fillWithOutline(0, 0, 0, 7, 4, 7, endstoneBricks, null, false);
@@ -89,7 +88,7 @@ public class EndCityFinder extends Finder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
         if (!Features.END_CITY.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();
 
         Map<PieceFinder, List<BlockPos>> result = this.findInChunkPieces();
@@ -106,19 +105,19 @@ public class EndCityFinder extends Finder {
             positions.forEach(pos -> {
                 //minecraft 1.19 moved end citys by 1 block reeeeeeeee
                 if (Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_19)) {
-                    BlockPos posFix = pos.add(1, 0, 1);
+                    BlockPos posFix = pos.offset(1, 0, 1);
                     RegionStructure.Data<?> data = Features.END_CITY.at(posFix.getX()>>4, posFix.getZ()>>4);
 
                     if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                        this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(153, 0, 153)));
-                        this.renderers.add(new Cube(posFix, new Color(153, 0, 153)));
+                        this.cuboids.add(new Cuboid(pos, pieceFinder.getLayout(), ARGB.color(153, 0, 153)));
+                        this.cuboids.add(new Cuboid(posFix, ARGB.color(153, 0, 153)));
                     }
                 } else {
                     RegionStructure.Data<?> data = Features.END_CITY.at(this.chunkPos.x, this.chunkPos.z);
 
                     if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                        this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(153, 0, 153)));
-                        this.renderers.add(new Cube(pos, new Color(153, 0, 153)));
+                        this.cuboids.add(new Cuboid(pos, pieceFinder.getLayout(), ARGB.color(153, 0, 153)));
+                        this.cuboids.add(new Cuboid(pos, ARGB.color(153, 0, 153)));
                     }
                 }
             });

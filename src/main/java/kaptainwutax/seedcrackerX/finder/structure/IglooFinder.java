@@ -5,17 +5,16 @@ import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,10 +27,10 @@ public class IglooFinder extends Finder {
     protected static final Vec3i size = new Vec3i(7, 5, 8);
     protected List<JigsawFinder> finders = new ArrayList<>();
 
-    public IglooFinder(World world, ChunkPos chunkPos) {
+    public IglooFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos);
 
-        Direction.Type.HORIZONTAL.forEach(direction -> {
+        Direction.Plane.HORIZONTAL.forEach(direction -> {
             JigsawFinder finder = new JigsawFinder(world, chunkPos, direction, size);
 
             finder.searchPositions = SEARCH_POSITIONS.get(direction);
@@ -59,8 +58,8 @@ public class IglooFinder extends Finder {
                 RegionStructure.Data<?> data = Features.IGLOO.at(this.chunkPos.x, this.chunkPos.z);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
-                    this.renderers.add(new Cuboid(pos, pieceFinder.getLayout(), new Color(176, 207, 252)));
-                    this.renderers.add(new Cube(chunkPos.getStartPos().add(0, pos.getY(), 0), new Color(176, 207, 252)));
+                    this.cuboids.add(new Cuboid(pos, pieceFinder.getLayout(), ARGB.color(176, 207, 252)));
+                    this.cuboids.add(new Cuboid(chunkPos.getWorldPosition().offset(0, pos.getY(), 0), ARGB.color(176, 207, 252)));
                 }
             });
         });
@@ -79,9 +78,9 @@ public class IglooFinder extends Finder {
     }
 
     public void buildStructure(JigsawFinder finder) {
-        BlockState snow = Blocks.SNOW_BLOCK.getDefaultState();
-        BlockState ice = Blocks.ICE.getDefaultState();
-        BlockState workBench = Blocks.CRAFTING_TABLE.getDefaultState();
+        BlockState snow = Blocks.SNOW_BLOCK.defaultBlockState();
+        BlockState ice = Blocks.ICE.defaultBlockState();
+        BlockState workBench = Blocks.CRAFTING_TABLE.defaultBlockState();
 
         finder.addBlock(workBench, 1, 1, 5);
         for(int y = 0; y < 3; y++) {
@@ -114,7 +113,7 @@ public class IglooFinder extends Finder {
         return this.isOverworld(dimension);
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new IglooFinder(world, chunkPos));
         finders.add(new IglooFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z)));

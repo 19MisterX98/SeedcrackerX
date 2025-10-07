@@ -6,17 +6,17 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
+import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,22 +27,22 @@ public class BuriedTreasureFinder extends BlockFinder {
     protected static List<BlockPos> SEARCH_POSITIONS;
 
     static {
-        CHEST_HOLDERS.add(Blocks.SANDSTONE.getDefaultState());
-        CHEST_HOLDERS.add(Blocks.STONE.getDefaultState());
-        CHEST_HOLDERS.add(Blocks.ANDESITE.getDefaultState());
-        CHEST_HOLDERS.add(Blocks.GRANITE.getDefaultState());
-        CHEST_HOLDERS.add(Blocks.DIORITE.getDefaultState());
+        CHEST_HOLDERS.add(Blocks.SANDSTONE.defaultBlockState());
+        CHEST_HOLDERS.add(Blocks.STONE.defaultBlockState());
+        CHEST_HOLDERS.add(Blocks.ANDESITE.defaultBlockState());
+        CHEST_HOLDERS.add(Blocks.GRANITE.defaultBlockState());
+        CHEST_HOLDERS.add(Blocks.DIORITE.defaultBlockState());
 
         //Population can turn stone, andesite, granite and diorite into ores...
-        CHEST_HOLDERS.add(Blocks.COAL_ORE.getDefaultState());
-        CHEST_HOLDERS.add(Blocks.IRON_ORE.getDefaultState());
-        CHEST_HOLDERS.add(Blocks.GOLD_ORE.getDefaultState());
+        CHEST_HOLDERS.add(Blocks.COAL_ORE.defaultBlockState());
+        CHEST_HOLDERS.add(Blocks.IRON_ORE.defaultBlockState());
+        CHEST_HOLDERS.add(Blocks.GOLD_ORE.defaultBlockState());
 
         //Ocean can turn stone into gravel.
-        CHEST_HOLDERS.add(Blocks.GRAVEL.getDefaultState());
+        CHEST_HOLDERS.add(Blocks.GRAVEL.defaultBlockState());
     }
 
-    public BuriedTreasureFinder(World world, ChunkPos chunkPos) {
+    public BuriedTreasureFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos, Blocks.CHEST);
         this.searchPositions = SEARCH_POSITIONS;
     }
@@ -57,7 +57,7 @@ public class BuriedTreasureFinder extends BlockFinder {
         });
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new BuriedTreasureFinder(world, chunkPos));
         return finders;
@@ -66,16 +66,16 @@ public class BuriedTreasureFinder extends BlockFinder {
     @Override
     public List<BlockPos> findInChunk() {
 
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
         if (!Features.BURIED_TREASURE.isValidBiome(BiomeFixer.swap(biome))) return new ArrayList<>();
 
         List<BlockPos> result = super.findInChunk();
 
         result.removeIf(pos -> {
             BlockState chest = world.getBlockState(pos);
-            if (chest.get(ChestBlock.WATERLOGGED)) return true;
+            if (chest.hasProperty(ChestBlock.WATERLOGGED)) return true;
 
-            BlockState chestHolder = world.getBlockState(pos.down());
+            BlockState chestHolder = world.getBlockState(pos.below());
             return !CHEST_HOLDERS.contains(chestHolder);
         });
 
@@ -83,7 +83,7 @@ public class BuriedTreasureFinder extends BlockFinder {
             RegionStructure.Data<?> data = Features.BURIED_TREASURE.at(this.chunkPos.x, this.chunkPos.z);
 
             if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                this.renderers.add(new Cube(pos, new Color(255, 255, 0)));
+                this.cuboids.add(new Cuboid(pos, ARGB.color(255, 255, 0)));
             }
         });
 

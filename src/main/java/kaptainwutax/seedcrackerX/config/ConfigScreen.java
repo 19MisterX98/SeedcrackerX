@@ -10,10 +10,12 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,53 +45,53 @@ public class ConfigScreen {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(Text.translatable("title"))
-                .setDefaultBackgroundTexture(Identifier.of("minecraft:textures/block/blackstone.png"))
+                .setTitle(Component.translatable("title"))
+                .setDefaultBackgroundTexture(ResourceLocation.parse("minecraft:textures/block/blackstone.png"))
                 .setTransparentBackground(true);
         ConfigEntryBuilder eb = builder.entryBuilder();
 
         //=============================CONFIG========================
-        ConfigCategory settings = builder.getOrCreateCategory(Text.translatable("settings"));
+        ConfigCategory settings = builder.getOrCreateCategory(Component.translatable("settings"));
 
-        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
-        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.database"), config.databaseSubmits)
+        settings.addEntry(eb.startBooleanToggle(Component.translatable("settings.active"), config.active).setSaveConsumer(val -> config.active = val).build());
+        settings.addEntry(eb.startBooleanToggle(Component.translatable("settings.database"), config.databaseSubmits)
                 .setSaveConsumer(val -> config.databaseSubmits = val).build());
-        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
-        settings.addEntry(eb.startTextDescription(Text.translatable("settings.openDatabase").styled(s -> s
+        settings.addEntry(eb.startBooleanToggle(Component.translatable("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
+        settings.addEntry(eb.startTextDescription(Component.translatable("settings.openDatabase").withStyle(s -> s
                 .withClickEvent(new ClickEvent.OpenUrl(DatabaseCommand.DATABASE_URL))
-                .withHoverEvent(new HoverEvent.ShowText(Text.literal("google sheet")))
-                .withColor(Formatting.BLUE)
-                .withUnderline(true)
+                .withHoverEvent(new HoverEvent.ShowText(Component.literal("google sheet")))
+                .withColor(ChatFormatting.BLUE)
+                .withUnderlined(true)
                 .withItalic(true)))
                 .build());
-        settings.addEntry(eb.startDropdownMenu(Text.translatable("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), this::mcVersionFromString))
+        settings.addEntry(eb.startDropdownMenu(Component.translatable("settings.version"), DropdownMenuBuilder.TopCellElementBuilder.of(config.getVersion(), this::mcVersionFromString))
                 .setSelections(getSupportedVersions())
                 .setSuggestionMode(false)
                 .setDefaultValue(config.getVersion())
                 .setSaveConsumer(config::setVersion)
                 .build());
 
-        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
+        settings.addEntry(eb.startTextDescription(Component.literal("==============")).build());
 
-        settings.addEntry(eb.startTextDescription(Text.translatable("settings.visuals")).build());
-        settings.addEntry(eb.startEnumSelector(Text.translatable("settings.outline"), Config.RenderType.class, config.render).setSaveConsumer(val -> config.render = val).build());
+        settings.addEntry(eb.startTextDescription(Component.translatable("settings.visuals")).build());
+        settings.addEntry(eb.startEnumSelector(Component.translatable("settings.outline"), Config.RenderType.class, config.render).setSaveConsumer(val -> config.render = val).build());
 
-        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
+        settings.addEntry(eb.startTextDescription(Component.literal("==============")).build());
 
-        settings.addEntry(eb.startTextDescription((Text.translatable("settings.finderToggles"))).build());
+        settings.addEntry(eb.startTextDescription((Component.translatable("settings.finderToggles"))).build());
         for (Finder.Type finder : Finder.Type.values()) {
-            settings.addEntry(eb.startBooleanToggle(Text.translatable(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());
+            settings.addEntry(eb.startBooleanToggle(Component.translatable(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());
         }
 
-        settings.addEntry(eb.startTextDescription(Text.literal("==============")).build());
+        settings.addEntry(eb.startTextDescription(Component.literal("==============")).build());
 
-        settings.addEntry(eb.startBooleanToggle(Text.translatable("settings.antiXrayMode"), config.antiXrayBypass).setSaveConsumer(val -> config.antiXrayBypass = val).build());
-        settings.addEntry(eb.startTextDescription(Text.translatable("settings.antiAntiXrayExplained")).build());
+        settings.addEntry(eb.startBooleanToggle(Component.translatable("settings.antiXrayMode"), config.antiXrayBypass).setSaveConsumer(val -> config.antiXrayBypass = val).build());
+        settings.addEntry(eb.startTextDescription(Component.translatable("settings.antiAntiXrayExplained")).build());
 
         //=============================INFO========================
-        ConfigCategory info = builder.getOrCreateCategory(Text.translatable("info"));
+        ConfigCategory info = builder.getOrCreateCategory(Component.translatable("info"));
         //Clear data
-        info.addEntry(eb.startBooleanToggle(Text.translatable("info.clearData"), false).setSaveConsumer(val -> {
+        info.addEntry(eb.startBooleanToggle(Component.translatable("info.clearData"), false).setSaveConsumer(val -> {
             if (val) {
                 SeedCracker.get().reset();
             }
@@ -97,44 +99,44 @@ public class ConfigScreen {
         //List worldseeds
         Set<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
         if (!worldSeeds.isEmpty()) {
-            SubCategoryBuilder world = eb.startSubCategory(Text.translatable("info.worldSeeds"));
+            SubCategoryBuilder world = eb.startSubCategory(Component.translatable("info.worldSeeds"));
             for (long worldSeed : worldSeeds) {
-                world.add(eb.startTextField(Text.literal(""), String.valueOf(worldSeed)).build());
+                world.add(eb.startTextField(Component.literal(""), String.valueOf(worldSeed)).build());
             }
             info.addEntry(world.setExpanded(true).build());
         } else {
-            info.addEntry(eb.startTextDescription(Text.translatable("info.noWorldSeeds")).build());
+            info.addEntry(eb.startTextDescription(Component.translatable("info.noWorldSeeds")).build());
         }
         //List structureseeds
         Set<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
         if (!structureSeeds.isEmpty()) {
-            SubCategoryBuilder struc = eb.startSubCategory(Text.translatable("info.structureSeeds"));
+            SubCategoryBuilder struc = eb.startSubCategory(Component.translatable("info.structureSeeds"));
             for (long structureSeed : structureSeeds) {
-                struc.add(eb.startTextField(Text.literal(""), String.valueOf(structureSeed)).build());
+                struc.add(eb.startTextField(Component.literal(""), String.valueOf(structureSeed)).build());
             }
             info.addEntry(struc.setExpanded(true).build());
         } else {
-            info.addEntry(eb.startTextDescription(Text.translatable("info.noStructureSeeds")).build());
+            info.addEntry(eb.startTextDescription(Component.translatable("info.noStructureSeeds")).build());
         }
 
         if (config.debug) {
             //List pillarseeds
             List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
             if (pillarSeeds != null) {
-                SubCategoryBuilder pillar = eb.startSubCategory(Text.translatable("info.pillarSeeds"));
+                SubCategoryBuilder pillar = eb.startSubCategory(Component.translatable("info.pillarSeeds"));
                 for (long structureSeed : pillarSeeds) {
-                    pillar.add(eb.startTextField(Text.literal(""), String.valueOf(structureSeed)).build());
+                    pillar.add(eb.startTextField(Component.literal(""), String.valueOf(structureSeed)).build());
                 }
                 info.addEntry(pillar.setExpanded(true).build());
             } else {
-                info.addEntry(eb.startTextDescription(Text.translatable("info.noPillarSeeds")).build());
+                info.addEntry(eb.startTextDescription(Component.translatable("info.noPillarSeeds")).build());
             }
             //Hashed seed
             HashedSeedData hashedSeed = SeedCracker.get().getDataStorage().hashedSeedData;
             if (hashedSeed != null) {
-                info.addEntry(eb.startTextField(Text.translatable("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
+                info.addEntry(eb.startTextField(Component.translatable("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
             } else {
-                info.addEntry(eb.startTextDescription(Text.translatable("info.noHashedSeed")).build());
+                info.addEntry(eb.startTextDescription(Component.translatable("info.noHashedSeed")).build());
             }
         }
 

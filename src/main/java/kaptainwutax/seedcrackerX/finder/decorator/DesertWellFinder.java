@@ -6,19 +6,18 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.structure.PieceFinder;
-import kaptainwutax.seedcrackerX.render.Color;
-import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +26,13 @@ public class DesertWellFinder extends PieceFinder {
 
     protected static Vec3i SIZE = new Vec3i(5, 6, 5);
 
-    public DesertWellFinder(World world, ChunkPos chunkPos) {
+    public DesertWellFinder(Level world, ChunkPos chunkPos) {
         super(world, chunkPos, Direction.NORTH, SIZE);
         this.searchPositions = CHUNK_POSITIONS;
         this.buildStructure();
     }
 
-    public static List<Finder> create(World world, ChunkPos chunkPos) {
+    public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new DesertWellFinder(world, chunkPos));
 
@@ -52,7 +51,7 @@ public class DesertWellFinder extends PieceFinder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getBiomeForNoiseGen((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2).value();
 
         if (!Features.DESERT_WELL.isValidBiome(BiomeFixer.swap(biome))) {
             return new ArrayList<>();
@@ -61,13 +60,13 @@ public class DesertWellFinder extends PieceFinder {
         List<BlockPos> result = super.findInChunk();
 
         result.forEach(pos -> {
-            pos = pos.add(2, 1, 2);
+            pos = pos.offset(2, 1, 2);
 
             DesertWell.Data data = Features.DESERT_WELL.at(pos.getX(), pos.getZ());
 
             if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                this.renderers.add(new Cuboid(pos.add(-2, -1, -2), SIZE, new Color(128, 128, 255)));
-                this.renderers.add(new Cube(pos, new Color(128, 128, 255)));
+                this.cuboids.add(new Cuboid(pos.offset(-2, -1, -2), SIZE, ARGB.color(128, 128, 255)));
+                this.cuboids.add(new Cuboid(pos, ARGB.color(128, 128, 255)));
             }
         });
 
@@ -80,9 +79,9 @@ public class DesertWellFinder extends PieceFinder {
     }
 
     protected void buildStructure() {
-        BlockState sandstone = Blocks.SANDSTONE.getDefaultState();
-        BlockState sandstoneSlab = Blocks.SANDSTONE_SLAB.getDefaultState();
-        BlockState water = Blocks.WATER.getDefaultState();
+        BlockState sandstone = Blocks.SANDSTONE.defaultBlockState();
+        BlockState sandstoneSlab = Blocks.SANDSTONE_SLAB.defaultBlockState();
+        BlockState water = Blocks.WATER.defaultBlockState();
 
         this.fillWithOutline(0, 0, 0, 4, 1, 4, sandstone, sandstone, false);
         this.fillWithOutline(1, 5, 1, 3, 5, 3, sandstoneSlab, sandstoneSlab, false);
@@ -91,8 +90,8 @@ public class DesertWellFinder extends PieceFinder {
         BlockPos p1 = new BlockPos(2, 1, 2);
         this.addBlock(water, p1.getX(), p1.getY(), p1.getZ());
 
-        Direction.Type.HORIZONTAL.forEach(facing -> {
-            BlockPos p2 = p1.offset(facing);
+        Direction.Plane.HORIZONTAL.forEach(facing -> {
+            BlockPos p2 = p1.relative(facing);
             this.addBlock(water, p2.getX(), p2.getY(), p2.getZ());
         });
     }

@@ -2,13 +2,12 @@ package kaptainwutax.seedcrackerX.util;
 
 import com.seedfinding.mcbiome.biome.Biome;
 import com.seedfinding.mcbiome.biome.Biomes;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.registry.BuiltinRegistries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,14 +46,14 @@ public class BiomeFixer {
         //deep_dark
     }
 
-    public static Biome swap(net.minecraft.world.biome.Biome biome) {
-        ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (networkHandler == null) return Biomes.VOID;
+    public static Biome swap(net.minecraft.world.level.biome.Biome biome) {
+        ClientPacketListener clientPacketListener = Minecraft.getInstance().getConnection();
+        if (clientPacketListener == null) return Biomes.VOID;
 
-        Identifier biomeID = networkHandler
-                .getRegistryManager()
-                .getOptional(RegistryKeys.BIOME)
-                .map(reg -> reg.getId(biome))
+        ResourceLocation biomeID = clientPacketListener
+                .registryAccess()
+                .lookup(Registries.BIOME)
+                .map(reg -> reg.getKey(biome))
                 .orElse(null);
 
         if (biomeID == null) return Biomes.THE_VOID;
@@ -62,12 +61,12 @@ public class BiomeFixer {
         return COMPATREGISTRY.getOrDefault(biomeID.getPath(), Biomes.VOID);
     }
 
-    public static net.minecraft.world.biome.Biome swap(Biome biome) {
+    public static net.minecraft.world.level.biome.Biome swap(Biome biome) {
         // internal, meh
-        var biomeRegistries = BuiltinRegistries.createWrapperLookup().getOrThrow(RegistryKeys.BIOME);
+        var biomeRegistries = VanillaRegistries.createLookup().lookupOrThrow(Registries.BIOME);
 
-        return biomeRegistries.getOptional(RegistryKey.of(RegistryKeys.BIOME, Identifier.ofVanilla(biome.getName()))).orElse(
-                biomeRegistries.getOrThrow(BiomeKeys.THE_VOID)
+        return biomeRegistries.get(ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace(biome.getName()))).orElse(
+                biomeRegistries.getOrThrow(net.minecraft.world.level.biome.Biomes.THE_VOID)
         ).value();
     }
 }

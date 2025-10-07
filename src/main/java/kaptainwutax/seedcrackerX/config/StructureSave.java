@@ -7,20 +7,22 @@ import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.ScheduledSet;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.Connection;
+import net.minecraft.world.level.storage.LevelResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StructureSave {
     private static final Logger logger = LoggerFactory.getLogger("structureSave");
@@ -81,14 +83,14 @@ public class StructureSave {
     }
 
     private static String getWorldName() {
-        MinecraftClient minecraftClient = MinecraftClient.getInstance();
-        if (minecraftClient.getNetworkHandler() != null) {
-            ClientConnection connection = minecraftClient.getNetworkHandler().getConnection();
-            if (connection.isLocal()) {
-                String address = minecraftClient.getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();
+        Minecraft minecraftClient = Minecraft.getInstance();
+        if (minecraftClient.getConnection() != null) {
+            Connection connection = minecraftClient.getConnection().getConnection();
+            if (connection.isMemoryConnection()) {
+                String address = minecraftClient.getSingleplayerServer().getWorldPath(LevelResource.ROOT).getParent().getFileName().toString();
                 return address.replace("/","_").replace(":", "_")+".txt";
             } else {
-                return connection.getAddress().toString().replace("/","_").replace(":","_")+".txt";
+                return connection.getRemoteAddress().toString().replace("/","_").replace(":","_")+".txt";
             }
         }
         return "Invalid.txt";

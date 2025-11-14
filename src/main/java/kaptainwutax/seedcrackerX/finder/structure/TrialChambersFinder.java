@@ -210,7 +210,7 @@ public class TrialChambersFinder extends Finder {
             positions.forEach(pos -> {
                 RegionStructure.Data<?> data = Features.TRIAL_CHAMBERS.at(this.chunkPos.x, this.chunkPos.z);
 
-                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
+                if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
                     this.cuboids.add(new Cuboid(pos, pieceFinder.getLayout(), ARGB.color(170, 84, 3)));
                     this.cuboids.add(new Cuboid(chunkPos.getWorldPosition().offset(0, pos.getY(), 0), ARGB.color(170, 84, 3)));
                 }

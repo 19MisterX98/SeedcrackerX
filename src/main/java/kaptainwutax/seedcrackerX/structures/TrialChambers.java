@@ -4,13 +4,13 @@ import com.seedfinding.mcbiome.biome.Biome;
 import com.seedfinding.mccore.state.Dimension;
 import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mccore.version.VersionMap;
-import com.seedfinding.mcfeature.structure.OldStructure;
 import com.seedfinding.mcfeature.structure.RegionStructure;
+import com.seedfinding.mcfeature.structure.UniformStructure;
 
-public class TrialChambers extends OldStructure<TrialChambers> {
+public class TrialChambers extends UniformStructure<TrialChambers> {
 
-    public static final VersionMap<RegionStructure.Config> CONFIGS = new VersionMap<RegionStructure.Config>()
-            .add(MCVersion.v1_21, new RegionStructure.Config(34, 12, 94251327));
+    public static final VersionMap<Config> CONFIGS = new VersionMap<Config>()
+            .add(MCVersion.v1_21, new Config(34, 12, 94251327));
 
     public TrialChambers(MCVersion version) {
         this(CONFIGS.getAsOf(version), version);

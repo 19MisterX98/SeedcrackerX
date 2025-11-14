@@ -7,15 +7,7 @@ import kaptainwutax.seedcrackerX.finder.decorator.EndGatewayFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.EndPillarsFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.WarpedFungusFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
-import kaptainwutax.seedcrackerX.finder.structure.BuriedTreasureFinder;
-import kaptainwutax.seedcrackerX.finder.structure.DesertPyramidFinder;
-import kaptainwutax.seedcrackerX.finder.structure.EndCityFinder;
-import kaptainwutax.seedcrackerX.finder.structure.IglooFinder;
-import kaptainwutax.seedcrackerX.finder.structure.JunglePyramidFinder;
-import kaptainwutax.seedcrackerX.finder.structure.MonumentFinder;
-import kaptainwutax.seedcrackerX.finder.structure.OutpostFinder;
-import kaptainwutax.seedcrackerX.finder.structure.ShipwreckFinder;
-import kaptainwutax.seedcrackerX.finder.structure.SwampHutFinder;
+import kaptainwutax.seedcrackerX.finder.structure.*;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 import kaptainwutax.seedcrackerX.util.HeightContext;
@@ -132,6 +124,7 @@ public abstract class Finder {
         SHIPWRECK(ShipwreckFinder::create, Category.STRUCTURES, Config.get().shipwreck, "finder.shipwrecks"),
         PILLAGER_OUTPOST(OutpostFinder::create, Category.STRUCTURES, Config.get().outpost, "finder.outposts"),
         IGLOO(IglooFinder::create, Category.STRUCTURES, Config.get().igloo, "finder.igloo"),
+        TRIAL_CHAMBERS(TrialChambersFinder::create, Category.STRUCTURES, Config.get().trialChambers, "finder.trialChambers"),
 
         END_PILLARS(EndPillarsFinder::create, Category.DECORATORS, Config.get().endPillars, "finder.endPillars"),
         END_GATEWAY(EndGatewayFinder::create, Category.DECORATORS, Config.get().endGateway, "finder.endGateways"),

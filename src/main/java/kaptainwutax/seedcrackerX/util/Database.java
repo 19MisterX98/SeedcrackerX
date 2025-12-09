@@ -5,14 +5,13 @@ import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.exceptions.InsufficientPrivilegesException;
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.finder.Finder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
-import org.apache.http.entity.ContentType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -62,7 +61,7 @@ public class Database {
         Minecraft client = Minecraft.getInstance();
         Map<String,Object> data = new HashMap<>();
         data.put("serverIp", client.getConnection().getConnection().getRemoteAddress().toString());
-        data.put("dimension", client.level.dimensionType().effectsLocation().getPath());
+        data.put("dimension", Finder.inferDimension(client.level.dimensionType()));
         data.put("seed", seed+"L"); //javascript backend likes floating point. so we need to convert it to a string
         data.put("version", Config.get().getVersion().name);
         data.put("username", client.player.getName().getString());
@@ -71,13 +70,13 @@ public class Database {
         HttpRequest request = HttpRequest.newBuilder(URI.create(DATABASE_POST_URL))
             .timeout(TIMEOUT)
             .POST(HttpRequest.BodyPublishers.ofString(HttpAuthenticationService.buildQuery(data)))
-            .setHeader(HttpHeaders.USER_AGENT, SEEDCRACKERX_USER_AGENT)
-            .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.getMimeType())
+            .setHeader("User-Agent", SEEDCRACKERX_USER_AGENT)
+            .header("Content-Type", "application/x-www-form-urlencoded")
             .build();
 
         try {
             HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == HttpStatus.SC_MOVED_TEMPORARILY) { //the page says "document moved" but the post gets processed
+            if (response.statusCode() == HttpURLConnection.HTTP_MOVED_TEMP) { //the page says "document moved" but the post gets processed
                 Log.warn("database.success");
             } else {
                 Log.warn("database.fail");
@@ -91,7 +90,7 @@ public class Database {
         HttpRequest request = HttpRequest.newBuilder(URI.create(DATABASE_URL))
             .timeout(TIMEOUT)
             .GET()
-            .setHeader(HttpHeaders.USER_AGENT, SEEDCRACKERX_USER_AGENT)
+            .setHeader("User-Agent", SEEDCRACKERX_USER_AGENT)
             .build();
         HTTP_CLIENT.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body)

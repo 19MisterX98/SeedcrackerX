@@ -9,6 +9,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
 
 public class Cuboid {
     private final AABB box;
@@ -41,11 +42,8 @@ public class Cuboid {
         return new Cuboid(this.box.move(camera.position().scale(-1)), this.argb);
     }
 
-    public void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
+    public void render(PoseStack poseStack, MultiBufferSource bufferSource) {
         float alpha = ARGB.alphaFloat(this.argb);
-        float red = ARGB.redFloat(this.argb);
-        float green = ARGB.greenFloat(this.argb);
-        float blue = ARGB.blueFloat(this.argb);
-        ShapeRenderer.renderLineBox(poseStack.last(), bufferSource.getBuffer(NoDepthLayer.LINES_NO_DEPTH_LAYER), this.box, red, green, blue, alpha);
+        ShapeRenderer.renderShape(poseStack, bufferSource.getBuffer(NoDepthLayer.LINES_NO_DEPTH_LAYER), Shapes.box(this.box.minX, this.box.minY, this.box.minZ, this.box.maxX, this.box.maxY, this.box.maxZ), 0, 0, 0, ARGB.opaque(this.argb), alpha);
     }
 }

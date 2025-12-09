@@ -20,15 +20,15 @@
       "kaptainwutax.seedcrackerX.SeedCracker"
     ],
     "modmenu": [
-      "kaptainwutax.seedcrackerX.config.ScModMenuEntry"
     ]
   },
   "mixins": [
     "seedcracker.mixins.json"
   ],
+  "accessWidener": "seedcrackerx.aw",
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": ">=1.21.9 <1.22",
+    "minecraft": ">=1.21.11 <1.22",
     "fabric-api-base": "*",
     "fabric-transitive-access-wideners-v1": "*",
     "fabric-command-api-v2": "*",

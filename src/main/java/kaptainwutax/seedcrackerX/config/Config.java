@@ -29,6 +29,7 @@ public class Config {
     public FeatureToggle shipwreck = new FeatureToggle(true);
     public FeatureToggle outpost = new FeatureToggle(true);
     public FeatureToggle igloo = new FeatureToggle(true);
+    public FeatureToggle trialChambers = new FeatureToggle(true);
     public FeatureToggle endPillars = new FeatureToggle(true);
     public FeatureToggle endGateway = new FeatureToggle(false);
     public FeatureToggle dungeon = new FeatureToggle(true);

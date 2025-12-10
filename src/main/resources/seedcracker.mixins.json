@@ -8,7 +8,6 @@
   "client": [
     "ClientLevelMixin",
     "ClientPacketListenerMixin",
-    "LevelRendererMixin",
     "LocalPlayerMixin"
   ],
   "injectors": {

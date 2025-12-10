@@ -15,7 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ConfigScreen {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
                 .setTitle(Component.translatable("title"))
-                .setDefaultBackgroundTexture(ResourceLocation.parse("minecraft:textures/block/blackstone.png"))
+                .setDefaultBackgroundTexture(Identifier.parse("minecraft:textures/block/blackstone.png"))
                 .setTransparentBackground(true);
         ConfigEntryBuilder eb = builder.entryBuilder();
 

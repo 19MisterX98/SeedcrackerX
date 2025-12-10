@@ -3,11 +3,9 @@ package kaptainwutax.seedcrackerX.finder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.render.Cuboid;
-import kaptainwutax.seedcrackerX.render.EndMainPassEvent;
-import kaptainwutax.seedcrackerX.render.ExtractStateEvent;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.world.level.ChunkPos;
@@ -39,8 +37,8 @@ public class FinderQueue {
     }
 
     public static void registerEvents() {
-        ExtractStateEvent.EXTRACT_STATE.register((state, camera, deltaTracker) -> FinderQueue.get().extractCuboids(state, camera, deltaTracker));
-        EndMainPassEvent.END_MAIN_PASS.register((bufferSource, poseStack, state) -> FinderQueue.get().renderCuboids(bufferSource, poseStack, state));
+        WorldRenderEvents.END_EXTRACTION.register(worldExtractionContext -> FinderQueue.get().extractCuboids(worldExtractionContext.worldState(), worldExtractionContext.camera()));
+        WorldRenderEvents.END_MAIN.register(worldRenderContext -> FinderQueue.get().renderCuboids(worldRenderContext.consumers(), worldRenderContext.matrices(), worldRenderContext.worldState()));
     }
 
     public static FinderQueue get() {
@@ -68,7 +66,7 @@ public class FinderQueue {
         });
     }
 
-    private void extractCuboids(LevelRenderState state, Camera camera, DeltaTracker deltaTracker) {
+    private void extractCuboids(LevelRenderState state, Camera camera) {
         if (Config.get().render == Config.RenderType.OFF) {
             state.setData(CUBOID_SET_KEY, Collections.emptySet());
             return;
@@ -82,7 +80,7 @@ public class FinderQueue {
         state.setData(CUBOID_SET_KEY, cuboids);
     }
 
-    public void renderCuboids(MultiBufferSource.BufferSource bufferSource, PoseStack poseStack, LevelRenderState state) {
+    public void renderCuboids(MultiBufferSource bufferSource, PoseStack poseStack, LevelRenderState state) {
         Set<Cuboid> cuboids = state.getData(CUBOID_SET_KEY);
         if (cuboids == null) {
             return;

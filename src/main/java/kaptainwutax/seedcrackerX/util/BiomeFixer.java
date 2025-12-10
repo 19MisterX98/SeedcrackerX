@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class BiomeFixer {
         ClientPacketListener clientPacketListener = Minecraft.getInstance().getConnection();
         if (clientPacketListener == null) return Biomes.VOID;
 
-        ResourceLocation biomeID = clientPacketListener
+        Identifier biomeID = clientPacketListener
                 .registryAccess()
                 .lookup(Registries.BIOME)
                 .map(reg -> reg.getKey(biome))
@@ -65,7 +65,7 @@ public class BiomeFixer {
         // internal, meh
         var biomeRegistries = VanillaRegistries.createLookup().lookupOrThrow(Registries.BIOME);
 
-        return biomeRegistries.get(ResourceKey.create(Registries.BIOME, ResourceLocation.withDefaultNamespace(biome.getName()))).orElse(
+        return biomeRegistries.get(ResourceKey.create(Registries.BIOME, Identifier.withDefaultNamespace(biome.getName()))).orElse(
                 biomeRegistries.getOrThrow(net.minecraft.world.level.biome.Biomes.THE_VOID)
         ).value();
     }

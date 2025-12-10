@@ -3,10 +3,11 @@ package kaptainwutax.seedcrackerX.render;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.DepthTestFunction;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
-
-import java.util.OptionalDouble;
+import net.minecraft.client.renderer.rendertype.LayeringTransform;
+import net.minecraft.client.renderer.rendertype.OutputTarget;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 
 public final class NoDepthLayer {
     private NoDepthLayer() {
@@ -14,12 +15,15 @@ public final class NoDepthLayer {
 
     private static final RenderPipeline LINES_NO_DEPTH_PIPELINE = RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.LINES_SNIPPET)
-            .withLocation(ResourceLocation.fromNamespaceAndPath("seedcrackerx", "pipeline/lines_no_depth"))
+            .withLocation(Identifier.fromNamespaceAndPath("seedcrackerx", "pipeline/lines_no_depth"))
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .build()
     );
-    public static final RenderType LINES_NO_DEPTH_LAYER = RenderType.create("seedcrackerx_no_depth", 3 * 512, LINES_NO_DEPTH_PIPELINE, RenderType.CompositeState.builder()
-        .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
-        .setLineState(new RenderType.LineStateShard(OptionalDouble.of(2)))
-        .createCompositeState(false));
+
+    public static final RenderType LINES_NO_DEPTH_LAYER = RenderType.create("seedcrackerx_no_depth",
+        RenderSetup.builder(LINES_NO_DEPTH_PIPELINE)
+            .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+            .setOutputTarget(OutputTarget.ITEM_ENTITY_TARGET)
+            .createRenderSetup()
+    );
 }

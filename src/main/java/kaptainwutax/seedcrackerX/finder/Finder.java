@@ -97,15 +97,23 @@ public abstract class Finder {
     public abstract boolean isValidDimension(DimensionType dimension);
 
     public boolean isOverworld(DimensionType dimension) {
-        return dimension.effectsLocation().getPath().equals("overworld");
+        return dimension.skybox() == DimensionType.Skybox.OVERWORLD;
     }
 
     public boolean isNether(DimensionType dimension) {
-        return dimension.effectsLocation().getPath().equals("the_nether");
+        return dimension.skybox() == DimensionType.Skybox.NONE;
     }
 
     public boolean isEnd(DimensionType dimension) {
-        return dimension.effectsLocation().getPath().equals("the_end");
+        return dimension.skybox() == DimensionType.Skybox.END;
+    }
+
+    public static String inferDimension(DimensionType dimension) {
+        return switch (dimension.skybox()) {
+            case OVERWORLD -> "overworld";
+            case NONE -> "the_nether";
+            case END -> "the_end";
+        };
     }
 
     public enum Category {

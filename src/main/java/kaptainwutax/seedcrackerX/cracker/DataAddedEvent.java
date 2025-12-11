@@ -10,6 +10,7 @@ public interface DataAddedEvent {
     DataAddedEvent POKE_STRUCTURES = s -> s.getTimeMachine().poke(TimeMachine.Phase.STRUCTURES);
     DataAddedEvent POKE_LIFTING = s -> s.getTimeMachine().poke(TimeMachine.Phase.LIFTING);
     DataAddedEvent POKE_BIOMES = s -> s.getTimeMachine().poke(TimeMachine.Phase.BIOMES);
+    DataAddedEvent POKE_BEDROCK = s -> s.getTimeMachine().poke(TimeMachine.Phase.BEDROCK);
 
     void onDataAdded(DataStorage dataStorage);
 

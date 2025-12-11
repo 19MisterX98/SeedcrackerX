@@ -15,6 +15,7 @@ import com.seedfinding.mcseed.lcg.LCG;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
+import kaptainwutax.seedcrackerX.cracker.bedrock.BedrockCracker;
 import kaptainwutax.seedcrackerX.cracker.decorator.Decorator;
 import kaptainwutax.seedcrackerX.util.Database;
 import kaptainwutax.seedcrackerX.util.Log;
@@ -73,6 +74,9 @@ public class TimeMachine {
 
             } else if (phase == Phase.BIOMES) {
                 if (!this.pokeBiomes()) break;
+
+            } else if (phase == Phase.BEDROCK) {
+                if (!this.pokeBedrock()) break;
             }
 
             phase = phase.nextPhase();
@@ -419,6 +423,42 @@ public class TimeMachine {
         return true;
     }
 
+    protected boolean pokeBedrock() {
+        if (!Config.get().getVersion().isNewerOrEqualTo(MCVersion.v1_18)) return false;
+        if (!this.dataStorage.getBedrockData().canCrack()) return false;
+        if (!this.structureSeeds.isEmpty()) return false;
+
+        Log.debug("====================================");
+        Log.warn("tmachine.lookingForStructureSeedsBedrock");
+
+        BedrockCracker cracker = new BedrockCracker(this.dataStorage.getBedrockData());
+        this.structureSeeds = cracker.crackStructureSeeds();
+
+        if (this.structureSeeds.isEmpty()) {
+            Log.error("finishedSearchNoResult");
+            return false;
+        }
+
+        for (long seed : this.structureSeeds) {
+            Log.printSeed("foundStructureSeed", seed);
+        }
+
+        Log.warn("tmachine.structureSeedSearchFinished");
+
+        if (this.dataStorage.getBedrockData().hasOverworld()) {
+            this.worldSeeds = cracker.crackWorldSeeds(this.structureSeeds);
+
+            if (!this.worldSeeds.isEmpty()) {
+                for (long seed : this.worldSeeds) {
+                    Log.printSeed("tmachine.foundWorldSeed", seed);
+                }
+                Log.warn("tmachine.worldSeedSearchFinished");
+            }
+        }
+
+        return true;
+    }
+
     protected boolean pokeStructureReduce() {
         if (shouldTerminate) return false;
         if (!this.worldSeeds.isEmpty() || this.structureSeeds.size() < 2) return false;
@@ -502,7 +542,7 @@ public class TimeMachine {
     }
 
     public enum Phase {
-        BIOMES(null), STRUCURE_REDUCE(BIOMES), STRUCTURES(BIOMES), LIFTING(STRUCURE_REDUCE), PILLARS(STRUCTURES);
+        BIOMES(null), STRUCURE_REDUCE(BIOMES), STRUCTURES(BIOMES), LIFTING(STRUCURE_REDUCE), PILLARS(STRUCTURES), BEDROCK(BIOMES);
 
         private final Phase nextPhase;
 

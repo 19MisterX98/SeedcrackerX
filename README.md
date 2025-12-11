@@ -111,9 +111,11 @@ The mod may ask you to find additional structures after this.
 It's more likely to happen with fewer bits and structures of the same type.
 After reducing your structure seeds, the mod will brute force your world seed via dungeon positions or hashed seed.
 
+Alternatively, enable the Bedrock finder and load 32 chunks at y=-60 to crack the world seed from bedrock. Anti-xray can interfere with bedrock detection.
+
 ### The Nether
 
-Fungus cracking don't work anymore, so there are no way to find nether seed using SeedcrackerX, however you can try to crack it yourself by using [Nether_Bedrock_Cracker](https://github.com/19MisterX98/Nether_Bedrock_Cracker)
+Enable the Bedrock finder in the config GUI. Load 8 chunks at floor (y=4) or roof (y=123) to crack the structure seed. Anti-xray can interfere with bedrock detection.
     
 ### The End
 

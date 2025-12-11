@@ -27,6 +27,7 @@
   "finder.emeraldOres": "Emerald ores",
   "finder.desertWells": "Desert wells",
   "finder.warpedFungus": "Warped fungus",
+  "finder.bedrock": "Bedrock",
   "finder.biomes": "Biomes",
   "finder.isFinder": "Finder %s is set to",
   "finder.setFinder": "Finder %s has been set to",
@@ -48,6 +49,8 @@
   "data.clearData": "Cleared data storage",
   "data.collectedBits": "You currently have collected %s bits out of %s.",
   "data.collectedLiftingBits": "You currently have collected %s bits from liftable structures out of %s.",
+  "data.collectedBedrockNether": "Nether bedrock: floor %s, roof %s out of %s.",
+  "data.collectedBedrockOverworld": "Overworld bedrock: %s out of %s.",
   "data.restoreStructures": "Restored %s structure/s",
   "data.restoreFailed": "no structures from the previous session found",
   "cracker.successfully": "Successfully ",
@@ -61,6 +64,7 @@
   "tmachine.foundPillarSeed": "Found pillar seed ${SEED}.",
   "tmachine.pillarSeedSearchFinished": "Finished searching for pillar seeds.",
   "tmachine.lookingForStructureSeeds": "Looking for structure seeds with pillar seed [%s]...",
+  "tmachine.lookingForStructureSeedsBedrock": "Looking for structure seeds with bedrock...",
   "tmachine.progress": "Progress",
   "tmachine.structureSeedSearchFinished": "Finished searching for structure seeds.",
   "tmachine.decoratorWorldSeedSearch": "Looking for world seeds with decorators...",
@@ -91,5 +95,4 @@
   "fungus.usableAsWorldSeed": "this structure seed is also usable as worldseed",
   "database.success": "sent seed to database successfully",
   "database.fail": "failed to send the seed to database"
-
 }

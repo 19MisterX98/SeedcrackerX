@@ -37,6 +37,7 @@ public class Config {
     public FeatureToggle desertWell = new FeatureToggle(false);
     public FeatureToggle warpedFungus = new FeatureToggle(false);
     public FeatureToggle biome = new FeatureToggle(false);
+    public FeatureToggle bedrock = new FeatureToggle(false);
     public RenderType render = RenderType.XRAY;
     public boolean active = true;
     public boolean debug = false;

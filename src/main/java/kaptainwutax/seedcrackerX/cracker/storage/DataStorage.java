@@ -16,6 +16,7 @@ import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.HashedSeedData;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
+import kaptainwutax.seedcrackerX.cracker.bedrock.BedrockData;
 import kaptainwutax.seedcrackerX.cracker.decorator.Decorator;
 import kaptainwutax.seedcrackerX.cracker.decorator.DeepDungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
@@ -24,6 +25,7 @@ import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.BlockUpdateQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -56,6 +58,7 @@ public class DataStorage {
     protected Set<Consumer<DataStorage>> scheduledData = ConcurrentHashMap.newKeySet();
     protected PillarData pillarData = null;
     protected ScheduledSet<Entry<BiomeData>> biomeSeedData = new ScheduledSet<>(null);
+    protected BedrockData bedrockData = new BedrockData();
 
     public static double getBits(Feature<?, ?> feature, boolean decorators18) {
         if (feature instanceof UniformStructure<?> s) {
@@ -150,12 +153,27 @@ public class DataStorage {
         return false;
     }
 
+    public synchronized boolean addBedrockData(BlockPos pos, DataAddedEvent event) {
+        this.bedrockData.add(pos);
+
+        if (this.bedrockData.canCrack()) {
+            this.schedule(event::onDataAdded);
+            return true;
+        }
+
+        return false;
+    }
+
     public void schedule(Consumer<DataStorage> consumer) {
         this.scheduledData.add(consumer);
     }
 
     public TimeMachine getTimeMachine() {
         return this.timeMachine;
+    }
+
+    public BedrockData getBedrockData() {
+        return this.bedrockData;
     }
 
     public double getBaseBits() {
@@ -210,6 +228,7 @@ public class DataStorage {
         this.timeMachine.shouldTerminate = true;
         this.timeMachine = new TimeMachine(this);
         this.blockUpdateQueue = new BlockUpdateQueue();
+        this.bedrockData.reset();
     }
 
     public static class Entry<T> {

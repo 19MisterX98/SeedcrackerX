@@ -49,6 +49,12 @@ public class DataCommand extends ClientCommand {
         String message2 = Language.getInstance().getOrDefault("data.collectedLiftingBits").formatted((int) s.getLiftingBits(), 40);
         sendFeedback(message, ChatFormatting.GREEN, false);
         sendFeedback(message2, ChatFormatting.GREEN, false);
+
+        var bedrock = s.getBedrockData();
+        String message3 = Language.getInstance().getOrDefault("data.collectedBedrockNether").formatted(bedrock.getNetherFloorCount(), bedrock.getNetherRoofCount(), 128);
+        String message4 = Language.getInstance().getOrDefault("data.collectedBedrockOverworld").formatted(bedrock.getOverworldCount(), 512);
+        sendFeedback(message3, ChatFormatting.GREEN, false);
+        sendFeedback(message4, ChatFormatting.GREEN, false);
         return 0;
     }
 

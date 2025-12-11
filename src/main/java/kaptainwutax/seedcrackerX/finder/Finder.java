@@ -1,6 +1,7 @@
 package kaptainwutax.seedcrackerX.finder;
 
 import kaptainwutax.seedcrackerX.config.Config;
+import kaptainwutax.seedcrackerX.finder.decorator.BedrockFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.DesertWellFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
 import kaptainwutax.seedcrackerX.finder.decorator.EndGatewayFinder;
@@ -140,6 +141,7 @@ public abstract class Finder {
         EMERALD_ORE(EmeraldOreFinder::create, Category.DECORATORS, Config.get().emeraldOre, "finder.emeraldOres"),
         DESERT_WELL(DesertWellFinder::create, Category.DECORATORS, Config.get().desertWell, "finder.desertWells"),
         WARPED_FUNGUS(WarpedFungusFinder::create, Category.DECORATORS, Config.get().warpedFungus, "finder.warpedFungus"),
+        BEDROCK(BedrockFinder::create, Category.DECORATORS, Config.get().bedrock, "finder.bedrock"),
 
         BIOME(BiomeFinder::create, Category.BIOMES, Config.get().biome, "finder.biomes");
 

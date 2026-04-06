@@ -20,23 +20,38 @@ public class FinderCommand extends ClientCommand {
 
     @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
+    	
+        LiteralArgumentBuilder<FabricClientCommandSource> typeNode = literal("type")
+                .executes(context -> {
+                    Log.error("Error: please enter a valid seedcracker command");
+                    return 1;
+        });
+    	
         for (Finder.Type finderType : Finder.Type.values()) {
-            builder.then(literal("type")
-                    .then(literal(finderType.toString())
-                            .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
-                            .executes(context -> this.printFinderType(finderType)))
+            typeNode.then(
+                literal(finderType.toString())
+                    .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
+                    .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
+                    .executes(context -> this.printFinderType(finderType))
             );
         }
+        
+        LiteralArgumentBuilder<FabricClientCommandSource> categoryNode = literal("category")
+                .executes(context -> {
+                    Log.error("Error: please enter a valid seedcracker command");
+                    return 1;
+        });
 
         for (Finder.Category finderCategory : Finder.Category.values()) {
-            builder.then(literal("category")
-                    .then(literal(finderCategory.toString())
-                            .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
-                            .executes(context -> this.printFinderCategory(finderCategory)))
+            categoryNode.then(
+                literal(finderCategory.toString())
+                    .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
+                    .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
+                    .executes(context -> this.printFinderCategory(finderCategory))
             );
         }
+        builder.then(typeNode);
+        builder.then(categoryNode);
         builder.then(literal("reload").executes(context -> this.reload()));
     }
 

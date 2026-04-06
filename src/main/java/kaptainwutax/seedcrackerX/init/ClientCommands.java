@@ -1,6 +1,8 @@
 package kaptainwutax.seedcrackerX.init;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import kaptainwutax.seedcrackerX.command.ClientCommand;
 import kaptainwutax.seedcrackerX.command.CrackerCommand;
 import kaptainwutax.seedcrackerX.command.DataCommand;
@@ -10,6 +12,9 @@ import kaptainwutax.seedcrackerX.command.GuiCommand;
 import kaptainwutax.seedcrackerX.command.RenderCommand;
 import kaptainwutax.seedcrackerX.command.VersionCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.*;
+import kaptainwutax.seedcrackerX.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +43,16 @@ public class ClientCommands {
     }
 
     public static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        COMMANDS.forEach(clientCommand -> clientCommand.register(dispatcher));
+        LiteralArgumentBuilder<FabricClientCommandSource> root = literal(PREFIX)
+                .executes(context -> {
+                    Log.error("Error: please enter a valid seedcracker command");
+                    return 1;
+                });
+     
+            for (ClientCommand command : COMMANDS) {
+                root.then(command.buildSubCommand());
+            }
+     
+            dispatcher.register(root);
+        }
     }
-
-}

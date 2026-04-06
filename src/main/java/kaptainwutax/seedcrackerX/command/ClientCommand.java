@@ -23,15 +23,20 @@ public abstract class ClientCommand {
     public abstract String getName();
 
     public abstract void build(LiteralArgumentBuilder<FabricClientCommandSource> builder);
+    
+    protected boolean hasOwnExecutes() {
+        return false;
+    }
 
-    public final void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+    public final LiteralArgumentBuilder<FabricClientCommandSource> buildSubCommand() {
         LiteralArgumentBuilder<FabricClientCommandSource> builder = literal(this.getName());
         this.build(builder);
-        LiteralArgumentBuilder<FabricClientCommandSource> seedCrackerRootCommand = literal(ClientCommands.PREFIX)
-        .executes(context -> {
-            Log.error("Error: please enter a valid seedcracker command");
-            return 1;
-        });
-        dispatcher.register(seedCrackerRootCommand.then(builder));
+        if (!this.hasOwnExecutes()) {
+            builder.executes(context -> {
+                Log.error("Error: please enter a valid seedcracker command");
+                return 1;
+            });
+        }
+        return builder;
     }
 }

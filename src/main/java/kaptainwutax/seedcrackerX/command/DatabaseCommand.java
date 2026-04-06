@@ -15,6 +15,11 @@ public class DatabaseCommand extends ClientCommand {
     public String getName() {
         return "database";
     }
+    
+    @Override
+    protected boolean hasOwnExecutes() {
+        return true;
+    }
 
     @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {

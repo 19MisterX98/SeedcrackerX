@@ -14,6 +14,11 @@ public class CrackerCommand extends ClientCommand {
     public String getName() {
         return "cracker";
     }
+    
+    @Override
+    protected boolean hasOwnExecutes() {
+        return true;
+    }
 
     @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {

@@ -11,6 +11,11 @@ public class GuiCommand extends ClientCommand {
     public String getName() {
         return "gui";
     }
+    
+    @Override
+    protected boolean hasOwnExecutes() {
+        return true;
+    }
 
     @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {

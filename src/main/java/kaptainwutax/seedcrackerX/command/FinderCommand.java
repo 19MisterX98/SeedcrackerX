@@ -17,26 +17,48 @@ public class FinderCommand extends ClientCommand {
     public String getName() {
         return "finder";
     }
+    
+    @Override
+    public String getUsage() {
+        return "/seedcracker finder <type|category|reload>";
+    }
+ 
+    public String getUsageType() {
+        return "/seedcracker finder type <finder_type> [ON|OFF]";
+    }
+ 
+    public String getUsageCategory() {
+        return "/seedcracker finder category <category> [ON|OFF]";
+    }
 
     @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
+        LiteralArgumentBuilder<FabricClientCommandSource> typeNode = literal("type")
+                .executes(context -> {
+                    sendFeedback("Usage: " + this.getUsageType(), ChatFormatting.RED);
+                    return 1;
+                });
         for (Finder.Type finderType : Finder.Type.values()) {
-            builder.then(literal("type")
-                    .then(literal(finderType.toString())
-                            .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
-                            .executes(context -> this.printFinderType(finderType)))
-            );
+            typeNode.then(literal(finderType.toString())
+                    .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
+                    .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
+                    .executes(context -> this.printFinderType(finderType)));
         }
-
+        builder.then(typeNode);
+ 
+        LiteralArgumentBuilder<FabricClientCommandSource> categoryNode = literal("category")
+                .executes(context -> {
+                    sendFeedback("Usage: " + this.getUsageCategory(), ChatFormatting.RED);
+                    return 1;
+                });
         for (Finder.Category finderCategory : Finder.Category.values()) {
-            builder.then(literal("category")
-                    .then(literal(finderCategory.toString())
-                            .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
-                            .executes(context -> this.printFinderCategory(finderCategory)))
-            );
+            categoryNode.then(literal(finderCategory.toString())
+                    .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
+                    .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
+                    .executes(context -> this.printFinderCategory(finderCategory)));
         }
+        builder.then(categoryNode);
+ 
         builder.then(literal("reload").executes(context -> this.reload()));
     }
 

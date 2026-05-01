@@ -16,6 +16,12 @@ public class RenderCommand extends ClientCommand {
     }
 
     @Override
+    public String getUsage() {
+        return "/seedcracker render outlines <" + java.util.Arrays.stream(Config.RenderType.values())
+                .map(Object::toString).collect(java.util.stream.Collectors.joining("|")) + ">";
+    }    
+
+    @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
         builder.then(literal("outlines")
                 .executes(context -> this.printRenderMode())

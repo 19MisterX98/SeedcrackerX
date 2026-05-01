@@ -22,6 +22,11 @@ public class DataCommand extends ClientCommand {
     }
 
     @Override
+    public String getUsage() {
+        return "/seedcracker data <clear|bits|restore>";
+    }    
+
+    @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
         builder.then(literal("clear")
                 .executes(this::clear)

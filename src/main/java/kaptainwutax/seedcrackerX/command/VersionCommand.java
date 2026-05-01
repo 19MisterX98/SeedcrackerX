@@ -15,6 +15,11 @@ public class VersionCommand extends ClientCommand {
     public String getName() {
         return "version";
     }
+    
+    @Override
+    public String getUsage() {
+        return "/seedcracker version <mc_version>";
+    }
 
     @Override
     public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {

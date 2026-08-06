@@ -2,14 +2,12 @@ package kaptainwutax.seedcrackerX.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.util.Util;
-
-import java.net.URI;
+import net.minecraft.Util;
+import net.minecraft.commands.CommandSourceStack;
 
 public class DatabaseCommand extends ClientCommand {
 
-    public static URI DATABASE_URL = URI.create("https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing");
+    public static String databaseURL = "https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing";
 
     @Override
     public String getName() {
@@ -17,12 +15,12 @@ public class DatabaseCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<CommandSourceStack> builder) {
         builder.executes(this::openURL);
     }
 
-    public int openURL(CommandContext<FabricClientCommandSource> context) {
-        Util.getPlatform().openUri(DATABASE_URL);
+    public int openURL(CommandContext<CommandSourceStack> context) {
+        Util.getPlatform().openUri(databaseURL);
         return 0;
     }
 }

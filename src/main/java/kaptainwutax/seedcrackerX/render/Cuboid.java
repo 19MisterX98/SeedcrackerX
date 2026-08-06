@@ -1,48 +1,66 @@
 package kaptainwutax.seedcrackerX.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
-public class Cuboid {
-    private final AABB box;
-    private final int argb;
-    private final BlockPos centerPos;
+public class Cuboid extends Renderer {
 
-    public Cuboid(AABB box, int argb) {
-        this.box = box;
-        this.argb = argb;
-        this.centerPos = BlockPos.containing(box.getCenter());
+    private final Line[] edges = new Line[12];
+    public BlockPos start;
+    public Vec3i size;
+    public BlockPos pos;
+
+    public Cuboid() {
+        this(BlockPos.ZERO, BlockPos.ZERO, Color.WHITE);
     }
 
-    public Cuboid(BoundingBox boundingBox, int argb) {
-        this(AABB.of(boundingBox), argb);
+    public Cuboid(BlockPos pos) {
+        this(pos, new BlockPos(1, 1, 1), Color.WHITE);
     }
 
-    public Cuboid(BlockPos pos, int argb) {
-        this(new AABB(pos), argb);
+    public Cuboid(BlockPos start, BlockPos end, Color color) {
+        this(start, new Vec3i(end.getX() - start.getX(), end.getY() - start.getY(), end.getZ() - start.getZ()), color);
     }
 
-    public Cuboid(BlockPos pos, Vec3i size, int argb) {
-        this(AABB.encapsulatingFullBlocks(pos, pos.offset(size)), argb);
+    public Cuboid(BoundingBox box, Color color) {
+        this(new BlockPos(box.minX(), box.minY(), box.minZ()), new BlockPos(box.maxX(), box.maxY(), box.maxZ()), color);
     }
 
-    public BlockPos getCenterPos() {
-        return this.centerPos;
+    public Cuboid(BlockPos start, Vec3i size, Color color) {
+        this.start = start;
+        this.size = size;
+        this.pos = this.start.offset(this.size.getX() / 2, this.size.getY() / 2, this.size.getZ() / 2);
+        this.edges[0] = new Line(toVec3d(this.start), toVec3d(this.start.offset(this.size.getX(), 0, 0)), color);
+        this.edges[1] = new Line(toVec3d(this.start), toVec3d(this.start.offset(0, this.size.getY(), 0)), color);
+        this.edges[2] = new Line(toVec3d(this.start), toVec3d(this.start.offset(0, 0, this.size.getZ())), color);
+        this.edges[3] = new Line(toVec3d(this.start.offset(this.size.getX(), 0, this.size.getZ())), toVec3d(this.start.offset(this.size.getX(), 0, 0)), color);
+        this.edges[4] = new Line(toVec3d(this.start.offset(this.size.getX(), 0, this.size.getZ())), toVec3d(this.start.offset(this.size.getX(), this.size.getY(), this.size.getZ())), color);
+        this.edges[5] = new Line(toVec3d(this.start.offset(this.size.getX(), 0, this.size.getZ())), toVec3d(this.start.offset(0, 0, this.size.getZ())), color);
+        this.edges[6] = new Line(toVec3d(this.start.offset(this.size.getX(), this.size.getY(), 0)), toVec3d(this.start.offset(this.size.getX(), 0, 0)), color);
+        this.edges[7] = new Line(toVec3d(this.start.offset(this.size.getX(), this.size.getY(), 0)), toVec3d(this.start.offset(0, this.size.getY(), 0)), color);
+        this.edges[8] = new Line(toVec3d(this.start.offset(this.size.getX(), this.size.getY(), 0)), toVec3d(this.start.offset(this.size.getX(), this.size.getY(), this.size.getZ())), color);
+        this.edges[9] = new Line(toVec3d(this.start.offset(0, this.size.getY(), this.size.getZ())), toVec3d(this.start.offset(0, 0, this.size.getZ())), color);
+        this.edges[10] = new Line(toVec3d(this.start.offset(0, this.size.getY(), this.size.getZ())), toVec3d(this.start.offset(0, this.size.getY(), 0)), color);
+        this.edges[11] = new Line(toVec3d(this.start.offset(0, this.size.getY(), this.size.getZ())), toVec3d(this.start.offset(this.size.getX(), this.size.getY(), this.size.getZ())), color);
     }
 
-    public Cuboid offset(Camera camera) {
-        return new Cuboid(this.box.move(camera.position().scale(-1)), this.argb);
+    @Override
+    public void render(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vec3 cameraPos) {
+        if (this.start == null || this.size == null || this.edges == null) return;
+
+        for (Line edge : this.edges) {
+            if (edge == null) continue;
+            edge.render(matrix4f, vertexConsumer, cameraPos);
+        }
     }
 
-    public void render(PoseStack poseStack, SubmitNodeCollector submitter) {
-        VoxelShape shape = Shapes.box(this.box.minX, this.box.minY, this.box.minZ, this.box.maxX, this.box.maxY, this.box.maxZ);
-        submitter.submitShapeOutline(poseStack, shape, NoDepthLayer.LINES_NO_DEPTH_LAYER, this.argb, 2, true);
+    @Override
+    public BlockPos getPos() {
+        return pos;
     }
+
 }

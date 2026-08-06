@@ -6,12 +6,13 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
+import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -41,22 +42,22 @@ public class ShipwreckFinder extends BlockFinder {
         List<Finder> finders = new ArrayList<>();
         finders.add(new ShipwreckFinder(world, chunkPos));
 
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z())));
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x(), chunkPos.z() - 1)));
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z() - 1)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
 
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x() + 1, chunkPos.z())));
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x(), chunkPos.z() + 1)));
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x() + 1, chunkPos.z() + 1)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x, chunkPos.z + 1)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z + 1)));
 
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z() - 1)));
-        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z() + 1)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
+        finders.add(new ShipwreckFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z + 1)));
         return finders;
     }
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getNoiseBiome((this.chunkPos.x() << 2) + 2, 64, (this.chunkPos.z() << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
 
         if (!Features.SHIPWRECK.isValidBiome(BiomeFixer.swap(biome))) {
             return new ArrayList<>();
@@ -205,11 +206,11 @@ public class ShipwreckFinder extends BlockFinder {
             mutablePos.move(-4, -chestY, -15);
 
             if ((mutablePos.getX() & 0xf) == 0 && (mutablePos.getZ() & 0xf) == 0) {
-                RegionStructure.Data<?> data = Features.SHIPWRECK.at(ChunkPos.containing(mutablePos).x(), ChunkPos.containing(mutablePos).z());
+                RegionStructure.Data<?> data = Features.SHIPWRECK.at(new ChunkPos(mutablePos).x, new ChunkPos(mutablePos).z);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
-                    this.cuboids.add(new Cuboid(box, ARGB.color(0, 255, 255)));
-                    this.cuboids.add(new Cuboid(ChunkPos.containing(mutablePos).getWorldPosition().relative(Direction.UP, mutablePos.getY()), ARGB.color(0, 255, 255)));
+                    this.renderers.add(new Cuboid(box, new Color(0, 255, 255)));
+                    this.renderers.add(new Cube(new ChunkPos(mutablePos).getWorldPosition().relative(Direction.UP, mutablePos.getY()), new Color(0, 255, 255)));
                     return true;
                 }
             }

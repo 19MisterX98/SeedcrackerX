@@ -5,10 +5,9 @@ import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.ReloadFinders;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
-
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.*;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 public class FinderCommand extends ClientCommand {
     ReloadFinders reloadFinders = new ReloadFinders();
@@ -19,25 +18,25 @@ public class FinderCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<CommandSourceStack> builder) {
         for (Finder.Type finderType : Finder.Type.values()) {
-            builder.then(literal("type")
-                    .then(literal(finderType.toString())
-                            .then(literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
+            builder.then(Commands.literal("type")
+                    .then(Commands.literal(finderType.toString())
+                            .then(Commands.literal("ON").executes(context -> this.setFinderType(finderType, true, true)))
+                            .then(Commands.literal("OFF").executes(context -> this.setFinderType(finderType, false, true)))
                             .executes(context -> this.printFinderType(finderType)))
             );
         }
 
         for (Finder.Category finderCategory : Finder.Category.values()) {
-            builder.then(literal("category")
-                    .then(literal(finderCategory.toString())
-                            .then(literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
-                            .then(literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
+            builder.then(Commands.literal("category")
+                    .then(Commands.literal(finderCategory.toString())
+                            .then(Commands.literal("ON").executes(context -> this.setFinderCategory(finderCategory, true)))
+                            .then(Commands.literal("OFF").executes(context -> this.setFinderCategory(finderCategory, false)))
                             .executes(context -> this.printFinderCategory(finderCategory)))
             );
         }
-        builder.then(literal("reload").executes(context -> this.reload()));
+        builder.then(Commands.literal("reload").executes(context -> this.reload()));
     }
 
     private int printFinderCategory(Finder.Category finderCategory) {
@@ -46,7 +45,7 @@ public class FinderCommand extends ClientCommand {
     }
 
     private int printFinderType(Finder.Type finderType) {
-        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", ChatFormatting.AQUA);
+        sendFeedback(Log.translate("finder.isFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(finderType.enabled.get()).toUpperCase() + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 
@@ -59,7 +58,7 @@ public class FinderCommand extends ClientCommand {
     private int setFinderType(Finder.Type finderType, boolean flag, boolean save) {
         finderType.enabled.set(flag);
         if (save) Config.save();
-        sendFeedback(Log.translate("finder.setFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(flag).toUpperCase() + "].", ChatFormatting.AQUA);
+        sendFeedback(Log.translate("finder.setFinder").formatted(Log.translate(finderType.nameKey)) + " [" + String.valueOf(flag).toUpperCase() + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 
@@ -67,5 +66,4 @@ public class FinderCommand extends ClientCommand {
         reloadFinders.reload();
         return 0;
     }
-
 }

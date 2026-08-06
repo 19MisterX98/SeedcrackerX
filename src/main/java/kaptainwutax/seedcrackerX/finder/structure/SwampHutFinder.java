@@ -1,21 +1,23 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
+import net.minecraft.world.level.block.state.BlockState;
+
 import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
+import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 
 import java.util.ArrayList;
@@ -43,10 +45,10 @@ public class SwampHutFinder extends AbstractTempleFinder {
             combinedResult.addAll(positions);
 
             positions.forEach(pos -> {
-                RegionStructure.Data<?> data = Features.SWAMP_HUT.at(this.chunkPos.x(), this.chunkPos.z());
+                RegionStructure.Data<?> data = Features.SWAMP_HUT.at(this.chunkPos.x, this.chunkPos.z);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
-                    this.addRenderers(pieceFinder, pos, ARGB.color(255, 0, 255));
+                    this.addRenderers(pieceFinder, pos, new Color(255, 0, 255));
                 }
             });
         });

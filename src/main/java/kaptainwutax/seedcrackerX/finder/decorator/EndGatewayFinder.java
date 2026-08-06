@@ -6,10 +6,10 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
+import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -35,7 +35,7 @@ public class EndGatewayFinder extends BlockFinder {
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getNoiseBiome((this.chunkPos.x() << 2) + 2, 64, (this.chunkPos.z() << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
         if(!Features.END_GATEWAY.isValidBiome(BiomeFixer.swap(biome)))return new ArrayList<>();
 
         List<BlockPos> result = super.findInChunk();
@@ -50,7 +50,7 @@ public class EndGatewayFinder extends BlockFinder {
                 EndGateway.Data data = Features.END_GATEWAY.at(pos.getX(), pos.getZ(), height);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                    this.cuboids.add(new Cuboid(pos.offset(-1, -2, -1), pos.offset(2, 3, 2), ARGB.color(102, 102, 210)));
+                    this.renderers.add(new Cuboid(pos.offset(-1, -2, -1), pos.offset(2, 3, 2), new Color(102, 102, 210)));
                 }
             }
         });

@@ -10,12 +10,13 @@ import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
+import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import kaptainwutax.seedcrackerX.util.PosIterator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -46,8 +47,8 @@ public class DungeonFinder extends BlockFinder {
     public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
 
-        for (int chunkX = chunkPos.x() - 1; chunkX <= chunkPos.x() + 1; chunkX++) {
-            for (int chunkZ = chunkPos.z() - 1; chunkZ <= chunkPos.z() + 1; chunkZ++) {
+        for (int chunkX = chunkPos.x - 1; chunkX <= chunkPos.x + 1; chunkX++) {
+            for (int chunkZ = chunkPos.z - 1; chunkZ <= chunkPos.z + 1; chunkZ++) {
                 if (surroundingChunksLoaded(chunkX, chunkZ, world)) {
                     finders.add(new DungeonFinder(world, new ChunkPos(chunkX, chunkZ)));
                 }
@@ -60,7 +61,7 @@ public class DungeonFinder extends BlockFinder {
     private static boolean surroundingChunksLoaded(int chunkX, int chunkZ, Level world) {
         for (int x = chunkX - 1; x <= chunkX + 1; x++) {
             for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                if (world.getChunkSource().getChunkNow(x, z) == null) return false;
+                if (!world.getChunkSource().hasChunk(x, z)) return false;
             }
         }
         return true;
@@ -78,7 +79,7 @@ public class DungeonFinder extends BlockFinder {
         XRAY_TEST_POS.add(new BlockPos(0, 0, -3));
         for (BlockPos blockpos : XRAY_TEST_POS) {
             BlockPos.MutableBlockPos currentPos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
-            currentPos.move(blockpos);
+            currentPos.move(blockpos.getX(), blockpos.getY(), blockpos.getZ());
             Block posCheck = this.world.getBlockState(currentPos).getBlock();
             if (posCheck == Blocks.COBBLESTONE) {
                 currentPos.move(0, -1, 0);
@@ -114,7 +115,7 @@ public class DungeonFinder extends BlockFinder {
         });
 
         if (result.size() != 1) return new ArrayList<>();
-        Biome biome = this.world.getNoiseBiome((this.chunkPos.x() << 2) + 2, 0, (this.chunkPos.z() << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2).value();
 
         BlockPos pos = result.get(0);
         if (Config.get().getVersion().isNewerThan(MCVersion.v1_17_1)) {
@@ -124,7 +125,7 @@ public class DungeonFinder extends BlockFinder {
             } else {
                 data = Features.DUNGEON.at(pos.getX(), pos.getY(), pos.getZ(), null, null, BiomeFixer.swap(biome), null);
             }
-            this.cuboids.add(new Cuboid(pos, ARGB.color(255, 0, 0)));
+            this.renderers.add(new Cube(pos, new Color(255, 0, 0)));
             SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_BIOMES);
             return result;
         }
@@ -137,7 +138,7 @@ public class DungeonFinder extends BlockFinder {
             if (SeedCracker.get().getDataStorage().baseSeedData.contains(new DataStorage.Entry<>(data, null))) {
                 return result;
             }
-            this.cuboids.add(new Cuboid(pos, ARGB.color(255, 0, 0)));
+            this.renderers.add(new Cube(pos, new Color(255, 0, 0)));
             Thread floorCallsUpdater = new Thread(() -> {
                 try {
                     //server needs to send the blocks before we do a second check
@@ -154,19 +155,19 @@ public class DungeonFinder extends BlockFinder {
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, data::onDataAdded)) {
                     if (data.usesFloor()) {
-                        this.cuboids.add(new Cuboid(pos.subtract(size), pos.offset(size).offset(1, -1, 1), ARGB.color(255, 0, 0)));
+                        this.renderers.add(new Cuboid(pos.subtract(size), pos.offset(size).offset(1, -1, 1), new Color(255, 0, 0)));
                     }
                 } else {
-                    this.cuboids.clear();
+                    this.renderers.clear();
                 }
 
             });
             blockUpdateExploit(pos, size, floorCallsUpdater);
         } else if (SeedCracker.get().getDataStorage().addBaseData(data, data::onDataAdded)) {
-            this.cuboids.add(new Cuboid(pos, ARGB.color(255, 0, 0)));
+            this.renderers.add(new Cube(pos, new Color(255, 0, 0)));
 
             if (data.usesFloor()) {
-                this.cuboids.add(new Cuboid(pos.subtract(size), pos.offset(size).offset(1, -1, 1), ARGB.color(255, 0, 0)));
+                this.renderers.add(new Cuboid(pos.subtract(size), pos.offset(size).offset(1, -1, 1), new Color(255, 0, 0)));
             }
         }
         return result;

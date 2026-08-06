@@ -15,12 +15,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 
 public class ConfigScreen {
 
@@ -41,12 +40,16 @@ public class ConfigScreen {
         return mcVersion;
     }
 
-    public Screen getConfigScreenByCloth(Screen parent) {
+    public static Screen getConfigScreenByCloth(Screen parent) {
+        ConfigScreen instance = new ConfigScreen();
+        return instance.buildScreen(parent);
+    }
 
+    public Screen buildScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
                 .setTitle(Component.translatable("title"))
-                .setDefaultBackgroundTexture(Identifier.parse("minecraft:textures/block/blackstone.png"))
+                .setDefaultBackgroundTexture(ResourceLocation.parse("minecraft:textures/block/blackstone.png"))
                 .setTransparentBackground(true);
         ConfigEntryBuilder eb = builder.entryBuilder();
 
@@ -58,8 +61,8 @@ public class ConfigScreen {
                 .setSaveConsumer(val -> config.databaseSubmits = val).build());
         settings.addEntry(eb.startBooleanToggle(Component.translatable("settings.hideNameDatabase"), config.anonymusSubmits).setSaveConsumer(val -> config.anonymusSubmits = val).build());
         settings.addEntry(eb.startTextDescription(Component.translatable("settings.openDatabase").withStyle(s -> s
-                .withClickEvent(new ClickEvent.OpenUrl(DatabaseCommand.DATABASE_URL))
-                .withHoverEvent(new HoverEvent.ShowText(Component.literal("google sheet")))
+                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, DatabaseCommand.databaseURL))
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("google sheet")))
                 .withColor(ChatFormatting.BLUE)
                 .withUnderlined(true)
                 .withItalic(true)))
@@ -78,7 +81,7 @@ public class ConfigScreen {
 
         settings.addEntry(eb.startTextDescription(Component.literal("==============")).build());
 
-        settings.addEntry(eb.startTextDescription((Component.translatable("settings.finderToggles"))).build());
+        settings.addEntry(eb.startTextDescription(Component.translatable("settings.finderToggles")).build());
         for (Finder.Type finder : Finder.Type.values()) {
             settings.addEntry(eb.startBooleanToggle(Component.translatable(finder.nameKey), finder.enabled.get()).setSaveConsumer(val -> finder.enabled.set(val)).build());
         }
@@ -96,53 +99,55 @@ public class ConfigScreen {
                 SeedCracker.get().reset();
             }
         }).build());
-        //List worldseeds
-        Set<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
-        if (!worldSeeds.isEmpty()) {
-            SubCategoryBuilder world = eb.startSubCategory(Component.translatable("info.worldSeeds"));
-            for (long worldSeed : worldSeeds) {
-                world.add(eb.startTextField(Component.literal(""), String.valueOf(worldSeed)).build());
-            }
-            info.addEntry(world.setExpanded(true).build());
-        } else {
-            info.addEntry(eb.startTextDescription(Component.translatable("info.noWorldSeeds")).build());
-        }
-        //List structureseeds
-        Set<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
-        if (!structureSeeds.isEmpty()) {
-            SubCategoryBuilder struc = eb.startSubCategory(Component.translatable("info.structureSeeds"));
-            for (long structureSeed : structureSeeds) {
-                struc.add(eb.startTextField(Component.literal(""), String.valueOf(structureSeed)).build());
-            }
-            info.addEntry(struc.setExpanded(true).build());
-        } else {
-            info.addEntry(eb.startTextDescription(Component.translatable("info.noStructureSeeds")).build());
-        }
 
-        if (config.debug) {
-            //List pillarseeds
-            List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
-            if (pillarSeeds != null) {
-                SubCategoryBuilder pillar = eb.startSubCategory(Component.translatable("info.pillarSeeds"));
-                for (long structureSeed : pillarSeeds) {
-                    pillar.add(eb.startTextField(Component.literal(""), String.valueOf(structureSeed)).build());
+        if (SeedCracker.get() != null && SeedCracker.get().getDataStorage() != null) {
+            //List worldseeds
+            Set<Long> worldSeeds = SeedCracker.get().getDataStorage().getTimeMachine().worldSeeds;
+            if (worldSeeds != null && !worldSeeds.isEmpty()) {
+                SubCategoryBuilder world = eb.startSubCategory(Component.translatable("info.worldSeeds"));
+                for (long worldSeed : worldSeeds) {
+                    world.add(eb.startTextField(Component.literal(""), String.valueOf(worldSeed)).build());
                 }
-                info.addEntry(pillar.setExpanded(true).build());
+                info.addEntry(world.setExpanded(true).build());
             } else {
-                info.addEntry(eb.startTextDescription(Component.translatable("info.noPillarSeeds")).build());
+                info.addEntry(eb.startTextDescription(Component.translatable("info.noWorldSeeds")).build());
             }
-            //Hashed seed
-            HashedSeedData hashedSeed = SeedCracker.get().getDataStorage().hashedSeedData;
-            if (hashedSeed != null) {
-                info.addEntry(eb.startTextField(Component.translatable("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
+            //List structureseeds
+            Set<Long> structureSeeds = SeedCracker.get().getDataStorage().getTimeMachine().structureSeeds;
+            if (structureSeeds != null && !structureSeeds.isEmpty()) {
+                SubCategoryBuilder struc = eb.startSubCategory(Component.translatable("info.structureSeeds"));
+                for (long structureSeed : structureSeeds) {
+                    struc.add(eb.startTextField(Component.literal(""), String.valueOf(structureSeed)).build());
+                }
+                info.addEntry(struc.setExpanded(true).build());
             } else {
-                info.addEntry(eb.startTextDescription(Component.translatable("info.noHashedSeed")).build());
+                info.addEntry(eb.startTextDescription(Component.translatable("info.noStructureSeeds")).build());
+            }
+
+            if (config.debug) {
+                //List pillarseeds
+                List<Integer> pillarSeeds = SeedCracker.get().getDataStorage().getTimeMachine().pillarSeeds;
+                if (pillarSeeds != null) {
+                    SubCategoryBuilder pillar = eb.startSubCategory(Component.translatable("info.pillarSeeds"));
+                    for (long structureSeed : pillarSeeds) {
+                        pillar.add(eb.startTextField(Component.literal(""), String.valueOf(structureSeed)).build());
+                    }
+                    info.addEntry(pillar.setExpanded(true).build());
+                } else {
+                    info.addEntry(eb.startTextDescription(Component.translatable("info.noPillarSeeds")).build());
+                }
+                //Hashed seed
+                HashedSeedData hashedSeed = SeedCracker.get().getDataStorage().hashedSeedData;
+                if (hashedSeed != null) {
+                    info.addEntry(eb.startTextField(Component.translatable("info.hashedSeed"), String.valueOf(hashedSeed.getHashedSeed())).build());
+                } else {
+                    info.addEntry(eb.startTextDescription(Component.translatable("info.noHashedSeed")).build());
+                }
             }
         }
 
         builder.setSavingRunnable(Config::save);
 
         return builder.build();
-
     }
 }

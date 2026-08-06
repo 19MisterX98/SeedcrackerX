@@ -6,17 +6,14 @@ import com.seedfinding.mcfeature.structure.Structure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.cracker.storage.DataStorage;
 import kaptainwutax.seedcrackerX.cracker.storage.ScheduledSet;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.storage.LevelResource;
+import net.neoforged.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,7 +24,7 @@ import java.util.Scanner;
 public class StructureSave {
     private static final Logger logger = LoggerFactory.getLogger("structureSave");
 
-    public static final Path saveDir = Paths.get(FabricLoader.getInstance().getConfigDir().toFile().toString(), "SeedCrackerX saved structures");
+    public static final Path saveDir = Paths.get(FMLPaths.CONFIGDIR.get().toFile().toString(), "SeedCrackerX saved structures");
 
     public static void saveStructures(ScheduledSet<DataStorage.Entry<Feature.Data<?>>> baseData) {
         try {
@@ -83,12 +80,14 @@ public class StructureSave {
     }
 
     private static String getWorldName() {
-        Minecraft minecraftClient = Minecraft.getInstance();
-        if (minecraftClient.getConnection() != null) {
-            Connection connection = minecraftClient.getConnection().getConnection();
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.getConnection() != null) {
+            Connection connection = minecraft.getConnection().getConnection();
             if (connection.isMemoryConnection()) {
-                String address = minecraftClient.getSingleplayerServer().getWorldPath(LevelResource.ROOT).getParent().getFileName().toString();
-                return address.replace("/","_").replace(":", "_")+".txt";
+                if (minecraft.getSingleplayerServer() != null) {
+                    String address = minecraft.getSingleplayerServer().getWorldPath(LevelResource.ROOT).getParent().getFileName().toString();
+                    return address.replace("/","_").replace(":", "_")+".txt";
+                }
             } else {
                 return connection.getRemoteAddress().toString().replace("/","_").replace(":","_")+".txt";
             }

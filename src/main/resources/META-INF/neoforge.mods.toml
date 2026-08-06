@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+issueTrackerURL="https://github.com/19MisterX98/SeedcrackerX/issues"
+license="MIT"
+
+[[mods]]
+modId="seedcrackerx"
+version="${file.jarVersion}"
+displayName="SeedcrackerX"
+authors="19MisterX98, KaptainWutax"
+description='''
+In-game seed cracker mod for Minecraft.
+'''
+
+[[mixins]]
+config="seedcracker.mixins.json"
+
+[[dependencies.seedcrackerx]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.seedcrackerx]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1,1.22)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.seedcrackerx]]
+    modId="cloth_config"
+    type="required"
+    versionRange="[15.0.0,)"
+    ordering="NONE"
+    side="BOTH"

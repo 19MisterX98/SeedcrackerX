@@ -6,11 +6,11 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.cracker.BiomeData;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
-import kaptainwutax.seedcrackerX.render.Cuboid;
+import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -44,7 +44,6 @@ public class BiomeFinder extends Finder {
                     biome = this.world.getNoiseBiome(blockPos.getX() >> 2, 0, blockPos.getZ() >> 2).value();
                 } else {
                     biome = this.world.getBiome(blockPos).value();
-
                 }
                 com.seedfinding.mcbiome.biome.Biome otherBiome = BiomeFixer.swap(biome);
                 if (otherBiome == Biomes.THE_VOID) {
@@ -64,7 +63,7 @@ public class BiomeFinder extends Finder {
                 }
             }
         }
-        result.forEach(pos -> this.cuboids.add(new Cuboid(pos, ARGB.color(51, 204, 128))));
+        result.forEach(pos -> this.renderers.add(new Cube(pos, new Color(51, 204, 128))));
 
         return result;
     }

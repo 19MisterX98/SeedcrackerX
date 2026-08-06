@@ -4,22 +4,12 @@ import com.seedfinding.mccore.version.MCVersion;
 import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.decorator.DesertWell;
 import com.seedfinding.mcfeature.decorator.EndGateway;
-import com.seedfinding.mcfeature.structure.BuriedTreasure;
-import com.seedfinding.mcfeature.structure.DesertPyramid;
-import com.seedfinding.mcfeature.structure.EndCity;
-import com.seedfinding.mcfeature.structure.Igloo;
-import com.seedfinding.mcfeature.structure.JunglePyramid;
-import com.seedfinding.mcfeature.structure.Monument;
-import com.seedfinding.mcfeature.structure.PillagerOutpost;
-import com.seedfinding.mcfeature.structure.RegionStructure;
-import com.seedfinding.mcfeature.structure.Shipwreck;
-import com.seedfinding.mcfeature.structure.SwampHut;
+import com.seedfinding.mcfeature.structure.*;
 import kaptainwutax.seedcrackerX.cracker.decorator.DeepDungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.Dungeon;
 import kaptainwutax.seedcrackerX.cracker.decorator.EmeraldOre;
 import kaptainwutax.seedcrackerX.cracker.decorator.WarpedFungus;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.structures.TrialChambers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +27,6 @@ public class Features {
     public static SwampHut SWAMP_HUT;
     public static PillagerOutpost PILLAGER_OUTPOST;
     public static Igloo IGLOO;
-    public static TrialChambers TRIAL_CHAMBERS;
 
     public static EndGateway END_GATEWAY;
     public static DesertWell DESERT_WELL;
@@ -58,7 +47,6 @@ public class Features {
         SWAMP_HUT = safe(STRUCTURE_TYPES, Finder.Type.SWAMP_HUT, () -> new SwampHut(version));
         PILLAGER_OUTPOST = safe(STRUCTURE_TYPES, Finder.Type.PILLAGER_OUTPOST, () -> new PillagerOutpost(version));
         IGLOO = safe(STRUCTURE_TYPES, Finder.Type.IGLOO, () -> new Igloo(version));
-        TRIAL_CHAMBERS = safe(STRUCTURE_TYPES, Finder.Type.TRIAL_CHAMBERS, () -> new TrialChambers(version));
 
         END_GATEWAY = safe(Finder.Type.END_GATEWAY, () -> new EndGateway(version));
         DESERT_WELL = safe(Finder.Type.DESERT_WELL, () -> new DesertWell(version));

@@ -3,10 +3,9 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
-
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.*;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 public class CrackerCommand extends ClientCommand {
 
@@ -16,23 +15,23 @@ public class CrackerCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
-        builder.then(literal("ON").executes(context -> this.setActive(true)))
-                .then(literal("OFF").executes(context -> this.setActive(false)))
+    public void build(LiteralArgumentBuilder<CommandSourceStack> builder) {
+        builder.then(Commands.literal("ON").executes(context -> this.setActive(true)))
+                .then(Commands.literal("OFF").executes(context -> this.setActive(false)))
                 .executes(context -> this.toggleActive());
 
-        builder.then(literal("debug")
-                .then(literal("ON").executes(context -> this.setDebug(true)))
-                .then(literal("OFF").executes(context -> this.setDebug(false)))
+        builder.then(Commands.literal("debug")
+                .then(Commands.literal("ON").executes(context -> this.setDebug(true)))
+                .then(Commands.literal("OFF").executes(context -> this.setDebug(false)))
                 .executes(context -> this.toggleDebug()));
     }
 
     private void feedback(boolean success, boolean flag) {
         String action = Log.translate(flag ? "cracker.enabled" : "cracker.disabled");
         if (success) {
-            sendFeedback(Log.translate("cracker.successfully") + action, ChatFormatting.GREEN);
+            sendFeedback(Log.translate("cracker.successfully") + action, ChatFormatting.GREEN, false);
         } else {
-            sendFeedback(Log.translate("cracker.already") + action, ChatFormatting.RED);
+            sendFeedback(Log.translate("cracker.already") + action, ChatFormatting.RED, false);
         }
         Config.save();
     }

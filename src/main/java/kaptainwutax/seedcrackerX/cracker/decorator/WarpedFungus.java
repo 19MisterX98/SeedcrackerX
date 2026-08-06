@@ -14,11 +14,7 @@ import kaptainwutax.seedcrackerX.util.Log;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WarpedFungus extends Decorator<Decorator.Config, WarpedFungus.Data> {
     public static final VersionMap<Config> CONFIGS = new VersionMap<Config>()

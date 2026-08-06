@@ -3,7 +3,7 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import kaptainwutax.seedcrackerX.SeedCracker;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
 public class GuiCommand extends ClientCommand {
 
@@ -13,12 +13,14 @@ public class GuiCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
+    public void build(LiteralArgumentBuilder<CommandSourceStack> builder) {
         builder.executes(this::openGui);
     }
 
-    private int openGui(CommandContext<FabricClientCommandSource> context) {
-        SeedCracker.get().getDataStorage().openGui = true; //gui needs to open on the main thread
+    private int openGui(CommandContext<CommandSourceStack> context) {
+        if (SeedCracker.get() != null && SeedCracker.get().getDataStorage() != null) {
+            SeedCracker.get().getDataStorage().openGui = true;
+        }
         return 0;
     }
 }

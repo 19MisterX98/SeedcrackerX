@@ -22,8 +22,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,6 +33,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TimeMachine {
     private static final Logger logger = LoggerFactory.getLogger("timeMachine");
@@ -81,8 +82,8 @@ public class TimeMachine {
             long seed = worldSeeds.stream().findFirst().get();
             SeedCracker.entrypoints.forEach(entrypoint -> entrypoint.pushWorldSeed(seed));
             Minecraft client = Minecraft.getInstance();
-            if (Config.get().databaseSubmits && client.getConnection().getOnlinePlayers().size() > 10 &&
-                    !client.getConnection().getConnection().isMemoryConnection()) {
+            if (Config.get().databaseSubmits && client.getConnection() != null && client.getConnection().getOnlinePlayers().size() > 10 &&
+                    !client.isLocalServer()) {
                 Component text = Database.joinFakeServerForAuth();
                 if (text == null) {
                     Database.handleDatabaseCall(seed);

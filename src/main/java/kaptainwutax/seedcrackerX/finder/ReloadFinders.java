@@ -30,10 +30,10 @@ public class ReloadFinders {
         MonumentFinder.reloadSearchPositions();
         OutpostFinder.reloadSearchPositions();
         IglooFinder.reloadSearchPositions();
-        TrialChambersFinder.reloadSearchPositions();
     }
 
     public void reload() {
+        if (client.player == null || client.level == null) return;
         int renderdistance = client.options.renderDistance().get();
 
         int playerChunkX = (int) (Math.round(client.player.getX()) >> 4);

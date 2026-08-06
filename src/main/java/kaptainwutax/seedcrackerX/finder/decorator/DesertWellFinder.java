@@ -6,12 +6,13 @@ import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.finder.structure.PieceFinder;
+import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -36,22 +37,22 @@ public class DesertWellFinder extends PieceFinder {
         List<Finder> finders = new ArrayList<>();
         finders.add(new DesertWellFinder(world, chunkPos));
 
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z())));
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x(), chunkPos.z() - 1)));
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z() - 1)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
 
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x() + 1, chunkPos.z())));
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x(), chunkPos.z() + 1)));
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x() + 1, chunkPos.z() + 1)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x, chunkPos.z + 1)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x + 1, chunkPos.z + 1)));
 
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x() + 1, chunkPos.z() - 1)));
-        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z() + 1)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
+        finders.add(new DesertWellFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z + 1)));
         return finders;
     }
 
     @Override
     public List<BlockPos> findInChunk() {
-        Biome biome = this.world.getNoiseBiome((this.chunkPos.x() << 2) + 2, 0, (this.chunkPos.z() << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 0, (this.chunkPos.z << 2) + 2).value();
 
         if (!Features.DESERT_WELL.isValidBiome(BiomeFixer.swap(biome))) {
             return new ArrayList<>();
@@ -65,8 +66,8 @@ public class DesertWellFinder extends PieceFinder {
             DesertWell.Data data = Features.DESERT_WELL.at(pos.getX(), pos.getZ());
 
             if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                this.cuboids.add(new Cuboid(pos.offset(-2, -1, -2), SIZE, ARGB.color(128, 128, 255)));
-                this.cuboids.add(new Cuboid(pos, ARGB.color(128, 128, 255)));
+                this.renderers.add(new Cuboid(pos.offset(-2, -1, -2), SIZE, new Color(128, 128, 255)));
+                this.renderers.add(new Cube(pos, new Color(128, 128, 255)));
             }
         });
 

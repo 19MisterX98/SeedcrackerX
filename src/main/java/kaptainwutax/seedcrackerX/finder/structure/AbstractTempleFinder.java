@@ -1,6 +1,8 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
 import kaptainwutax.seedcrackerX.finder.Finder;
+import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.render.Cube;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -46,7 +48,7 @@ public abstract class AbstractTempleFinder extends Finder {
     }
 
     public List<BlockPos> findInChunkPiece(PieceFinder pieceFinder) {
-        Biome biome = this.world.getNoiseBiome((this.chunkPos.x() << 2) + 2, 64, (this.chunkPos.z() << 2) + 2).value();
+        Biome biome = this.world.getNoiseBiome((this.chunkPos.x << 2) + 2, 64, (this.chunkPos.z << 2) + 2).value();
 
         if (!isValidBiome(biome)) {
             return new ArrayList<>();
@@ -57,10 +59,10 @@ public abstract class AbstractTempleFinder extends Finder {
 
     protected abstract boolean isValidBiome(Biome biome);
 
-    public void addRenderers(PieceFinder pieceFinder, BlockPos origin, int argb) {
-        this.cuboids.add(new Cuboid(origin, pieceFinder.getLayout(), argb));
+    public void addRenderers(PieceFinder pieceFinder, BlockPos origin, Color color) {
+        this.renderers.add(new Cuboid(origin, pieceFinder.getLayout(), color));
         BlockPos chunkStart = new BlockPos(origin.getX() & -16, origin.getY(), origin.getZ() & -16);
-        this.cuboids.add(new Cuboid(chunkStart, argb));
+        this.renderers.add(new Cube(chunkStart, color));
     }
 
     public Map<PieceFinder, List<BlockPos>> findInChunkPieces() {

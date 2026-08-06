@@ -7,10 +7,10 @@ import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.cracker.PillarData;
 import kaptainwutax.seedcrackerX.finder.BlockFinder;
 import kaptainwutax.seedcrackerX.finder.Finder;
-import kaptainwutax.seedcrackerX.render.Cuboid;
+import kaptainwutax.seedcrackerX.render.Color;
+import kaptainwutax.seedcrackerX.render.Cube;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -38,7 +38,7 @@ public class EndPillarsFinder extends Finder {
                 x = Math.round(x);
                 z = Math.round(z);
             }
-            this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, ChunkPos.containing(BlockPos.containing(x, 0, z)), BlockPos.containing(x, 0, z));
+            this.bedrockMarkers[i] = new BedrockMarkerFinder(this.world, new ChunkPos(BlockPos.containing(x, 0, z)), BlockPos.containing(x, 0, z));
         }
     }
 
@@ -61,7 +61,7 @@ public class EndPillarsFinder extends Finder {
             PillarData pillarData = new PillarData(result.stream().map(Vec3i::getY).collect(Collectors.toList()));
 
             if (SeedCracker.get().getDataStorage().addPillarData(pillarData, DataAddedEvent.POKE_PILLARS)) {
-                result.forEach(pos -> this.cuboids.add(new Cuboid(pos, ARGB.color(128, 0, 128))));
+                result.forEach(pos -> this.renderers.add(new Cube(pos, new Color(128, 0, 128))));
             }
 
         }

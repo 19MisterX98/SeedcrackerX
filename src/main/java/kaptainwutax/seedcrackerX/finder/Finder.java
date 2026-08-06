@@ -1,14 +1,11 @@
 package kaptainwutax.seedcrackerX.finder;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import kaptainwutax.seedcrackerX.config.Config;
-import kaptainwutax.seedcrackerX.finder.decorator.DesertWellFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.DungeonFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.EndGatewayFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.EndPillarsFinder;
-import kaptainwutax.seedcrackerX.finder.decorator.WarpedFungusFinder;
+import kaptainwutax.seedcrackerX.finder.decorator.*;
 import kaptainwutax.seedcrackerX.finder.decorator.ore.EmeraldOreFinder;
 import kaptainwutax.seedcrackerX.finder.structure.*;
-import kaptainwutax.seedcrackerX.render.Cuboid;
+import kaptainwutax.seedcrackerX.render.Renderer;
 import kaptainwutax.seedcrackerX.util.FeatureToggle;
 import kaptainwutax.seedcrackerX.util.HeightContext;
 import net.minecraft.client.Minecraft;
@@ -17,6 +14,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +39,7 @@ public abstract class Finder {
     }
 
     protected Minecraft mc = Minecraft.getInstance();
-    protected final List<Cuboid> cuboids = new ArrayList<>();
+    protected List<Renderer> renderers = new ArrayList<>();
     protected Level world;
     protected ChunkPos chunkPos;
 
@@ -73,6 +71,8 @@ public abstract class Finder {
     public abstract List<BlockPos> findInChunk();
 
     public boolean shouldRender() {
+        if (mc.player == null || mc.player.level() == null) return false;
+
         DimensionType finderDim = this.world.dimensionType();
         DimensionType playerDim = mc.player.level().dimensionType();
 
@@ -81,8 +81,8 @@ public abstract class Finder {
         int renderDistance = mc.options.renderDistance().get() * 16 + 16;
         Vec3 playerPos = mc.player.position();
 
-        for (Cuboid cuboid : this.cuboids) {
-            BlockPos pos = cuboid.getCenterPos();
+        for (Renderer renderer : this.renderers) {
+            BlockPos pos = renderer.getPos();
             double distance = playerPos.distanceToSqr(pos.getX(), playerPos.y, pos.getZ());
             if (distance <= renderDistance * renderDistance + 32) return true;
         }
@@ -90,30 +90,26 @@ public abstract class Finder {
         return false;
     }
 
+    public void render(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vec3 cameraPos) {
+        this.renderers.forEach(renderer -> renderer.render(matrix4f, vertexConsumer, cameraPos));
+    }
+
     public boolean isUseless() {
-        return this.cuboids.isEmpty();
+        return this.renderers.isEmpty();
     }
 
     public abstract boolean isValidDimension(DimensionType dimension);
 
     public boolean isOverworld(DimensionType dimension) {
-        return dimension.skybox() == DimensionType.Skybox.OVERWORLD;
+        return dimension.effectsLocation().getPath().equals("overworld");
     }
 
     public boolean isNether(DimensionType dimension) {
-        return dimension.skybox() == DimensionType.Skybox.NONE;
+        return dimension.effectsLocation().getPath().equals("the_nether");
     }
 
     public boolean isEnd(DimensionType dimension) {
-        return dimension.skybox() == DimensionType.Skybox.END;
-    }
-
-    public static String inferDimension(DimensionType dimension) {
-        return switch (dimension.skybox()) {
-            case OVERWORLD -> "overworld";
-            case NONE -> "the_nether";
-            case END -> "the_end";
-        };
+        return dimension.effectsLocation().getPath().equals("the_end");
     }
 
     public enum Category {
@@ -132,7 +128,6 @@ public abstract class Finder {
         SHIPWRECK(ShipwreckFinder::create, Category.STRUCTURES, Config.get().shipwreck, "finder.shipwrecks"),
         PILLAGER_OUTPOST(OutpostFinder::create, Category.STRUCTURES, Config.get().outpost, "finder.outposts"),
         IGLOO(IglooFinder::create, Category.STRUCTURES, Config.get().igloo, "finder.igloo"),
-        TRIAL_CHAMBERS(TrialChambersFinder::create, Category.STRUCTURES, Config.get().trialChambers, "finder.trialChambers"),
 
         END_PILLARS(EndPillarsFinder::create, Category.DECORATORS, Config.get().endPillars, "finder.endPillars"),
         END_GATEWAY(EndGatewayFinder::create, Category.DECORATORS, Config.get().endGateway, "finder.endGateways"),

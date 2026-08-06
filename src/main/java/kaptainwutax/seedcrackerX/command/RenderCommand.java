@@ -3,10 +3,9 @@ package kaptainwutax.seedcrackerX.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.util.Log;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
-
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.*;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 public class RenderCommand extends ClientCommand {
 
@@ -16,28 +15,27 @@ public class RenderCommand extends ClientCommand {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<FabricClientCommandSource> builder) {
-        builder.then(literal("outlines")
+    public void build(LiteralArgumentBuilder<CommandSourceStack> builder) {
+        builder.then(Commands.literal("outlines")
                 .executes(context -> this.printRenderMode())
         );
 
         for (Config.RenderType renderType : Config.RenderType.values()) {
-            builder.then(literal("outlines")
-                    .then(literal(renderType.toString()).executes(context -> this.setRenderMode(renderType)))
+            builder.then(Commands.literal("outlines")
+                    .then(Commands.literal(renderType.toString()).executes(context -> this.setRenderMode(renderType)))
             );
         }
     }
 
     private int printRenderMode() {
-        sendFeedback(Log.translate("render.getRenderMode") + " [" + Config.get().render + "].", ChatFormatting.AQUA);
+        sendFeedback(Log.translate("render.getRenderMode") + " [" + Config.get().render + "].", ChatFormatting.AQUA, false);
         return 0;
     }
 
     private int setRenderMode(Config.RenderType renderType) {
         Config.get().render = renderType;
         Config.save();
-        sendFeedback(Log.translate("render.setRenderMode") + " [" + Config.get().render + "].", ChatFormatting.AQUA);
+        sendFeedback(Log.translate("render.setRenderMode") + " [" + Config.get().render + "].", ChatFormatting.AQUA, false);
         return 0;
     }
-
 }

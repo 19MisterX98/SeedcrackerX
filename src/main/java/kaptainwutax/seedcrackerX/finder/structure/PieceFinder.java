@@ -73,9 +73,9 @@ public class PieceFinder extends Finder {
         //FOR DEBUGGING PIECES.
         if (this.debug) {
             Minecraft.getInstance().execute(() -> {
-                int y = this.rotation.ordinal() * (this.height + 5) + this.mirror.ordinal() * (this.height + 5) * 2 + 120;
+                int y = this.rotation.ordinal() * 15 + this.mirror.ordinal() * 30 + 120;
 
-                if (this.chunkPos.x() % 2 == 0 && this.chunkPos.z() % 2 == 0) {
+                if (this.chunkPos.x % 2 == 0 && this.chunkPos.z % 2 == 0) {
                     this.structure.forEach((pos, state) -> {
                         this.world.setBlock(this.chunkPos.getWorldPosition().offset(pos).offset(0, y, 0), state, 0);
                     });

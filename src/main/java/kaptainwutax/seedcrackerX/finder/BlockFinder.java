@@ -7,11 +7,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class BlockFinder extends Finder {
 
@@ -25,13 +22,13 @@ public abstract class BlockFinder extends Finder {
 
     public BlockFinder(Level world, ChunkPos chunkPos, BlockState... blockStates) {
         super(world, chunkPos);
-        this.targetBlockStates.addAll(Arrays.stream(blockStates).toList());
+        this.targetBlockStates.addAll(Arrays.stream(blockStates).collect(Collectors.toList()));
     }
 
     @Override
     public List<BlockPos> findInChunk() {
         List<BlockPos> result = new ArrayList<>();
-        ChunkAccess chunk = this.world.getChunk(this.chunkPos.getWorldPosition());
+        ChunkAccess chunk = this.world.getChunk(this.chunkPos.x, this.chunkPos.z);
 
         for (BlockPos blockPos : this.searchPositions) {
             BlockState currentState = chunk.getBlockState(blockPos);

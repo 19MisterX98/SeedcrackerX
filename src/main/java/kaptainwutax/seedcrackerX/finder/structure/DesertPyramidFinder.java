@@ -1,21 +1,23 @@
 package kaptainwutax.seedcrackerX.finder.structure;
 
+import net.minecraft.world.level.block.state.BlockState;
+
 import com.seedfinding.mcfeature.structure.RegionStructure;
 import kaptainwutax.seedcrackerX.Features;
 import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.cracker.DataAddedEvent;
 import kaptainwutax.seedcrackerX.finder.Finder;
+import kaptainwutax.seedcrackerX.render.Color;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,9 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
     public static List<Finder> create(Level world, ChunkPos chunkPos) {
         List<Finder> finders = new ArrayList<>();
         finders.add(new DesertPyramidFinder(world, chunkPos));
-        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z())));
-        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x(), chunkPos.z() - 1)));
-        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x() - 1, chunkPos.z() - 1)));
+        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z)));
+        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x, chunkPos.z - 1)));
+        finders.add(new DesertPyramidFinder(world, new ChunkPos(chunkPos.x - 1, chunkPos.z - 1)));
         return finders;
     }
 
@@ -45,10 +47,10 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
             combinedResult.addAll(positions);
 
             positions.forEach(pos -> {
-                RegionStructure.Data<?> data = Features.DESERT_PYRAMID.at(this.chunkPos.x(), this.chunkPos.z());
+                RegionStructure.Data<?> data = Features.DESERT_PYRAMID.at(this.chunkPos.x, this.chunkPos.z);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_LIFTING)) {
-                    this.addRenderers(pieceFinder, pos, ARGB.color(255, 0, 255));
+                    this.addRenderers(pieceFinder, pos, new Color(255, 0, 255));
                 }
             });
         });
@@ -137,39 +139,39 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
             finder.addBlock(Blocks.CHISELED_SANDSTONE.defaultBlockState(), finder.width - 5, 2, int_7);
         }
 
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 10, 0, 7);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 10, 0, 8);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 9, 0, 9);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 11, 0, 9);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 8, 0, 10);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 12, 0, 10);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 7, 0, 10);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 13, 0, 10);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 9, 0, 11);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 11, 0, 11);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 10, 0, 12);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 10, 0, 13);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.blue().defaultBlockState(), 10, 0, 10);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 10, 0, 7);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 10, 0, 8);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 9, 0, 9);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 11, 0, 9);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 8, 0, 10);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 12, 0, 10);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 7, 0, 10);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 13, 0, 10);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 9, 0, 11);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 11, 0, 11);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 10, 0, 12);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 10, 0, 13);
+        finder.addBlock(Blocks.BLUE_TERRACOTTA.defaultBlockState(), 10, 0, 10);
 
         for (int_7 = 0; int_7 <= finder.width - 1; int_7 += finder.width - 1) {
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 2, 1);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 2, 2);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 2, 2);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 2, 3);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 3, 1);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 3, 2);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 3, 2);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 3, 3);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 4, 1);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 4, 1);
             finder.addBlock(Blocks.CHISELED_SANDSTONE.defaultBlockState(), int_7, 4, 2);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 4, 3);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 4, 3);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 5, 1);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 5, 2);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 5, 2);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 5, 3);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 6, 1);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 6, 1);
             finder.addBlock(Blocks.CHISELED_SANDSTONE.defaultBlockState(), int_7, 6, 2);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 6, 3);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 7, 1);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 7, 2);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 7, 3);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 6, 3);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 7, 1);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 7, 2);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 7, 3);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 8, 1);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 8, 2);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 8, 3);
@@ -177,23 +179,23 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
 
         for (int_7 = 2; int_7 <= finder.width - 3; int_7 += finder.width - 3 - 2) {
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 - 1, 2, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 2, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 2, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 + 1, 2, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 - 1, 3, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 3, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 3, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 + 1, 3, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7 - 1, 4, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7 - 1, 4, 0);
             finder.addBlock(Blocks.CHISELED_SANDSTONE.defaultBlockState(), int_7, 4, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7 + 1, 4, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7 + 1, 4, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 - 1, 5, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 5, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 5, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 + 1, 5, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7 - 1, 6, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7 - 1, 6, 0);
             finder.addBlock(Blocks.CHISELED_SANDSTONE.defaultBlockState(), int_7, 6, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7 + 1, 6, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7 - 1, 7, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7, 7, 0);
-            finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), int_7 + 1, 7, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7 + 1, 6, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7 - 1, 7, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7, 7, 0);
+            finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), int_7 + 1, 7, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 - 1, 8, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7, 8, 0);
             finder.addBlock(Blocks.CUT_SANDSTONE.defaultBlockState(), int_7 + 1, 8, 0);
@@ -202,9 +204,9 @@ public class DesertPyramidFinder extends AbstractTempleFinder {
         finder.fillWithOutline(8, 4, 0, 12, 6, 0, Blocks.CUT_SANDSTONE.defaultBlockState(), Blocks.CUT_SANDSTONE.defaultBlockState(), false);
         finder.addBlock(Blocks.AIR.defaultBlockState(), 8, 6, 0);
         finder.addBlock(Blocks.AIR.defaultBlockState(), 12, 6, 0);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 9, 5, 0);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 9, 5, 0);
         finder.addBlock(Blocks.CHISELED_SANDSTONE.defaultBlockState(), 10, 5, 0);
-        finder.addBlock(Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), 11, 5, 0);
+        finder.addBlock(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 11, 5, 0);
         finder.fillWithOutline(8, -14, 8, 12, -11, 12, Blocks.CUT_SANDSTONE.defaultBlockState(), Blocks.CUT_SANDSTONE.defaultBlockState(), false);
         finder.fillWithOutline(8, -10, 8, 12, -10, 12, Blocks.CHISELED_SANDSTONE.defaultBlockState(), Blocks.CHISELED_SANDSTONE.defaultBlockState(), false);
         finder.fillWithOutline(8, -9, 8, 12, -9, 12, Blocks.CUT_SANDSTONE.defaultBlockState(), Blocks.CUT_SANDSTONE.defaultBlockState(), false);

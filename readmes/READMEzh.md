@@ -1,8 +1,9 @@
 # SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
-## Readme 语言
+## 其他语言 Readme
+- 英文版为官方最新版
 
-[中文](readmes/READMEzh.md)
+[英文](README.md)
 [Русский](readmes/READMEru.md)
 [Українська](readmes/READMEuk.md)
 [Türkçe](readmes/READMEtr.md)

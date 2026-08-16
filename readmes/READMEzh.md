@@ -1,117 +1,169 @@
-# SeedCrackerX [![Github 所有版本](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
-<!-- PS:请以后更新翻译的同学参照en_us.json改的地方并在同样的位置添加，让后人修改时更方便。-->
-最好看英文版,中文版可能较旧
+# SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
-## 其他语言自述
+## Readme 语言
 
-[English](../README.md)
-[Русский](READMEru.md)
+[中文](readmes/READMEzh.md)
+[Русский](readmes/READMEru.md)
+[Українська](readmes/READMEuk.md)
+[Türkçe](readmes/READMEtr.md)
 
-## 我活跃在:
+## 我的活跃于
 
 - [我的 Discord](https://discord.gg/JRmHzqQYfp)
-- [Youtube](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA)
+- [YouTube](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA)
+
+# 版本对照表
+
+| Minecraft 版本 | SeedCrackerX 版本                                                                                       | 依赖项                                                                                                                                                                                   |
+|----------------|---------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 26.2           | [2.16.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/prerelease/seedcrackerX-2.16.1.jar) | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 26.1-26.1.2    | [2.16.0](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.16.0/seedcrackerX-2.16.0.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21.11        | [2.15.6](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.6/seedcrackerX-2.15.6.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21.9-1.21.10 | [2.15.5](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.5/seedcrackerX-2.15.5.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21.6-1.21.8  | [2.15.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.4/seedcrackerX-2.15.4.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21.5         | [2.15.3](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.3/seedcrackerX-2.15.3.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21.4         | [2.15.2](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.2/seedcrackerX-2.15.2.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21.2-1.21.3  | [2.15.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.1/seedcrackerX-2.15.1.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.21-1.21.1    | [2.15.0](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.15.0/seedcrackerX-2.15.0.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.20.6         | [2.14.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.7/seedcrackerX-2.14.7.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.20.4         | [2.14.6](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.6/seedcrackerX-2.14.6.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.20.2         | [2.14.5](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.5/seedcrackerX-2.14.5.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.20-1.20.1    | [2.14.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.4/seedcrackerX-2.14.4.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.19.4         | [2.14.2](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.14.2/seedcrackerX-2.14.2.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.19.3         | [2.13.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13.1/seedcrackerX-2.13.1.jar)     | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.19-1.19.2    | [2.13](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.13/seedcrackerX-2.13.jar)           | [Fabric 模组加载器 0.14.0+](https://fabricmc.net/use/)                                                                                                                                   |
+| 1.18.2         | [2.12](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.12/seedcrackerX-2.12.jar)           | [Fabric 模组加载器](https://fabricmc.net/use/)                                                                                                                                           |
+| 1.18-1.18.1    | [2.11.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.11.4/seedcrackerX-2.11.4.jar)     | [Fabric 模组加载器](https://fabricmc.net/use/)                                                                                                                                           |
+| 1.17-1.17.1    | [2.10.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.10.1/seedcrackerX-2.10.1.jar)     | [Fabric 模组加载器](https://fabricmc.net/use/)                                                                                                                                           |
+| 1.16.5         | [2.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.7.1/seedcrackerX-0.2.7.jar)          | [Fabric 模组加载器](https://fabricmc.net/use/)、[Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)、[Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu/files) |
 
 ## 安装
-下载并安装[fabric模组加载器](https://fabricmc.net/use/)
- 
-下载并安装SeedCrackerX的[发布或预发布](https://github.com/19MisterX98/SeedCrackerX/releases)版
-  
-把.jar文件放在你的mods目录下, 或者是%appdata%/.minecraft/mods/文件夹, 用于官方启动器, 或者是你自己的MultiMC实例文件夹.
+
+下载并安装 [Fabric 模组加载器](https://fabricmc.net/use/)
+
+下载 SeedCrackerX 最新的 [正式版或预发布版](https://github.com/19MisterX98/SeedCrackerX/releases)
+
+将 .jar 文件放入你的模组目录，即原版启动器的 `%appdata%/.minecraft/mods/` 文件夹，或你自己的实例文件夹。
 
 #### 可选
 
-下载最新的Multiconnect[发布版](https://github.com/Earthcomputer/multiconnect/releases)用于连接到低版本的MC服务器
+下载最新版本的 [Multiconnect](https://github.com/Earthcomputer/multiconnect/releases) 或 [ViaFabric](https://modrinth.com/mod/viafabric)，以连接到较低 MC 版本的服务器。
 
 ## 数据库
 
-由于mod被很多人使用,我决定为服务器种子创建一个Google表格.
-如果您在配置gui中启用数据库选项,该mod将直接发送被10个以上玩家破解的服务器的种子到Google表格.
+由于本模组被许多人使用，我决定创建一个用于服务器种子的 Google 表格。
+如果在配置界面中启用数据库选项，模组会将来自 10 人以上服务器的破解种子直接发送到该 Google 表格。
+你还需要一个 Minecraft 正版账户。
 
-[表格](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
+[表格链接](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
 
-## 使用方法
-### 1.17.X及以下
+# 使用说明
 
-在这个世界上跑来跑去，直到Mod找到一个地牢.当Mod找到一个地牢后，破解过程就会自动开始.
-如果它没有获取世界种子，你可能需要找另一个地牢.
+## 1.17.X 及以下版本
 
-此Mod也支持通过以下方式来破解种子.
-- [结构和黑曜石柱](https://youtu.be/aUuPSZVPH8E?t=462)
-- [诡异菌](https://youtu.be/HKjwgofhKs4)
+### 主世界
 
-### 1.18.X及未来版本
+在世界中四处跑动，直到模组找到一个地牢。找到地牢后，破解过程会自动开始。
+如果未给出世界种子，你可能需要再找另一个地牢。
 
-地牢破解，诡异菌破解不再起作用。
+### 下界
 
-通过“/seed gui”进入配置菜单并确保绿宝石矿石、末地折跃门、生物群系、沙漠水井和诡异菌被禁用,因为它们没有更新并且可能提供错误的数据.
+在诡异森林生物群系中跑动，直到模组找到大型菌类并开始破解。
 
-为了破解你现在需要找到下列结构中至少 5 个：
-沙漠神殿、丛林神殿、女巫小屋、沉船、雪屋、掠夺者前哨站。
+### 末地
 
-任何组合都是有效的。例如：3 艘沉船、1 座金字塔和 1 座冰屋。
-您可以使用“/seed data bits”查看您的进程。(查看可挖掘结构的位数)
-当结构周围有轮廓时，就代表Mod找到了结构。
-在你得到足够的数据后，破解过程会自动开始。需要 1-5 分钟。
-在这之后，mod可能会要求你寻找额外的结构。
-相同类型的比特和结构越少，就越有可能找到。
-减少你的结构种子后,该mod将通过地牢位置或散列的种子对你的世界种子进行暴力破解.
+你需要找到 5 个（或更多）末地城或末地折跃门，然后返回末地维度中心以获取黑曜石柱种子，之后破解应开始。
+
+#### 视频教程：
+- [结构及末地柱](https://youtu.be/aUuPSZVPH8E?t=462)
+- [诡异菌类](https://youtu.be/HKjwgofhKs4)
+
+  ### 支持的地物（装饰）
+    - 地牢
+    - 末地折跃门
+    - 沙漠水井
+    - 绿宝石矿石
+    - 诡异菌类
+
+## 1.18.X 及更高版本
+
+地牢破解、菌类破解不再有效。
+
+### 主世界
+
+通过 `/seedcracker gui`（1.19.3+）或 `/seed gui`（1.19.3 之前）进入配置菜单，确保 **禁用** 绿宝石、折跃门、生物群系、沙漠水井和诡异菌类，因为它们尚未更新，可能提供错误数据。
+
+为了破解，你现在需要从下列结构中收集 **40 位“可提升结构”** 和 **32 位常规位**：
 
   ### 支持的结构
-    - Ocean Monument(海底神殿)
-    - End City(末地城)
-    - Buried Treasure(埋藏的宝藏)
-    - Desert Pyramid(沙漠神殿)
-    - Jungle Temple(丛林神庙)
-    - Swamp Hut(沼泽小屋)
-    - Shipwreck(沉船)
-    - Igloo(雪屋)
-    - Pillager Outpost(掠夺者前哨站)
-    
-  ### 支持的装饰
-    - Dungeon(地牢)
-    - End Gateway(末地折跃门)
-    - Desert Well(沙漠水井)
-    - Emerald Ore(绿宝石矿石)
-    - Warped Fungus(诡异菌)
-
-## 命令.
-
-  ### GUI命令
-  - `/seed gui`
-  打开配置gui，您可以在其中修改服务器MC版本等设置,所有搜索器、数据库和渲染模式.
-  大多数命令都有替代品，所以它们不应该再被使用了
   
-  ### 搜索器重新搜索命令
-  - `/seed finder reload`
+    - 雪屋 —— 9 位常规和可提升位
+    - 沙漠神殿 —— 9 位常规和可提升位
+    - 丛林神庙 —— 9 位常规和可提升位
+    - 沼泽小屋 —— 9 位常规和可提升位
+    - 沉船 —— 8 位常规和可提升位
+    - 掠夺者前哨站 —— 9 位可提升位
+    - 海底神殿 —— 9 位常规位
 
-  重新扫描加载的区块以查找以前未找到的结构.
+任意组合均有效。例如：3 艘沉船、1 座金字塔和 1 个雪屋。
+你可以使用 `/seed data bits` 跟踪进度（查看可提升结构的位数）。
+当结构周围出现轮廓线时，即表示已找到该结构。
+收集足够后，破解过程自动开始，此过程大约需要 1-5 分钟。
+此后模组可能会要求你寻找更多结构。
+当位数较少或结构类型单一时，此情况更易发生。
+在缩减结构种子后，模组会通过地牢位置或哈希种子暴力破解世界种子。
 
-  ### 数据指令
-  - `/seed data clear`
+### 下界
+
+菌类破解不再有效，因此 SeedCrackerX 无法找到下界种子，但你可以尝试使用 [Nether_Bedrock_Cracker](https://github.com/19MisterX98/Nether_Bedrock_Cracker) 自行破解。
+
+### 末地
+
+你需要找到 5 个（或更多）末地城（填满常规位），然后返回末地维度中心获取黑曜石柱种子，之后破解应开始。
+
+- 请务必禁用末地折跃门！
+
+## 命令
+
+如果你的模组版本低于 2.13.1，请使用前缀 `/seed` 代替 `/seedcracker`
+
+  ### GUI 命令
+  - `/seedcracker gui`
   
-  无需重新登录即可清除所有收集的数据. 这对多世界的服务器很有用.
+  打开配置界面，可在其中修改设置，如服务器 MC 版本、所有查找器、数据库和渲染模式。
+  大部分设置也有对应的命令替代方案，但不建议再使用那些命令。
+
+  ### 查找器重载命令
+  - `/seedcracker finder reload`
+
+  重新扫描已加载的区块，用于查找之前未发现的结构。
+
+  ### 数据命令
+  - `/seedcracker data clear`
   
-  - `/seed data bits`
+  清除所有收集的数据，无需重新登录。这对多世界服务器很有用。
   
-  显示已经收集了多少比特的信息. 尽管这是一个近似值, 但它可以作为一个很好的参考来猜测什么时候应该开始进行暴力破解。
-  普通比特用于黑曜石柱和结构破解. 破解从 32 位开始.
-  挖掘比特用于可挖掘结构破解. 破解从 40 位开始.
+  - `/seedcracker data bits`
+  
+  显示已收集的信息位数。
+  常规位用于末地柱 + 结构破解，满 32 位开始破解。
+  可提升位用于可提升结构破解，满 40 位开始破解。
   
   - `/seed data restore`
   
-  当你离开一个世界时, mod会将当前收集的结构信息保存在一个文件中,在 .minecraft/config 目录.
-  重新进入后, 你可以用此命令恢复它.
+  当你离开世界时，模组会将当前收集的结构信息保存到 `.minecraft/config` 目录下的文件中。
+  重新加入后，可使用此命令恢复数据。
+  
   
   ### 调试命令
-  - `/seed cracker debug`
+  - `/seedcracker cracker debug`
 
-  显示调试信息
+  显示额外信息。
   
   ### 数据库命令
-  - `/seed database`
+  - `/seedcracker database`
   
-  打开一个[google表格](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)由mod维护
+  打开由模组维护的 [Google 表格](https://docs.google.com/spreadsheets/d/1tuQiE-0leW88em9OHbZnH-RFNhVqgoHhIt9WQbeqqWw/edit?usp=sharing)
 
 ## 视频教程
 
@@ -119,26 +171,28 @@ Neil的:
 - [1.15](https://youtu.be/1ChmLi9og8Q)
 - [1.16](https://youtu.be/aUuPSZVPH8E)
 
+Dyiing的:
+- [1.18](https://www.youtube.com/watch?v=tKeEyx7jIE4)
 
 我的:
-- [地牢破解和黑曜石柱破解](https://youtu.be/8ytfZ2MXosY)
+- [地牢破解 & 末地柱破解](https://youtu.be/8ytfZ2MXosY)
 - [下界破解](https://youtu.be/HKjwgofhKs4)
 - [结构破解](https://youtu.be/UXVrBaOR8H0)
+
+
 ## 设置工作区
 
--克隆此仓库.
+- 克隆仓库。
+- 运行 `gradlew genSources <idea|eclipse>`。
 
--运行 `gradlew genSources <idea|eclipse>`.
+## 构建模组
 
-## 编译此Mod
+- 更新 `build.gradle` 和 `fabric.mod.json` 中的版本号。
+- 运行 `gradlew build`。
 
--在 `build.gradle` 和 `fabric.mod.json` 里更新版本.
+## 供其他模组使用的 API
 
--运行 `gradlew build`.
-
-## 对于其他mod的API接口
-
-- 在你的build.gradle中包含seedcracker-api和jitpack
+- 在 `build.gradle` 中包含 seedcracker-api 和 jitpack
 
       repositories {
           mavenCentral()
@@ -149,7 +203,7 @@ Neil的:
           implementation (include('com.github.19MisterX98.SeedcrackerX:seedcrackerx-api:master-SNAPSHOT')) {transitive = false}
       }
 
-- 添加一个实现api接口的类
+- 添加一个实现 API 接口的类
 
       package misterx.myMod.seedManagemnet.SeedCrackerEP
       
@@ -158,12 +212,12 @@ Neil的:
       public class SeedCrackerEP implements SeedCrackerAPI {
           @Override
           public void pushWorldSeed(long seed) {
-              //do something
+              //执行某些命令
               Foo.bar(seed)
           }
       }
 
-- 告诉fabric.mod.json你的入口点在哪里
+- 在 `fabric.mod.json` 中声明你的入口点
 
       "entrypoints": {
         "main": [...],
@@ -176,10 +230,10 @@ Neil的:
 
 ## 贡献者
 
-[KaptainWutax](https://github.com/KaptainWutax) - 原作者
+[KaptainWutax](https://github.com/KaptainWutax) —— 原模组作者
 
-[neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) - 视频教程
+[neil](https://www.youtube.com/watch?v=aUuPSZVPH8E) —— 视频教程
 
-[Nekzuris](https://github.com/Nekzuris) - README
+[Nekzuris](https://github.com/Nekzuris) 和 [ItzSkyReed](https://github.com/ItzSkyReed) —— README
 
-[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) - 作者
+[19MisterX98](https://www.youtube.com/channel/UCby9ZxEjJCqmccQGF3GSYlA) —— SeedCrackerX 作者

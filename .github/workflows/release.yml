@@ -1,0 +1,68 @@
+# Builds and publishes a full release of the mod.
+# Push a tag named after the mod version (e.g. 2.16.1) or run this workflow manually.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up JDK 25
+      uses: actions/setup-java@v4
+      with:
+        java-version: 25
+        distribution: 'zulu'
+
+    - name: Read versions from gradle.properties
+      id: versions
+      run: |
+        echo "mod=$(grep -m1 '^mod_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+        echo "minecraft=$(grep -m1 '^minecraft_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+
+    - name: Check that the tag matches mod_version
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        if [ "${{ github.ref_name }}" != "${{ steps.versions.outputs.mod }}" ]; then
+          echo "Tag ${{ github.ref_name }} does not match mod_version ${{ steps.versions.outputs.mod }} in gradle.properties"
+          exit 1
+        fi
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Keep only the release jar
+      run: |
+        rm -f ./build/libs/*-dev.jar
+        rm -f ./build/libs/*-api.jar
+        rm -f ./build/libs/*-sources.jar
+        ls -l ./build/libs
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.versions.outputs.mod }}
+        name: ${{ steps.versions.outputs.mod }}
+        body: |
+          SeedCrackerX ${{ steps.versions.outputs.mod }} for Minecraft ${{ steps.versions.outputs.minecraft }}.
+
+          Install the [Fabric mod loader](https://fabricmc.net/use/), then put `seedcrackerX-${{ steps.versions.outputs.mod }}.jar` in your mods folder.
+        generate_release_notes: true
+        prerelease: false
+        files: ./build/libs/*.jar

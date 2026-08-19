@@ -5,6 +5,8 @@ name: Build
 
 on:
   push:
+    tags-ignore:
+      - '**' # tags are built and published by release.yml
     paths-ignore:
       - 'readmes/*'
       - '*.md'

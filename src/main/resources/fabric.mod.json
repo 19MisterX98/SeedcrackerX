@@ -28,7 +28,7 @@
   "accessWidener": "seedcrackerx.aw",
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": ">=26.2 <26.3",
+    "minecraft": ">=26.3 <26.4",
     "fabric-api-base": "*",
     "fabric-transitive-access-wideners-v1": "*",
     "fabric-command-api-v2": "*",

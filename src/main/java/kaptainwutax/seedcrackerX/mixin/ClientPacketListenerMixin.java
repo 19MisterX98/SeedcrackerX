@@ -35,8 +35,8 @@ public abstract class ClientPacketListenerMixin {
 
     @Inject(method = "handleLevelChunkWithLight", at = @At(value = "TAIL"))
     private void onChunkData(ClientboundLevelChunkWithLightPacket packet, CallbackInfo ci) {
-        int chunkX = packet.getX();
-        int chunkZ = packet.getZ();
+        int chunkX = packet.x();
+        int chunkZ = packet.z();
         FinderQueue.get().onChunkData(this.level, new ChunkPos(chunkX, chunkZ));
     }
 

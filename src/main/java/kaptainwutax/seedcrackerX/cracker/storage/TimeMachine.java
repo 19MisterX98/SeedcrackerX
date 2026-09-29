@@ -39,8 +39,7 @@ import java.util.stream.Stream;
 public class TimeMachine {
     private static final Logger logger = LoggerFactory.getLogger("timeMachine");
 
-    public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
-
+    public ExecutorService SERVICE = Executors.newFixedThreadPool(10, Thread.ofPlatform().daemon().factory());
     private final LCG inverseLCG = LCG.JAVA.combine(-2);
     public boolean isRunning = false;
     public boolean shouldTerminate = false;

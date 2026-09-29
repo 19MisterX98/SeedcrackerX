@@ -63,7 +63,7 @@ public class BiomeFixer {
 
     public static net.minecraft.world.level.biome.Biome swap(Biome biome) {
         // internal, meh
-        var biomeRegistries = VanillaRegistries.createLookup().lookupOrThrow(Registries.BIOME);
+        var biomeRegistries = VanillaRegistries.createWorldLookup().lookupOrThrow(Registries.BIOME);
 
         return biomeRegistries.get(ResourceKey.create(Registries.BIOME, Identifier.withDefaultNamespace(biome.getName()))).orElse(
                 biomeRegistries.getOrThrow(net.minecraft.world.level.biome.Biomes.THE_VOID)

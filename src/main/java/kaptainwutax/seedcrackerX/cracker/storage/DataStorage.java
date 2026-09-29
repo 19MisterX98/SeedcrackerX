@@ -90,7 +90,7 @@ public class DataStorage {
 
             this.timeMachine.isRunning = true;
 
-            TimeMachine.SERVICE.submit(() -> {
+            this.timeMachine.SERVICE.submit(() -> {
                 try {
                     this.scheduledData.removeIf(c -> {
                         c.accept(this);

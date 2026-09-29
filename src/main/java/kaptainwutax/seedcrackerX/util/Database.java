@@ -1,6 +1,6 @@
 package kaptainwutax.seedcrackerX.util;
 
-import com.mojang.authlib.HttpAuthenticationService;
+import com.mojang.authlib.HttpDiscoveryService;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.exceptions.InsufficientPrivilegesException;
@@ -69,7 +69,7 @@ public class Database {
 
         HttpRequest request = HttpRequest.newBuilder(URI.create(DATABASE_POST_URL))
             .timeout(TIMEOUT)
-            .POST(HttpRequest.BodyPublishers.ofString(HttpAuthenticationService.buildQuery(data)))
+            .POST(HttpRequest.BodyPublishers.ofString(HttpDiscoveryService.buildQuery(data)))
             .setHeader("User-Agent", SEEDCRACKERX_USER_AGENT)
             .header("Content-Type", "application/x-www-form-urlencoded")
             .build();

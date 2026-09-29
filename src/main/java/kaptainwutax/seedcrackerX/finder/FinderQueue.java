@@ -1,6 +1,7 @@
 package kaptainwutax.seedcrackerX.finder;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import kaptainwutax.seedcrackerX.SeedCracker;
 import kaptainwutax.seedcrackerX.config.Config;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
@@ -26,7 +27,7 @@ public class FinderQueue {
 
     private final static FinderQueue INSTANCE = new FinderQueue();
     private static final Logger log = LoggerFactory.getLogger(FinderQueue.class);
-    public static ExecutorService SERVICE = Executors.newFixedThreadPool(5);
+    private final ExecutorService SERVICE = Executors.newFixedThreadPool(5, Thread.ofPlatform().daemon().factory());
 
     private static final RenderStateDataKey<Set<Cuboid>> CUBOID_SET_KEY = RenderStateDataKey.create(() -> "SeedCrackerX cuboid set");
 

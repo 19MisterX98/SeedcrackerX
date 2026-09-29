@@ -9,6 +9,7 @@ import kaptainwutax.seedcrackerX.finder.Finder;
 import kaptainwutax.seedcrackerX.render.Cuboid;
 import kaptainwutax.seedcrackerX.util.BiomeFixer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -50,7 +51,7 @@ public class EndGatewayFinder extends BlockFinder {
                 EndGateway.Data data = Features.END_GATEWAY.at(pos.getX(), pos.getZ(), height);
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, DataAddedEvent.POKE_STRUCTURES)) {
-                    this.cuboids.add(new Cuboid(pos.offset(-1, -2, -1), pos.offset(2, 3, 2), ARGB.color(102, 102, 210)));
+                    this.cuboids.add(new Cuboid(pos.offset(-1, -2, -1), new Vec3i(3, 5, 3), ARGB.color(102, 102, 210)));
                 }
             }
         });

@@ -154,7 +154,7 @@ public class DungeonFinder extends BlockFinder {
 
                 if (SeedCracker.get().getDataStorage().addBaseData(data, data::onDataAdded)) {
                     if (data.usesFloor()) {
-                        this.cuboids.add(new Cuboid(pos.subtract(size), pos.offset(size).offset(1, -1, 1), ARGB.color(255, 0, 0)));
+                        this.cuboids.add(new Cuboid(pos.subtract(size).offset(0, -1, 0), size.multiply(2).offset(1, 0, 1), ARGB.color(255, 0, 0)));
                     }
                 } else {
                     this.cuboids.clear();
@@ -166,7 +166,7 @@ public class DungeonFinder extends BlockFinder {
             this.cuboids.add(new Cuboid(pos, ARGB.color(255, 0, 0)));
 
             if (data.usesFloor()) {
-                this.cuboids.add(new Cuboid(pos.subtract(size), pos.offset(size).offset(1, -1, 1), ARGB.color(255, 0, 0)));
+                this.cuboids.add(new Cuboid(pos.subtract(size).offset(0, -1, 0), size.multiply(2).offset(1, 0, 1), ARGB.color(255, 0, 0)));
             }
         }
         return result;

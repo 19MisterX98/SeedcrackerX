@@ -23,6 +23,7 @@ import kaptainwutax.seedcrackerX.structures.TrialChambers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Features {
@@ -49,40 +50,48 @@ public class Features {
     public static void init(MCVersion version) {
         STRUCTURE_TYPES.clear();
 
-        BURIED_TREASURE = safe(STRUCTURE_TYPES, Finder.Type.BURIED_TREASURE, () -> new BuriedTreasure(version));
-        DESERT_PYRAMID = safe(STRUCTURE_TYPES, Finder.Type.DESERT_TEMPLE, () -> new DesertPyramid(version));
-        END_CITY = safe(STRUCTURE_TYPES, Finder.Type.END_CITY, () -> new EndCity(version));
-        JUNGLE_PYRAMID = safe(STRUCTURE_TYPES, Finder.Type.JUNGLE_TEMPLE, () -> new JunglePyramid(version));
-        MONUMENT = safe(STRUCTURE_TYPES, Finder.Type.MONUMENT, () -> new Monument(version));
-        SHIPWRECK = safe(STRUCTURE_TYPES, Finder.Type.SHIPWRECK, () -> new Shipwreck(version));
-        SWAMP_HUT = safe(STRUCTURE_TYPES, Finder.Type.SWAMP_HUT, () -> new SwampHut(version));
-        PILLAGER_OUTPOST = safe(STRUCTURE_TYPES, Finder.Type.PILLAGER_OUTPOST, () -> new PillagerOutpost(version));
-        IGLOO = safe(STRUCTURE_TYPES, Finder.Type.IGLOO, () -> new Igloo(version));
-        TRIAL_CHAMBERS = safe(STRUCTURE_TYPES, Finder.Type.TRIAL_CHAMBERS, () -> new TrialChambers(version));
+        BURIED_TREASURE = safe(STRUCTURE_TYPES, version, Finder.Type.BURIED_TREASURE, BuriedTreasure::new);
+        DESERT_PYRAMID = safe(STRUCTURE_TYPES, version, Finder.Type.DESERT_TEMPLE, DesertPyramid::new);
+        END_CITY = safe(STRUCTURE_TYPES, version, Finder.Type.END_CITY, EndCity::new);
+        JUNGLE_PYRAMID = safe(STRUCTURE_TYPES, version, Finder.Type.JUNGLE_TEMPLE, JunglePyramid::new);
+        MONUMENT = safe(STRUCTURE_TYPES, version, Finder.Type.MONUMENT, Monument::new);
+        SHIPWRECK = safe(STRUCTURE_TYPES, version, Finder.Type.SHIPWRECK, Shipwreck::new);
+        SWAMP_HUT = safe(STRUCTURE_TYPES, version, Finder.Type.SWAMP_HUT, SwampHut::new);
+        PILLAGER_OUTPOST = safe(STRUCTURE_TYPES, version, Finder.Type.PILLAGER_OUTPOST, PillagerOutpost::new);
+        IGLOO = safe(STRUCTURE_TYPES, version, Finder.Type.IGLOO, Igloo::new);
+        TRIAL_CHAMBERS = safe(STRUCTURE_TYPES, version, Finder.Type.TRIAL_CHAMBERS, TrialChambers::new);
 
-        END_GATEWAY = safe(Finder.Type.END_GATEWAY, () -> new EndGateway(version));
-        DESERT_WELL = safe(Finder.Type.DESERT_WELL, () -> new DesertWell(version));
-        EMERALD_ORE = safe(Finder.Type.EMERALD_ORE, () -> new EmeraldOre(version));
-        DUNGEON = safe(Finder.Type.DUNGEON, () -> new Dungeon(version));
-        DEEP_DUNGEON = safe(Finder.Type.DUNGEON, () -> new DeepDungeon(version));
-        WARPED_FUNGUS = safe(Finder.Type.WARPED_FUNGUS, () -> new WarpedFungus(version));
+        END_GATEWAY = safe(Finder.Type.END_GATEWAY, version, EndGateway::new);
+        DESERT_WELL = safe(Finder.Type.DESERT_WELL, version, DesertWell::new);
+        EMERALD_ORE = safe(Finder.Type.EMERALD_ORE, version, EmeraldOre::new);
+        DUNGEON = safe(Finder.Type.DUNGEON, version, Dungeon::new);
+        DEEP_DUNGEON = safe(Finder.Type.DUNGEON, version, DeepDungeon::new);
+        WARPED_FUNGUS = safe(Finder.Type.WARPED_FUNGUS, version, WarpedFungus::new);
 
         STRUCTURE_TYPES.trimToSize();
     }
 
-    private static <F extends Feature<?, ?>> F safe(Finder.Type finderType, Supplier<F> lambda) {
+    private static <F extends Feature<?, ?>> F safe(Finder.Type finderType, MCVersion version, Function<MCVersion, F> lambda) {
         try {
-            return lambda.get();
+            return lambda.apply(version);
         } catch (Throwable t) {
-            SeedCracker.LOGGER.error("Exception thrown loading feature", t);
-            finderType.enabled.set(false);
-            return null;
+            if (finderType.enabled.get()) {
+                SeedCracker.LOGGER.error("Disabling: {} because it cant be loaded for version: {}", finderType.nameKey, version);
+                finderType.enabled.set(false);
+            }
+            try {
+                return lambda.apply(MCVersion.latest());
+            } catch (Throwable w) {
+                SeedCracker.LOGGER.error("Exception thrown loading feature,", t);
+            }
         }
+        return null;
     }
 
-    private static <F extends RegionStructure<?, ?>> F safe(List<RegionStructure<?, ?>> list, Finder.Type finderType, Supplier<F> lambda) {
-        F initializedFeature = safe(finderType, lambda);
+    private static <F extends RegionStructure<?, ?>> F safe(List<RegionStructure<?, ?>> list, MCVersion version, Finder.Type finderType, Function<MCVersion, F> lambda) {
+        F initializedFeature = safe(finderType, version, lambda);
         if (initializedFeature != null) list.add(initializedFeature);
+
         return initializedFeature;
     }
 

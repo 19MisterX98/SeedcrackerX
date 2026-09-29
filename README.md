@@ -1,5 +1,7 @@
 # SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
+Soon on [curseforge](https://www.curseforge.com/minecraft/mc-mods/SeedCracker_X)
+
 ## Readme Language
 
 [中文](readmes/READMEzh.md)

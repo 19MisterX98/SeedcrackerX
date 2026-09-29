@@ -247,4 +247,12 @@ public class DataStorage {
         }
     }
 
+    public ScheduledSet<Entry<BiomeData>> getBiomeSeedData() {
+        return this.biomeSeedData;
+    }
+
+    public PillarData getPillarData() {
+        return this.pillarData;
+    }
+
 }

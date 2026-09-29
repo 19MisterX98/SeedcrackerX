@@ -36,4 +36,8 @@ public class PillarData {
         return heights;
     }
 
+    public List<Integer> getHeights() {
+        return this.heights;
+    }
+
 }

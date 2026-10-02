@@ -1,6 +1,6 @@
-# SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
+## Only this github project and the curseforge page 'seedfinder' are official, all other sources should be treated as potential MALWARE
 
-Soon on [curseforge](https://www.curseforge.com/minecraft/mc-mods/SeedCracker_X)
+# SeedCrackerX [![Github All Releases](https://img.shields.io/github/downloads/19MisterX98/SeedCrackerX/total.svg)]
 
 ## Readme Language
 
@@ -39,6 +39,8 @@ Soon on [curseforge](https://www.curseforge.com/minecraft/mc-mods/SeedCracker_X)
 | 1.18-1.18.1       | [2.11.4](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.11.4/seedcrackerX-2.11.4.jar)     | [Fabric mod loader](https://fabricmc.net/use/)                                                                                                                                                 |
 | 1.17-1.17.1       | [2.10.1](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.10.1/seedcrackerX-2.10.1.jar)     | [Fabric mod loader](https://fabricmc.net/use/)                                                                                                                                                 |
 | 1.16.5            | [2.7](https://github.com/19MisterX98/SeedcrackerX/releases/download/2.7.1/seedcrackerX-0.2.7.jar)          | [Fabric mod loader](https://fabricmc.net/use/), [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api),  [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu/files) |
+
+I now also [publish on CurseForge](https://www.curseforge.com/minecraft/mc-mods/seedfinder). They have problems with the term 'crack' so yeah...
 
 ## Installation
 

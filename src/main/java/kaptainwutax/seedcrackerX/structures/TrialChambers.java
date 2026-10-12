@@ -25,6 +25,11 @@ public class TrialChambers extends UniformStructure<TrialChambers> {
     }
 
     @Override
+    public String getName() {
+        return "trial_chambers";
+    }
+
+    @Override
     public Dimension getValidDimension() {
         return Dimension.OVERWORLD;
     }
